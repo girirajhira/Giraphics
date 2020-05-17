@@ -23,13 +23,13 @@ class Graph:
 
     def tranx(self, x):
         if x != None:
-            return + (self.width / (2 * self.xlim)) * (x + self.origin[0]) + self.width/2
+            return + round((self.width / (2 * self.xlim)) * (x + self.origin[0]) + self.width/2, 2)
         else:
             return None
 
     def trany(self, y):
         if y != None:
-            return - (self.height / (2 * self.ylim)) * (y + self.origin[1]) + self.height/2
+            return round(-(self.height / (2 * self.ylim)) * (y + self.origin[1]) + self.height/2, 2)
         else:
             return None
 
@@ -115,7 +115,7 @@ class Graph:
 
     def graph(self, func, colour="red", strokewidth=1.5, opac=1, n0=1200):
         eps = self.xlim / n0
-        X = [self.tranx(i * eps ) for i in range(-n0, n0 + 1)]
+        X = [self.tranx(i * eps) for i in range(-n0, n0 + 1)]
         Y = [self.trany(func(i * eps)) for i in range(-n0, n0 + 1)]
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
@@ -184,13 +184,19 @@ g.show()
 '''
 '''
 def f(x):
-    return x*x
+    return math.sin(x) + 1
 
-A = Graph(1000,1000,10,10,"col2s.svg", origin=[-10,-10])
+A = Graph(1000,1000,5,5,"c1.svg", origin=[0,0])
 A.bg(colour="black")
 A.axes(colour="yellow")
-A.graph(f)
+A.graph(math.sin)
 A.grid(colour="white")
 A.show()
 
+A = Graph(1000,1000,5,5,"c2.svg", origin=[0,0])
+A.bg(colour="black")
+A.axes(colour="yellow")
+A.graph1(math.sin)
+A.grid(colour="white")
+A.show()
 '''
