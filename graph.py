@@ -2,7 +2,6 @@ import math
 from svgwtr import *
 from colour import *
 import numpy as np
-
 '''
 TODO:
     : Create Axes labels
@@ -22,12 +21,19 @@ class Graph:
         self.origin = np.array(origin)
 
     def tranx(self, x):
+        """
+        converts the x coordinate to svg coordinate
+        """
         if x != None:
             return + round((self.width / (2 * self.xlim)) * (x + self.origin[0]) + self.width/2, 2)
         else:
             return None
 
     def trany(self, y):
+       """
+         converts the x coordinate to svg coordinate
+       """
+
         if y != None:
             return round(-(self.height / (2 * self.ylim)) * (y + self.origin[1]) + self.height/2, 2)
         else:
@@ -114,6 +120,7 @@ class Graph:
         self.svg.draw_arrow(x1, y1, x2, y2, scale, stroke=stroke, strokewidth=strokewidth)
 
     def graph(self, func, colour="red", strokewidth=1.5, opac=1, n0=1200):
+
         eps = self.xlim / n0
         X = [self.tranx(i * eps) for i in range(-n0, n0 + 1)]
         Y = [self.trany(func(i * eps)) for i in range(-n0, n0 + 1)]

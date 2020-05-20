@@ -1,7 +1,7 @@
 from svgwtr import *
 from graph import *
 from convert import *
-from grapher import *
+from fancygraphs import *
 import numpy as np
 from math import cos, sin
 

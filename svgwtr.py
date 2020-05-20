@@ -2,7 +2,7 @@ import numpy as np
 import math
 import time
 import os
-import  matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 class SVG:
     def __init__(self, path, width, height, fullsvg = True):
@@ -11,7 +11,6 @@ class SVG:
             width (Int): Width of the SVG
             height (Int): Height of the SVG
         """
-
         self.path = path
         if fullsvg:
             self.canvas = '<svg version="1.1" \n baseProfile="full" \n width="' + str(width) + '" \n height="' + str(
@@ -37,10 +36,32 @@ class SVG:
         x - width/2, y-height/2, width, height, fill, stroke, strokewidth, opacity)
 
     def draw_circ(self, x, y, r, fill="none", stroke="black", strokewidth=1, opac = 1):
+        """
+        Draws a circle of radius r at (x,y)
+        :param x: x position
+        :param y: y position
+        :param r: radius
+        :param fill: fill colour
+        :param stroke: stroke colour
+        :param strokewidth: strokewidth
+        :param opac: opacity
+        :return:
+        """
         self.canvas += '<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="%s" fill-opacity="%s"/>\n' % (
         x, y, r, fill, stroke, strokewidth, opac)
 
     def draw_ellipse(self, x, y, rx, ry, fill, stroke="black", strokewidth=1):
+        """
+        Draws an ellipse at (x,y)  with horizontal radius rx and vertical radius ry.
+        :param x:
+        :param y:
+        :param rx:
+        :param ry:
+        :param fill:
+        :param stroke:
+        :param strokewidth:
+        :return:
+        """
         self.canvas += '<ellipse cx="%s" cy="%s" rx="%s" ry="%s" fill="%s" stroke="%s" stroke-width="%s"/>\n' % (
         x, y, rx, ry, fill, stroke, strokewidth)
 
