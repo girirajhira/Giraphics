@@ -32,10 +32,13 @@ def convert_mpeg(outputfile):
     os.system(command)
     print("MPEG Exported!")
 
+def convert_image(inputfile, outputfile):
+    command = ("convert %s %s ") % (inputfile, outputfile)
+    os.system(command)
 
-def convert_svg(n, dirName, inputFolder):
+def convert_svg(n, dirName, inputFolder, filetype = 'png'):
     command = ("convert " + os.getcwd() + "/" + inputFolder + "/g" + str(n) + ".svg " + dirName + "/p" + namer(
-        n) + ".png")
+        n) + "." + filetype)
     os.system(command)
 
 def BatchConvert(inputFolder, outputFile, frames):

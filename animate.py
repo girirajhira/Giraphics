@@ -2,15 +2,16 @@ import math
 import os
 import convert
 import sys
-from grapher import Grapher
+from fancygraphs import FancyGraphs
+
 
 '''
 TODO: Fix grid issue, too bold
     : Quality control
     : Create work spaces
     : Do an eigen vector example
-
 '''
+
 def Error(error):
     print("Error!: " + error)
     sys.exit()
@@ -38,7 +39,7 @@ class Animate:
 
     def create_frame(self, name, func, i,axes = True, label=True, expr = "",  grid = True, axestroke = 2, axescolour = "white", strokewidths=[2], colours=["yellow"], bg="black", gridcolour="yellow", grindint=10, scale=0.8, grids=[10,10], s=1, opac=1):
         if self.type == "complex":
-            G = Grapher(self.height, self.width, self.xlim, self.ylim, name)
+            G = FancyGraphs(self.height, self.width, self.xlim, self.ylim, name)
             G.bg(bg)
             if axes:
                 G.axes(colour=axescolour, strokewidth=axestroke)
@@ -48,7 +49,7 @@ class Animate:
                 G.ComplexPlot(func[i], strokewidths=strokewidths[i])
             G.show()
         elif self.type == "cart":
-            G = Grapher(self.height, self.width, self.xlim, self.ylim, name)
+            G = FancyGraphs(self.height, self.width, self.xlim, self.ylim, name)
             G.bg(bg)
             if axes:
                 G.axes(colour=axescolour, strokewidth=axestroke)
@@ -60,7 +61,7 @@ class Animate:
                 G.graph(func[i], strokewidth=strokewidths[i], colour=colours[i], opac=opac)
             G.show()
         elif self.type == "lineartrans":
-            G = Grapher(self.height, self.width, self.xlim, self.ylim, name)
+            G = FancyGraphs(self.height, self.width, self.xlim, self.ylim, name)
             G.bg(bg)
             if axes:
                 G.axes(colour=axescolour, strokewidth=axestroke)
@@ -70,7 +71,7 @@ class Animate:
                 G.LinearTranforms(func, strokewidths=strokewidths)
             G.show()
         elif self.type == "scatter":
-            G = Grapher(self.height, self.width, self.xlim, self.ylim, name)
+            G = FancyGraphs(self.height, self.width, self.xlim, self.ylim, name)
             G.bg(bg)
             if axes:
                 G.axes(colour=axescolour, strokewidth=axestroke)
@@ -80,7 +81,7 @@ class Animate:
                 G.scatter(func[i], strokewidth=strokewidths[i])
             G.show()
         elif self.type == "vectorfield":
-            G = Grapher(self.height, self.width, self.xlim, self.ylim, name)
+            G = FancyGraphs(self.height, self.width, self.xlim, self.ylim, name)
             G.bg(bg)
             if axes:
                 G.axes(colour=axescolour, strokewidth=axestroke)
@@ -90,7 +91,7 @@ class Animate:
                 G.VectorField(func[i], strokewidth=strokewidths[i], stroke=colours[i], gridint=grindint, scale=scale, constcolour=False)
             G.show()
         elif self.type == "complexscatter":
-            G = Grapher(self.height, self.width, self.xlim, self.ylim, name)
+            G = FancyGraphs(self.height, self.width, self.xlim, self.ylim, name)
             G.bg(bg)
             if axes:
                 G.axes(colour=axescolour, strokewidth=axestroke)
@@ -160,9 +161,8 @@ def f1(s):
             return None
     return f
 
-'''
+
 
 K = Animate(1000, 1000, [f1] ,strokewidth=2, frames=100, eps=0.01, xlim=10, ylim=10, type="cart")
 
-K.animate("wavepacket33.mp4", scale=0.75, grindint=20, colours=["white"], strokewidths= [1], grid=False, axes=False, label=False, expr = "$Z(x,%s) = sin(3x+%s)$" )
-'''
+K.animate("22.mp4", scale=0.75, grindint=20, colours=["white"], strokewidths= [1], grid=False, axes=False, label=False, expr = "$Z(x,%s) = sin(3x+%s)$" )
