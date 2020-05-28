@@ -155,6 +155,6 @@ A = FancyGraphs(1400,1400,5,5,"Dipole.svg")
 #A.VectorField(func, gridint=5,  arrow_scale=2, strokewidth=2, stroke="white", arrow = True, constcolour=False,constLength=True)
 A.VectorField(func, gridint=25,  arrow_scale=1.5, strokewidth=2, length_scale=0.5, grids=[30,30], arrow = True, constcolour=False, bg=True, constLength=True, initColour=hex_to_vec('#000099'), endColour=hex_to_vec('#ff99cc'), grid=False)
 
-A.show()
+A.save()
 
 #'''
