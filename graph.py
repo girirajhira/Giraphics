@@ -2,6 +2,9 @@ import math
 from svgwtr import *
 from colour import *
 import numpy as np
+import webbrowser
+import os
+from timer import Timer
 '''
 TODO:
     : Create Axes labels
@@ -9,10 +12,12 @@ TODO:
 
 '''
 
+t  = Timer()
 
 class Graph:
-    def __init__(self, width, height, xlim, ylim, name, origin=[0.0, 0.0], fullsvg = True):
-        self.svg = SVG(name, width, height, fullsvg=fullsvg)
+    def __init__(self, width, height, xlim, ylim, name, origin=[0.0, 0.0], full_svg = True):
+        self.svg = SVG(name, width, height, fullsvg=full_svg)
+        self.name = name
         self.eps = xlim / 2000
         self.height = height
         self.width = width
@@ -30,13 +35,9 @@ class Graph:
             return None
 
     def trany(self, y):
-       """
-         converts the x coordinate to svg coordinate
-       """
-
-        if y != None:
+       if y != None:
             return round(-(self.height / (2 * self.ylim)) * (y + self.origin[1]) + self.height/2, 2)
-        else:
+       else:
             return None
 
 
@@ -120,7 +121,6 @@ class Graph:
         self.svg.draw_arrow(x1, y1, x2, y2, scale, stroke=stroke, strokewidth=strokewidth)
 
     def graph(self, func, colour="red", strokewidth=1.5, opac=1, n0=1200):
-
         eps = self.xlim / n0
         X = [self.tranx(i * eps) for i in range(-n0, n0 + 1)]
         Y = [self.trany(func(i * eps)) for i in range(-n0, n0 + 1)]
@@ -134,7 +134,6 @@ class Graph:
     def scatter(self, X, Y, s=1, colour="white", opac=1):
         if len(X) != len(Y):
             print("Data sets are misaligned!")
-        # s = (self.width + self.height) / 500
         for i in range(len(X)):
             self.svg.draw_circ(self.tranx(-X[i]), self.trany(Y[i]), s, fill=colour, stroke=colour,
                                strokewidth=0, opac=opac)
@@ -143,9 +142,14 @@ class Graph:
         text = "%s = %s" % (label, s)
         self.text(x, y, text, strokewidth=strokewidth, stroke=stroke)
 
-    def show(self):
+    def save(self):
         self.svg.save()
         self.svg.canvas = ""
+
+    def display(self):
+        webbrowser.get("open -a /Applications/Google\ Chrome.app %s").open(os.getcwd()+"/"+self.name)
+
+
 
     def embed_latex(self, expr, x, y, width=200, height=200, colour="white", size=45):
         A = LaText("expr.png", 0.5, 0.5, expr, colour=colour, size=size)
@@ -158,8 +162,6 @@ class Graph:
         A.save()
         self.svg.embed_image(self.tranx(x) - width / 2, self.trany(y) - height / 2, width=width,
                              height=height, href=os.getcwd() + "/Plots/expr.png")
-
-
 
 '''
 
@@ -185,25 +187,24 @@ g.ticks(markers=True)
 #g.svg.draw_arrow(23, 200, 34, 44, stroke="white")m
 g.graph(g1)
 g.graph(g2)
-g.show()
+g.save()
 
 
 '''
-'''
-def f(x):
-    return math.sin(x) + 1
 
-A = Graph(1000,1000,5,5,"c1.svg", origin=[0,0])
-A.bg(colour="black")
-A.axes(colour="yellow")
-A.graph(math.sin)
-A.grid(colour="white")
-A.show()
+def f(s):
+    def k(x):
+        return math.sin(x) + s -5
+    return k
 
-A = Graph(1000,1000,5,5,"c2.svg", origin=[0,0])
-A.bg(colour="black")
-A.axes(colour="yellow")
-A.graph1(math.sin)
-A.grid(colour="white")
-A.show()
-'''
+if __name__ == "__main__":
+    A = Graph(1000,1000,5,5,"c1.svg", origin=[0,0])
+    A.bg(colour="black")
+    A.axes(colour="yellow")
+    for i in range(12):
+        A.graph(f(i))
+    A.grid(colour="white")
+    A.save()
+    A.display()
+
+
