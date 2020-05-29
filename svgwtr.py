@@ -1,8 +1,10 @@
+# Dependencies #
 import numpy as np
 import math
+import matplotlib.pyplot as plt
+
 import time
 import os
-import matplotlib.pyplot as plt
 
 class SVG:
     def __init__(self, path, width, height, fullsvg = True):
