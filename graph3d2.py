@@ -22,11 +22,11 @@ A = Graph(1000, 1000, 10, 10, "Pl.svg")
 A.bg("black")
 
 A.svg.draw_arrow(v01[0], v01[1], v02[0], v02[1], stroke="white")
-A.show()
+A.save()
 '''
 
-createDir("Plotsr")
-createDir("plotsrast")
+create_directory("Plotsr")
+create_directory("plotsrast")
 
 frames = 1000
 epss = 3.1415 / (180*1.5)
@@ -39,7 +39,7 @@ P = np.array([X,Y,Z])
 A = Graph(2560, 2560, 30, 30, "s6.svg")
 A.bg("black")
 A.graph_points(P[0][:], P[1][:], colour="white", strokewidth=1)
-A.show()
+A.save()
 
 '''
 
@@ -49,7 +49,7 @@ for i in range(frames):
     V = np.matmul(Ry(i*epss), P)
     #print(i*epss)
     A.graph_points(V[0][:], V[1][:])
-    A.show()
+    A.save()
 print('l')
 create_raster_batch("Plotsr", 'g', 'p', 'plotsrast', frames)
 create_mpeg('sav424ee.mp4', 'p', frames, dir=os.getcwd() + "/plotsrast")
@@ -68,7 +68,7 @@ for i in range(frames):
     #print(i*epss)
     V = f(i, eps=N/frames)
     A.graph_points(V(P)[0][:], V(P)[1][:], colour="yellow")
-    A.show()
+    A.save()
 print('l')
 create_raster_batch("Plotsr", 'g', 'p', 'plotsrast', frames)
 create_mpeg('LiveLorent3.mp4', 'p', frames, dir=os.getcwd() + "/plotsrast")
