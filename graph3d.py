@@ -32,11 +32,11 @@ A = Graph(1000, 1000, 10, 10, "Pl.svg")
 A.bg("black")
 
 A.svg.draw_arrow(v01[0], v01[1], v02[0], v02[1], stroke="white")
-A.show()
+A.save()
 '''
 
-createDir("Plotsr")
-createDir("plotsrast")
+create_directory("Plotsr")
+create_directory("plotsrast")
 
 frames = 181
 eps = 3.1415 / 180
@@ -54,7 +54,7 @@ for i in range(frames):
     A.svg.draw_arrow(A.tranx(0), A.trany(0), A.tranx(0), A.trany(10), stroke="white")
     A.svg.draw_arrow(A.tranx(0), A.trany(0), A.tranx(10), A.trany(0), stroke="white")
     A.svg.draw_arrow(A.tranx(v1[0]), A.trany(v1[1]), A.tranx(v2[0]), A.trany(v2[1]), stroke="white")
-    A.show()
+    A.save()
 
 create_raster_batch("Plotsr", 'g', 'p', 'plotsrast', frames)
 create_mpeg('sav42ee.mp4', 'p', frames, dir=os.getcwd() + "/plotsrast")
