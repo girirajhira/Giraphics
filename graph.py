@@ -12,7 +12,6 @@ TODO:
 
 '''
 
-t  = Timer()
 
 class Graph:
     def __init__(self, width, height, xlim, ylim, name, origin=[0.0, 0.0], full_svg = True):
@@ -41,10 +40,10 @@ class Graph:
             return None
 
 
-    def bg(self, colour):
+    def bg(self, colour="black"):
         self.svg.draw_rect(self.tranx(-self.origin[0]),self.trany(-self.origin[1]), self.width, self.height, colour)
 
-    def axes(self, colour="black", strokewidth=2.5):
+    def axes(self, colour="yellow", strokewidth=2.5):
         ox = self.origin[0]
         oy = self.origin[1]
         scale = strokewidth * self.height * 0.001
@@ -72,7 +71,7 @@ class Graph:
             self.svg.draw_arrowhead(self.tranx(self.xlim-ox) - 3 * scale, self.trany(0), scale, math.pi / 2, colour=colour) # E
             self.svg.draw_arrowhead(self.tranx(0), self.trany(self.ylim-oy) + 3 * scale, scale, 0, colour=colour) # N
 
-    def grid(self, grids=[10, 10], colour="black", strokewidth=1, opac=0.4):
+    def grid(self, grids=[10, 10], colour="white", strokewidth=1, opac=0.4):
         a = self.tranx(self.origin[0]) * 0
         b = self.trany(self.origin[1]) * 0
         for i in range(grids[0]):
@@ -191,7 +190,7 @@ g.save()
 
 
 '''
-
+'''
 def f(s):
     def k(x):
         return math.sin(x) + s -5
@@ -207,4 +206,5 @@ if __name__ == "__main__":
     A.save()
     A.display()
 
+'''
 
