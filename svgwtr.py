@@ -23,7 +23,6 @@ class SVG:
                 self.canvas = '<g transform="' + str(
                 transform) + '"> \n '
         else:
-            print("ug1")
             self.canvas = '<svg version="1.1" \n baseProfile="full" \n width="' + str(
                 width) + '" \n height="' + str(
                 height) + '" \n xmlns="http://www.w3.org/2000/svg">\n'
