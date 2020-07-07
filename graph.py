@@ -4,18 +4,10 @@ from colour import *
 import numpy as np
 import webbrowser
 import os
-from timer import Timer
-'''
-TODO:
-    : Create Axes labels
-    : Create Legend
-
-'''
-
 
 class Graph:
-    def __init__(self, width, height, xlim, ylim, name, origin=[0.0, 0.0], full_svg = True):
-        self.svg = SVG(name, width, height, fullsvg=full_svg)
+    def __init__(self, width, height, xlim, ylim, name, origin=[0.0, 0.0], full_svg=True, theme="dark", transform = "none", grouped=False):
+        self.svg = SVG(name, width, height, fullsvg=full_svg, transform=transform, grouped=grouped)
         self.name = name
         self.eps = xlim / 2000
         self.height = height
@@ -23,55 +15,62 @@ class Graph:
         self.xlim = xlim
         self.ylim = ylim
         self.origin = np.array(origin)
+        self.xscale = width / (2 * xlim)
+        self.yscale = height / (2 * ylim)
+
+        if theme == "dark":
+            self.theme = {
+                'background': 'black',
+                'primary': 'yellow',
+                'secondary': 'white'
+            }
+        else:
+            self.theme = {
+                'background': 'white',
+                'primary': 'black',
+                'secondary': 'black'
+            }
 
     def tranx(self, x):
         """
         converts the x coordinate to svg coordinate
         """
         if x != None:
-            return + round((self.width / (2 * self.xlim)) * (x + self.origin[0]) + self.width/2, 2)
+            return + round((self.width / (2 * self.xlim)) * (x + self.origin[0]) + self.width / 2, 2)
         else:
             return None
 
     def trany(self, y):
-       if y != None:
-            return round(-(self.height / (2 * self.ylim)) * (y + self.origin[1]) + self.height/2, 2)
-       else:
+        if y != None:
+            return round(-(self.height / (2 * self.ylim)) * (y + self.origin[1]) + self.height / 2, 2)
+        else:
             return None
 
-
     def bg(self, colour="black"):
-        self.svg.draw_rect(self.tranx(-self.origin[0]),self.trany(-self.origin[1]), self.width, self.height, colour)
+        self.svg.draw_rect(self.tranx(-self.origin[0]), self.trany(-self.origin[1]), self.width, self.height, colour)
 
-    def axes(self, colour="yellow", strokewidth=2.5):
+    def axes(self, colour="yellow", strokewidth=1, arrows=False):
         ox = self.origin[0]
         oy = self.origin[1]
-        scale = strokewidth * self.height * 0.001
+        scale = strokewidth * self.height * 0.001 / 2
 
-        self.svg.draw_line(self.tranx(-self.xlim + ox), self.trany(0) , self.tranx(self.xlim -ox), self.trany(0), stroke=colour,
+        self.svg.draw_line(self.tranx(-self.xlim + ox), self.trany(0), self.tranx(self.xlim - ox), self.trany(0),
+                           stroke=colour,
                            strokewidth=strokewidth)
-        self.svg.draw_line(self.tranx(0), self.trany(self.ylim - oy), self.tranx(0), self.trany(-self.ylim + oy), stroke=colour,
+        self.svg.draw_line(self.tranx(0), self.trany(self.ylim + oy), self.tranx(0), self.trany(-self.ylim - oy),
+                           stroke=colour,
                            strokewidth=strokewidth)
-        if (self.origin == [-self.xlim, -self.ylim]).all:
-            self.svg.draw_arrowhead(self.tranx(self.xlim - ox) - 3 * scale, self.trany(0), scale, math.pi / 2,
-                                    colour=colour)  # E
-            self.svg.draw_arrowhead(self.tranx(0), self.trany(self.ylim - oy) + 3 * scale, scale, 0, colour=colour)  # N
-        elif (self.origin == [-self.xlim, self.ylim]).all:
-            self.svg.draw_arrowhead(self.tranx(0), self.trany(-self.ylim - oy) - 3 * scale, scale, math.pi, colour=colour) # S
-            self.svg.draw_arrowhead(self.tranx(self.xlim-ox) - 3 * scale, self.trany(0), scale, math.pi / 2, colour=colour) # E
-        elif (self.origin == [self.xlim, -self.ylim]).all:
-            self.svg.draw_arrowhead(self.tranx(0), self.trany(self.ylim-oy) + 3 * scale, scale, 0, colour=colour) # N
-            self.svg.draw_arrowhead(self.tranx(-self.xlim - ox) + 3 * scale, self.trany(0), scale, - math.pi / 2, colour=colour) # W
-        elif (self.origin == [self.xlim, self.ylim]).all:
-            self.svg.draw_arrowhead(self.tranx(0), self.trany(-self.ylim - oy) - 3 * scale, scale, math.pi, colour=colour)  # S
-            self.svg.draw_arrowhead(self.tranx(-self.xlim - ox) + 3 * scale, self.trany(0), scale, - math.pi / 2, colour=colour)  # W
-        else:
-            self.svg.draw_arrowhead(self.tranx(0), self.trany(-self.ylim - oy) - 3 * scale, scale, math.pi, colour=colour) # S
-            self.svg.draw_arrowhead(self.tranx(-self.xlim - ox) + 3 * scale, self.trany(0), scale, - math.pi / 2, colour=colour) # W
-            self.svg.draw_arrowhead(self.tranx(self.xlim-ox) - 3 * scale, self.trany(0), scale, math.pi / 2, colour=colour) # E
-            self.svg.draw_arrowhead(self.tranx(0), self.trany(self.ylim-oy) + 3 * scale, scale, 0, colour=colour) # N
+        if arrows:
+            self.svg.draw_arrowhead2(self.tranx(self.xlim - ox) - 3 * scale, self.trany(0), scale, math.pi / 2,
+                                     colour=colour)  # E
+            self.svg.draw_arrowhead2(self.tranx(0), self.trany(self.ylim - oy) + 3 * scale, scale, 0,
+                                     colour=colour)  # N
+            self.svg.draw_arrowhead2(self.tranx(0), self.trany(-self.ylim - oy) - 3 * scale, scale, math.pi,
+                                     colour=colour)  # S
+            self.svg.draw_arrowhead2(self.tranx(-self.xlim - ox) + 3 * scale, self.trany(0), scale, - math.pi / 2,
+                                     colour=colour)  # W
 
-    def grid(self, grids=[10, 10], colour="white", strokewidth=1, opac=0.4):
+    def grid(self, grids=[20, 20], colour="white", strokewidth=0.7, opac=0.2):
         a = self.tranx(self.origin[0]) * 0
         b = self.trany(self.origin[1]) * 0
         for i in range(grids[0]):
@@ -81,31 +80,42 @@ class Graph:
             self.svg.draw_line(a, (i / grids[0]) * (self.height) + b, self.width + a,
                                (i / grids[0]) * (self.height) + b,
                                stroke=colour, strokewidth=strokewidth, opacity=opac)
+    def grid2(self, grids=[20,20], colour="white", strokewidth=0.7, opac=0.2):
+        ox = self.width*self.origin[0]/(2*self.xlim)
+        oy = self.origin[1]
+        for i in range(grids[0]):
+            self.svg.draw_line((i / grids[0]) * (self.width), ox, (i / grids[0]) * (self.width) + ox, self.height + oy,
+                               stroke=colour, strokewidth=strokewidth, opacity=opac)
 
-    def text(self, x, y, text, fontsize=20, colour="white", fontweight="normal", fontstyle="normal", font="14", opac=1):
-        self.svg.canvas += '<text x="%s" y="%s" fill="%s" font-size="%s" opacity="%s" > %s </text>' % (
-            self.tranx(x), self.trany(y), colour, fontsize, opac, text)
+        for i in range(grids[1]):
+            self.svg.draw_line(self.origin[0], (i / grids[0]) * (self.height) + oy, self.width + ox,
+                               (i / grids[0]) * (self.height) + oy,
+                               stroke=colour, strokewidth=strokewidth, opacity=opac)
 
-    def ticks(self, stroke="white", strokewidth=1, tick=10, markers=False, fontsize=8):
+    def text(self, x, y, text, fontsize=20, colour="white", fontweight="normal", rotation=0, fontstyle="normal", font="14", opac=1):
+        self.svg.canvas += '<text x="%s" y="%s"  style=" font-family:Arial" fill="%s" font-size="%s" opacity="%s"  transform="rotate(%s)"> %s </text>' % (
+            self.tranx(x), self.trany(y), colour, fontsize, opac,rotation, text)
+
+    def ticks(self, stroke="yellow", strokewidth=1, tick=10, markers=False, fontsize=8):
         tickx = round(tick * 2)
         ticky = round(tick * 2)
-        kx = self.width / 200
-        ky = self.height / 200
+        kx = self.width / 300
+        ky = self.height / 300
         dx = self.width / tickx
         dy = self.height / ticky
         ox = self.xlim * 2 / tickx
         oy = self.ylim * 2 / ticky
         a = self.origin[0] * (self.width / (2 * self.xlim))
         b = -self.origin[1] * (self.height / (2 * self.ylim))
-        p = 1
-        for i in range(0, tickx):
+        p = 2
+        for i in range(1, tickx):
             self.svg.draw_line(dx * i, -ky + self.trany(0) + b, dx * i, ky + self.height / 2 + b,
                                stroke=stroke, strokewidth=strokewidth)
             if markers:
                 if i - self.xlim != 0:
                     self.text((i - self.xlim - fontsize / (p * dx)) * ox, 0 + fontsize / dy,
-                              str(round((i - self.xlim - self.origin[0]) * ox, 1)),
-                              fontsize=fontsize, colour="white", opac=0.3)
+                              str(int(round((i - self.xlim - self.origin[0]) * ox, 1))),
+                              fontsize=fontsize, colour=stroke, opac=0.6)
 
         for i in range(1, ticky):
             self.svg.draw_line(-kx + self.width / 2 + a, dy * i, kx + self.width / 2 + a, dy * i, stroke=stroke,
@@ -113,16 +123,16 @@ class Graph:
             if markers:
                 if i - self.ylim != 0:
                     self.text(0 + fontsize / dx, (i - self.ylim - fontsize / (p * dy)) * oy,
-                              str(round((i - self.ylim + self.origin[1]) * oy, 1)),
-                              fontsize=fontsize, colour="white", opac=0.3)
+                              str(int(round((i - self.ylim + self.origin[1]) * oy))),
+                              fontsize=fontsize, colour=stroke, opac=0.6)
 
     def arrow(self, x1, y1, x2, y2, scale, stroke, strokewidth):
         self.svg.draw_arrow(x1, y1, x2, y2, scale, stroke=stroke, strokewidth=strokewidth)
 
     def graph(self, func, colour="red", strokewidth=1.5, opac=1, n0=1200):
         eps = self.xlim / n0
-        X = [self.tranx(i * eps) for i in range(-n0, n0 + 1)]
-        Y = [self.trany(func(i * eps)) for i in range(-n0, n0 + 1)]
+        X = [self.tranx(i * eps -self.origin[0]) for i in range(-n0, n0 + 1)]
+        Y = [self.trany(func(i * eps - self.origin[0])+self.origin[1]) for i in range(-n0, n0 + 1)]
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
     def graph_points(self, X, Y, colour="red", strokewidth=1, opac=1):
@@ -141,14 +151,15 @@ class Graph:
         text = "%s = %s" % (label, s)
         self.text(x, y, text, strokewidth=strokewidth, stroke=stroke)
 
+    def include_model(self, S):
+        self.svg.canvas += '\n' + S.svg.canvas
+
     def save(self):
         self.svg.save()
         self.svg.canvas = ""
 
     def display(self):
-        webbrowser.get("open -a /Applications/Google\ Chrome.app %s").open(os.getcwd()+"/"+self.name)
-
-
+        webbrowser.get("open -a /Applications/Google\ Chrome.app %s").open(os.getcwd() + "/" + self.name)
 
     def embed_latex(self, expr, x, y, width=200, height=200, colour="white", size=45):
         A = LaText("expr.png", 0.5, 0.5, expr, colour=colour, size=size)
@@ -162,7 +173,83 @@ class Graph:
         self.svg.embed_image(self.tranx(x) - width / 2, self.trany(y) - height / 2, width=width,
                              height=height, href=os.getcwd() + "/Plots/expr.png")
 
-'''
+    # Construction #
+
+    def draw_arrow(self, x1, y1, x2, y2, scale=1, stroke="black", strokewidth=1):
+        self.svg.draw_arrow(self.tranx(x1), self.trany(y1), self.tranx(x2), self.trany(y2), scale, stroke=stroke,
+                            strokewidth=strokewidth)
+
+    def draw_circle(self, x, y, r, fill="none", stroke="black", strokewidth=1):
+        self.svg.draw_circ(self.tranx(x), self.trany(y), self.xscale * r, fill=fill, stroke=stroke,
+                           strokewidth=strokewidth)
+
+    def draw_line(self, x1, y1, x2, y2, stroke="black", strokewidth=1, opacity=1, cap="butt"):
+        self.svg.draw_line(self.tranx(x1), self.trany(y1), self.tranx(x2), self.trany(y2), stroke=stroke,
+                           strokewidth=strokewidth, opacity=opacity, cap=cap)
+
+    def draw_rect(self, x, y, width, height, fill, stroke="black", strokewidth=1):
+        self.svg.draw_rect(self.tranx(x), self.trany(y), abs(self.xscale * (width)),
+                           self.yscale * height, fill, stroke=stroke, strokewidth=strokewidth)
+
+    def draw_dotted_line(self, x1, y1, x2, y2,marker="*",stroke="black", strokewidth=1, opacity=1, cap="butt", segments=20):
+        self.svg.draw_dotted_line(self.tranx(x1), self.trany(y1), self.tranx(x2), self.trany(y2),marker = marker, stroke=stroke,
+                           strokewidth=strokewidth, opacity=opacity, cap=cap, segments=segments)
+
+    def point(self, x, y, s=1, colour="white"):
+        self.draw_circ(x,y, s,fill=colour)
+
+
+class Model(Graph):
+    def __init__(self, width, height, xlim, ylim, name, origin=[0, 0], theme="dark"):
+        self.svg = SVG('', width, height, fullsvg=False)
+        self.eps = xlim / 2000
+        self.name = name
+        self.height = height
+        self.width = width
+        self.xlim = xlim
+        self.ylim = ylim
+        self.origin = np.array(origin)
+        if theme == "dark":
+            self.theme = {
+                'background': 'black',
+                'primary': 'yellow',
+                'secondary': 'white'
+            }
+        else:
+            self.theme = {
+                'background': 'white',
+                'primary': 'black',
+                'secondary': 'black'
+            }
+
+    def show(self):
+        svg = SVG(self.name, self.width, self.height, fullsvg=True)
+        svg.canvas += self.svg.canvas
+        svg.save()
+        self.display()
+
+    def clear(self):
+        self.svg.canvas = ""
+
+
+
+"""
+def func(x):
+    return 0.04 * x ** 2 * math.sin(6 * x) + 5
+
+
+def sq(x):
+    return x * x
+
+
+f = Figure(600, 500, 15, 10, "fig.svg", origin=[-0, -0])
+f.graph(func)
+f.axes(colour="black")
+f.scatter([0.1 * i for i in range(-1500, 1500)], [sq(0.1 * i) for i in range(-1500, 1500)], colour="black")
+f.save()
+f.display()
+"""
+''' 
 
 def g(s):
     def f(x):
@@ -177,7 +264,7 @@ g = Graph(800, 800, 5, 5, "50sd.svg", origin=[-2.,-2.])
 g.bg("black")
 g.axes(colour="white")
 g.ticks(markers=True)
-#g.grid(grids=[10,10], colour="white", strokewidth=0.5, opac=0.5)
+#g.grid(grids=[10,10], colour="white", stroke_width=0.5, opac=0.5)
 #g.ticks(markers=True, tick=5)
 
 #g.graph(f, "blue")
@@ -208,3 +295,32 @@ if __name__ == "__main__":
 
 '''
 
+# def f(x):
+#     return 0.1*(x-1)*(x+3)*(x+3/2)*(x-1/2)
+# A = Graph(1000, 1000, 10, 10, 'svg.svg', origin=[0,0])
+# A.bg()
+# A.axes()
+# A.grid()
+# A.ticks(markers=True)
+# A.graph(f)
+# A.draw_dotted_line(0, 0, 6, 7, stroke="white", marker=".")
+# A.save()
+# A.display()
+#
+
+# def func(x):
+#     return 0.04 * x ** 2 * math.sin(6 * x) - 5
+#
+#
+# def sq(x):
+#     return x * x
+#
+# f = Graph(600, 500, 15, 10, "sggi.svg", origin=[-2, -0])
+# f.bg()
+# f.graph(func, colour="red")
+# f.axes(colour="white")
+# f.grid()
+# f.ticks()
+# f.scatter([0.1 * i for i in range(-1500, 1500)], [sq(0.1 * i) for i in range(-1500, 1500)], colour="black")
+# f.save()
+# f.display()
