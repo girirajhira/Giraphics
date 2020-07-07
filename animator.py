@@ -214,5 +214,5 @@ def f1(s):
 
 K = Animator(1000, 1000, frames=400, eps=0.01, xlim=10, ylim=10, type="complex")
 
-#K.test_frame(f1, "a5.mp4", n=400, scale=0.75, grindint=20, colour="white", strokewidth=[1], grid=True, axes=False, label=False, expr="$Z(x,%s) = sin(3x+%s)$")
+#K.test_frame(f1, "a5.mp4", n=400, scale=0.75, grindint=20, colour="white", stroke_width=[1], grid=True, axes=False, label=False, expr="$Z(x,%s) = sin(3x+%s)$")
 K.animate(f1, "a2.mp4", scale=0.75, grindint=20, colour="white", strokewidth=[1], grid=True, axes=False, label=False, expr="$Z(x,%s) = sin(3x+%s)$")
