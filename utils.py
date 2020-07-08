@@ -1,19 +1,36 @@
 import numpy as np
 from math import cos, sin
 import time
+
 class Timer:
+    """
+    Times code between the start() and stop()
+    """
     def __init__(self, text="Elapsed time: {:0.4f} seconds", logger=print):
         self._start_time = None
         self.text = text
         self.logger = logger
     def start(self, label="task"):
+        """
+        Starts the timer when run
+        :param label: Label of the timer
+        """
         self.label = label
         self.t1 = time.time()
     def stop(self):
+        """
+        Stops the timer when run and prints the time taken to complete the task
+        :return:
+        """
         self.t2 = time.time()
         print("Time lapsed for %s: %s" % (self.label, self.t2-self.t1))
 
 def listlike(var):
+    """
+    Takes a variable and returns the variable in a list if it is not already a list
+    :param var: variable
+    :return: List
+    """
     if isinstance(var, list):
         return var
     else:
