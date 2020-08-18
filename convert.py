@@ -85,7 +85,7 @@ def create_raster_batch2(dir, filename, savename, savedir, num):
 
 def create_raster_batch(dir, filename, savename, savedir, num):
     for i in range(num):
-        command = ("rsvg-convert %s/%s/%s%s.svg -o %s/%s/%s%s.png")%(os.getcwd(),dir,filename, namer(i), os.getcwd(), savedir, savename, namer(i) )
+        command = ("rsvg-convert %s/%s/%s%s.svg -o %s/%s/%s%s.png") % (os.getcwd(), dir, filename, namer(i), os.getcwd(), savedir, savename, namer(i))
         os.system(command)
 
 create_raster_batch("ftp", 'g', 'p', 'ftprast', 1)

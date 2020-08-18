@@ -1,0 +1,18 @@
+<svg version="1.1" 
+ baseProfile="full" 
+ width="300" 
+ height="300" 
+ xmlns="http://www.w3.org/2000/svg">
+<rect x="0.0" y="0.0" width="300" height="300" fill="black" stroke="black" stroke-width="0" opacity="1"/>
+<circle cx="0.0" cy="0.0" r="0" fill="white" stroke="black" stroke-width="1" fill-opacity="1"/>
+<circle cx="25.0" cy="25.0" r="2" fill="white" stroke="black" stroke-width="1" fill-opacity="1"/>
+<circle cx="50.0" cy="50.0" r="4" fill="white" stroke="black" stroke-width="1" fill-opacity="1"/>
+<circle cx="75.0" cy="75.0" r="6" fill="white" stroke="black" stroke-width="1" fill-opacity="1"/>
+<circle cx="100.0" cy="100.0" r="8" fill="white" stroke="black" stroke-width="1" fill-opacity="1"/>
+<circle cx="125.0" cy="125.0" r="10" fill="white" stroke="black" stroke-width="1" fill-opacity="1"/>
+<circle cx="150.0" cy="150.0" r="12" fill="white" stroke="black" stroke-width="1" fill-opacity="1"/>
+<circle cx="175.0" cy="175.0" r="14" fill="white" stroke="black" stroke-width="1" fill-opacity="1"/>
+<circle cx="200.0" cy="200.0" r="16" fill="white" stroke="black" stroke-width="1" fill-opacity="1"/>
+<circle cx="225.0" cy="225.0" r="18" fill="white" stroke="black" stroke-width="1" fill-opacity="1"/>
+
+ </svg>

@@ -1,11 +1,10 @@
 # Dependencies #
 import numpy as np
 import math
-import matplotlib.pyplot as plt
 
 
 class SVG:
-    def __init__(self, path, width, height, fullsvg=True, transform = "none", grouped=False):
+    def __init__(self, path, width, height, transform="none", grouped=False):
         """Arguments
             path (String): Where the SVG will be saved
             width (Int): Width of the SVG
@@ -13,17 +12,11 @@ class SVG:
         """
         self.grouped = grouped
         self.path = path
+        self.canvas = ""
         if grouped:
-            if fullsvg:
-                self.canvas = '<g transform="' + str(
-                    transform) + '"> \n <svg version="1.1" \n baseProfile="full" \n width="' + str(
-                    width) + '" \n height="' + str(
-                    height) + '" \n xmlns="http://www.w3.org/2000/svg">\n'
-            else:
-                self.canvas = '<g transform="' + str(
-                transform) + '"> \n '
-        else:
-            self.canvas = '<svg version="1.1" \n baseProfile="full" \n width="' + str(
+            self.canvas += '<g transform="' + str(transform) +'"> \n'
+
+        self.canvas += '<svg version="1.1" \n baseProfile="full" \n width="' + str(
                 width) + '" \n height="' + str(
                 height) + '" \n xmlns="http://www.w3.org/2000/svg">\n'
 
@@ -142,7 +135,7 @@ class SVG:
         self.draw_line(x1, y1, x2, y2, stroke, stroke_width)
         self.draw_arrowhead2(x2, y2, scale, ang, stroke)
 
-    def draw_polyline(self, X, Y, colour="red", strokewidth="2", opac=1):
+    def draw_polyline(self, X, Y, colour="red", strokewidth="2", opac=1, fill="none"):
         self.canvas += '<polyline points="'
         start = True
         for i in range(len(X)):
@@ -151,13 +144,13 @@ class SVG:
                 self.canvas += '%s, %s ' % (X[i], Y[i])
             else:
                 if start:
-                    self.canvas += '" fill="none" stroke="%s" stroke-width="%s" stroke-linejoin="round" stroke-opacity="%s"/>\n' % (
-                        colour, strokewidth, opac)
+                    self.canvas += '" stroke="%s" stroke-width="%s" stroke-linejoin="round" stroke-opacity="%s" fill="%s" />\n' % (
+                        colour, strokewidth, opac, fill)
                     self.canvas += '<polyline points="'
                 start = False
         if not start:
             self.canvas += '-1,1'
-        self.canvas += '" fill="none" stroke="%s" stroke-width="%s" stroke-linejoin="round" stroke-opacity="%s"/>\n' % (
+        self.canvas += '" fill="%s" stroke="%s" stroke-width="%s" stroke-linejoin="round" stroke-opacity="%s"/>\n' % ( fill,
             colour, strokewidth, opac)
 
     def draw_path_line(self, x_list, y_list, colour="red", strokewidth="2"):
@@ -169,13 +162,14 @@ class SVG:
     def embed_image(self, x, y, width, height, href):
         self.canvas += '<image x="%s" y="%s" width="%s" height="%s" href="%s"/>' % (x, y, width, height, href)
 
-    def save(self):
+    def save(self, write_out=True):
         if self.grouped:
             self.canvas += '\n </svg> \n </g> \n'
         else:
             self.canvas += '\n </svg>'
-        f = open(self.path, "w+")
-        f.write(self.canvas)
-        f.close()
+        if write_out:
+            f = open(self.path, "w+")
+            f.write(self.canvas)
+            f.close()
 
 

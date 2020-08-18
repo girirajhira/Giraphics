@@ -37,15 +37,36 @@ def listlike(var):
         return [var]
 
 
-def TopHeavy(self, i, k=4):
+def max2d(arr):
+    m,n = 0, 0
+    for i in range(len(arr)):
+        for j in range(len(arr[0])):
+            if arr[i][j] >= arr[m][n]:
+                m, n = i, j
+    return arr[m,n]
+
+def min2d(arr):
+    m,n = 0, 0
+    for i in range(len(arr)):
+        for j in range(len(arr[0])):
+            if arr[i][j] <= arr[m][n]:
+                m, n = i, j
+    return arr[m,n]
+
+
+# Velocity Distribution
+def identity(t):
+    return t
+
+def TopHeavy(i, k=4):
     return i ** k
 
 
-def BottomHeavy(self, i, k=0.25):
+def BottomHeavy(i, k=0.25):
     return i ** k
 
 
-def Linear(self):
+def Linear():
     pass
 
 

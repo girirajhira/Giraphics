@@ -1,54 +1,38 @@
 from svgwtr import *
-from grapher import *
+from fancygraphs import *
 import numpy as np
+from math import sin, cos
 
 
-class Widget(Grapher):
-    def __init__(self, win_width, win_height, xlim, ylim, x, y, origin=[0.0, 0.0], border = True):
-        self.svg = SVG('None', win_width, win_height, fullsvg=False)
-        self.eps = xlim / 2000
-        self.height = win_height
-        self.width = win_width
-        self.xlim = xlim
-        self.ylim = ylim
-        self.absposx = x
-        self.absposy = y
-        self.origin = np.array([-xlim, -ylim]) + np.array(origin)
 
-    def tranx(self, x):
-        if x != None:
-            return self.absposx + (self.width / (2 * self.xlim)) * (x + self.origin[0])
-        else:
-            return None
-
-    def trany(self, y):
-        if y != None:
-            return self.absposy - (self.height / (2 * self.ylim)) * (y  + self.origin[1])
-        else:
-            return None
+class Widget(FancyGraphs):
+    def __init__(self, xlim, ylim, Scene, scale=[0.25,0.25], pos=[0, 0], origin=[0.0, 0.0], border=True,
+                bcol="white", bstroke=2.5):
+        #Translations
+        absx, absy = Scene.tranx(pos[0]) - Scene.width * scale[0]/2, Scene.trany(pos[1]) - Scene.height * scale[1]/2
+        Graph.__init__(self,Scene.width * scale[0], Scene.height * scale[1], xlim, ylim, " ", origin=origin,
+                           transform="translate(" + str(absx) + " " + str(absy) + ")", grouped=True)
+        #Borders
+        Scene.svg.draw_rect(Scene.tranx(pos[0]), Scene.trany(pos[1]), Scene.width * scale[0], Scene.height * scale[1], 'none', stroke=bcol,
+                               strokewidth=bstroke)
+    def save(self):
+        self.svg.save(write_out=False)
 
 
-class Scene(Grapher):
-    def createWidget(self, width, height, xlim, ylim, x, y, origin=[0.0, 0.0], border=True, bcol = "white", bstroke = 1):
-        absx, absy = self.tranx(x), self.trany(y)
-        # border
-        self.svg.draw_rect(absx,absy,width, height, 'none', stroke=bcol, strokewidth=bstroke)
-        return Widget(width, height, xlim, ylim, absx + width/2, absy- height/2, origin=origin)
+class Scene(FancyGraphs):
+    def commitWidget(self, widget):
+        widget.save()
+        self.svg.canvas += widget.svg.canvas
 
-    def commitWidgets(self, *args):
-        self.svg.canvas += '\n'
-        for g in args:
-            self.svg.canvas += g.svg.canvas + '\n'
-
-import math
-
-def f(X):
-    return  X*X
-A = Scene(2000, 2000, 10, 10, 'Ascene.svg')
-A.bg("black")
-A.axes(colour="white")
-G1 = A.createWidget(1000,1000,10,10,5,5, origin=[-10,-0])
-G1.axes(colour="yellow")
-G1.graph(f)
-A.commitWidgets(G1)
-A.show()
+# A = Scene(2560, 1440, 16, 9, 'Ascene.svg')
+# A.bg(colour="black")
+# A.axes()
+# A.grid()
+# A.graph(math.sin)
+# g1 = Widget(10, 10, A, pos=[-0,0], scale=[0.5,.5], origin=[-10,0.1])
+# g1.bg(colour="blue")
+# g1.axes()
+# g1.graph(math.sin)
+# A.commitWidget(g1)
+# A.save()
+# A.display()

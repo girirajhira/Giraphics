@@ -1,7 +1,6 @@
 from convert import *
 from graph import *
-import matplotlib.pyplot as plt
-from math import floor
+from math import sin
 
 def fact(x):
     if x==0:
@@ -28,20 +27,20 @@ def taylor_series_sine(t, max_order=30):
         return total
     return f
 
-frames = 500 + 1
+frames = 780 + 1
 create_directory("ftp")
 create_directory("ftprast")
 
 for i in range(frames):
     t = i/80
-    g = Graph(400, 400 , 10, 10,"ftp/g"+namer(i)+".svg", origin=[0,0])
+    g = Graph(1000, 1000, 7, 7,"ftp/g"+namer(i)+".svg", origin=[0,0])
     g.bg("black")
     g.grid()
     g.axes("yellow")
-    g.embed_latex( "Order $n$ = " + str(floor(t)), -8, 8)
+    g.dotted_graph(sin, colour="yellow")
     g.graph(taylor_series_sine(t, max_order=round(frames/80)),colour="white", strokewidth=1.5)
     g.save()
 
 create_raster_batch("ftp", 'g', 'p', 'ftprast', frames)
 # Creating the final video
-create_mpeg('t4.mp4', 'p', frames, dir=os.getcwd()+"/ftprast")
+create_mpeg('SineExample2.mp4', 'p', frames, dir=os.getcwd()+"/ftprast", framerate=60)

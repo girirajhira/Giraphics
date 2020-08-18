@@ -1,6 +1,7 @@
 import math
 import numpy as np
 from graph import *
+from utils import max2d, min2d
 from colour import *
 from colour import max, norm, hex_to_vec, vec_to_hex
 
@@ -134,10 +135,37 @@ class FancyGraphs(Graph):
                 Y.append(self.trany(func(x, y).imag))
                 self.svg.draw_polyline(X, Y, colour="yellow", strokewidth=strokewidth)
 
-#class Figure(Grapher):
+    def DenistyPlot(self, func, points = [60,60], initColour=[10, 40, 30], endColour=[100, 240, 20]):
+        # Do simultaneous
+        # Edge Issue
+        xres = round(points[0]/2)
+        yres = round(points[1]/2)
+        field = np.array(
+            [[func((x- self.origin[0]) * xres/(2*self.xlim), (y- self.origin[1]) * yres/(2*self.ylim) )
+              for x in range(-xres, xres+1)]
+             for y in range(-yres, yres+1)])
+        cl = linear(initColour, endColour)
+        max = max2d(field)
+        min = min2d(field)
+        xx = xres/(self.xlim)
+        yy = yres/(self.ylim)
+        for j in range(0, 2*xres):
+            for k in range(0, 2*yres):
+                self.draw_rect((j-xres)*self.xlim/xres - self.origin[0], (k-yres)*self.ylim/yres-self.origin[1], 1/xx, 1/yy, cl((field[k][j]-min)/(max-min)), strokewidth=0)
+                # self.text(j*self.xlim/xres, k*self.ylim/yres, str(round(j*self.xlim/xres,1)) +"," +str(round(k*self.ylim/yres,1)) , colour="red",fontsize=1)
 
-
-
+    #class Figure(Grapher):
+# def f(x,y):
+#     # return np.sin((x / 10) ** 2 + (y / 10) ** 2)
+#     return np.sin(x)*np.cos(y)
+# def spherical(x,y):
+#     pass
+#
+# A = FancyGraphs(500,500,5,5,"dense.svg", origin=[3,0])
+# A.bg(colour="black")
+# A.DenistyPlot(f)
+# A.save()
+# A.display()
 '''
 from math import sin, sqrt
 from math import e
