@@ -70,6 +70,57 @@ class FancyGraphs(Graph):
                     else:
                         self.svg.draw_arrow(self.tranx(x), self.trany(y), x2, y2, stroke=cl((norm(f))/M), strokewidth=strokewidth, scale=arrow_scale)
 
+    def VectorField2(self, func, gridint=10, scale=0.08, strokewidth=1.25, stroke="white", arrow=True, constcolour=False,
+                    initColour=[0, 130, 50], endColour=[2, 66, 130],
+                     constLength=False, length_scale=1, arrow_scale=1):
+        """
+        :type gridint: int
+        """
+        epsx = self.xlim / gridint
+        epsy = self.ylim / gridint
+
+        fl = 1
+        if not constLength:
+            fl = 0
+        if constcolour:
+            if not arrow:
+                arrow_scale = 0
+
+            for i in range(-gridint, gridint + 1):
+                for j in range(-gridint, gridint + 1):
+                    x, y = epsx * i, epsy * j
+                    f = func(x, y)
+                    x2 = self.tranx(x + (f[0]) * length_scale)
+                    y2 = self.trany(y + (f[1]) * length_scale)
+                    if abs(f[0]) <= 0.05 and abs(f[1]) <= 0.05:
+                        self.svg.draw_arrow(self.tranx(x), self.trany(y), x2, y2, stroke=stroke,
+                                            strokewidth=strokewidth, scale=arrow_scale)
+
+        else:
+            cl = linear(initColour, endColour)
+            if not arrow:
+                arrow_scale = 0
+            L = []
+            for i in range(-gridint, gridint + 1):
+                for j in range(-gridint, gridint + 1):
+                    x, y = epsx * i, epsy * j
+                    f = func(x, y)
+                    L.append(norm(f))
+            M = max(L)
+            for i in range(-gridint, gridint + 1):
+                for j in range(-gridint, gridint + 1):
+                    x, y = epsx * i, epsy * j
+                    f = func(x, y)
+                    fn = norm(f) * fl * gridint / (2 * self.xlim) if norm(f) * fl != 0 else 1
+                    x2 = self.tranx(x + (f[0]) * length_scale / fn)
+                    y2 = self.trany(y + (f[1]) * length_scale / fn)
+                    if f == [0, 0]:
+                        self.svg.draw_circ(self.tranx(x), self.trany(y), scale * 70, fill=vec_to_hex(endColour),
+                                           strokewidth=0)
+                    else:
+                        self.svg.draw_arrow(self.tranx(x), self.trany(y), x2, y2, stroke=cl((norm(f)) / M),
+                                            strokewidth=strokewidth, scale=arrow_scale)
+
     def hj(self, x, xlim):
         return 0.1 + 0.9*x*x/xlim
 
@@ -118,6 +169,8 @@ class FancyGraphs(Graph):
                 Y.append(self.trany(func(x,y).imag))
             self.svg.draw_polyline(X, Y, colour="lightblue", strokewidth=strokewidth)
 
+
+
     def LinearTransforms(self, M, grids = [20,20], strokewidth = 1, colour="red"):
         self.bg(colour="black")
         func = 1
@@ -163,10 +216,10 @@ class FancyGraphs(Graph):
         self.draw_line(self.xlim, 0, 0, -self.ylim, colour="yellow")
         self.axes()
 
-A = FancyGraphs(500, 500, 5, 5, "penrose.svg")
-A.Penrose()
-A.save()
-A.display()
+# A = FancyGraphs(500, 500, 5, 5, "penrose.svg")
+# A.Penrose()
+# A.save()
+# A.display()
 
     #class Figure(Grapher):
 # def f(x,y):

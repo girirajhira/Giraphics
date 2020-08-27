@@ -185,13 +185,13 @@ class Graph:
         self.svg.canvas += '<text x="%s" y="%s"  font-family="Recursive" fill="%s" font-size="%s" alignment-baseline="middle" text-anchor="middle" opacity="%s"  transform="rotate(%s,%s,%s)"> %s </text>\n' % (
             self.tranx(x), self.trany(y), colour, fontsize, opac, rotation, self.tranx(x), self.trany(y), text)
 
-    def math_text(self,expression, x, y):
+    def math_text(self,expression, x, y, colour="White", scale=150):
         math_to_svg(expression, os.getcwd()+"/temp.txt")
         with open("temp.txt", 'r') as file:
             code = file.read()
         os.remove(os.getcwd()+"/temp.txt")
         self.svg.canvas += '\n <g transform="translate(' + str(self.tranx(x)) + ' ' + str(self.trany(y)) +')">'
-        self.svg.canvas += code
+        self.svg.canvas += code.replace('currentColor', colour).replace('8.781ex', str(scale))
         self.svg.canvas += '</g> \n'
 
     def ticks(self, colour="yellow", strokewidth=1, markers=False, fontsize=8):
@@ -334,11 +334,6 @@ class Graph:
     def param_label(self, x, y, label, s, stroke="white", strokewidth=12):
         text = "%s = %s" % (label, s)
         self.text(x, y, text, strokewidth=strokewidth, stroke=stroke)
-
-    # def include_model(self, S):
-    #     self.svg.canvas += '\n' + S.svg.canvas
-
-
 
     def embed_latex(self, expr, x, y, width=200, height=200, colour="white", size=45):
         A = LaText("expr.png", 0.5, 0.5, expr, colour=colour, size=size)
@@ -483,3 +478,9 @@ if __name__ == "__main__":
 # A.save()
 # A.display()
 #
+#
+# g = Graph(1000,1000,3,3,'giraphics.svg')
+# g.bg(colour="black")
+# g.math_text('GiraFix', 0,0)
+# g.save()
+# g.display()

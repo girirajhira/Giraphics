@@ -23,7 +23,7 @@ def convert_mpeg(outputfile):
     print("MPEG Exported!")
 
 
-# Create an MPEG from a batch of files
+# converts image formats
 def convert_image(inputfile, outputfile):
     command = ("rsvg-convert %s -o %s ") % (inputfile, outputfile)
     os.system(command)
