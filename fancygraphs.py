@@ -154,6 +154,20 @@ class FancyGraphs(Graph):
                 self.draw_rect((j-xres)*self.xlim/xres - self.origin[0], (k-yres)*self.ylim/yres-self.origin[1], 1/xx, 1/yy, cl((field[k][j]-min)/(max-min)), strokewidth=0)
                 # self.text(j*self.xlim/xres, k*self.ylim/yres, str(round(j*self.xlim/xres,1)) +"," +str(round(k*self.ylim/yres,1)) , colour="red",fontsize=1)
 
+
+    def Penrose(self, grids=10):
+        self.bg(colour="black")
+        self.draw_line(0, self.ylim, self.xlim, 0, colour="yellow")
+        self.draw_line(0, self.ylim, -self.xlim, 0, colour="yellow")
+        self.draw_line(-self.xlim, 0, 0, -self.ylim, colour="yellow")
+        self.draw_line(self.xlim, 0, 0, -self.ylim, colour="yellow")
+        self.axes()
+
+A = FancyGraphs(500, 500, 5, 5, "penrose.svg")
+A.Penrose()
+A.save()
+A.display()
+
     #class Figure(Grapher):
 # def f(x,y):
 #     # return np.sin((x / 10) ** 2 + (y / 10) ** 2)
