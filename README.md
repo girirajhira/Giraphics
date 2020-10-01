@@ -1,4 +1,5 @@
 # Giraphics
+![Banner] (https://github.com/tghira16/GiraFix/blob/master/res/banner.svg)
 
 Giraphics is static graphics library intended for creating plots and animations.
 
