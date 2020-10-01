@@ -97,6 +97,9 @@ class Graph3d(FancyGraphs):
     def Rz(self,theta, r=1):
         return np.array([[cos(theta), -sin(theta), 0], [sin(theta), cos(theta), 0], [0, 0, 1]])
 
+    def Rx(self,theta, r=1):
+        return np.array([ [0, 0, 1],[cos(theta), -sin(theta), 0], [sin(theta), cos(theta), 0]])
+
     def Ry(self,theta, r=1):
         return np.array([[cos(theta), 0, sin(theta)], [0, 1, 0], [-sin(theta), 0, cos(theta)]])
 

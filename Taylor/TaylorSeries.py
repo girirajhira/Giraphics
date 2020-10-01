@@ -3,9 +3,9 @@ from graph import *
 from math import sin
 
 def fact(x):
-    if x==0:
+    if x == 0:
         return 1
-    elif x==1:
+    elif x == 1:
         return 1
     else:
         t = 1

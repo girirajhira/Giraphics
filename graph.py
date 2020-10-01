@@ -40,7 +40,7 @@ class Graph:
         self.origin = np.array(origin)
         self.xscale = width / (2 * xlim)
         self.yscale = height / (2 * ylim)
-
+        self.TexLoader = []
         if theme == "dark":
             self.theme = {
                 'background': 'black',
@@ -193,6 +193,8 @@ class Graph:
         self.svg.canvas += '\n <g transform="translate(' + str(self.tranx(x)) + ' ' + str(self.trany(y)) +')">'
         self.svg.canvas += code.replace('currentColor', colour).replace('8.781ex', str(scale))
         self.svg.canvas += '</g> \n'
+    def add_math_text(self, expr, x, y, colour="white", scale=150):
+        self.TexLoader.append([expr,x,y,colour,scale])
 
     def ticks(self, colour="yellow", strokewidth=1, markers=False, fontsize=8):
         """
@@ -270,6 +272,27 @@ class Graph:
         eps = self.xlim / n
         X = [self.tranx(i * eps - self.origin[0]) for i in range(-n, n + 1)]
         Y = [self.trany(func(i * eps - self.origin[0])) for i in range(-n, n+ 1)]
+        self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
+
+    def graph_polar(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
+        """
+        Graphs the given function
+        :param func: function
+            function to be plotted
+        :param colour: string
+            colour of the curve
+        :param strokewidth: float
+            width of curve
+        :param opac: string
+            opacity of the curve
+        :param n: int
+            Number of points used in the curve
+        :return: None
+        """
+
+        eps = self.xlim / n
+        X = [self.tranx(i * eps - self.origin[0]) for i in range(-n, n + 1)]
+        Y = [self.trany(func(i * eps - self.origin[0])) for i in range(-n, n + 1)]
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
     def area(self, func, limits, colour="red", area_colour= "orange", strokewidth=0, opac=1, n=500):
@@ -379,6 +402,11 @@ class Graph:
         self.draw_circle(x, y, 15*s/self.width, fill=colour,strokewidth=0)
 
     def save(self):
+        if len(self.TexLoader)!=0:
+            for t in self.TexLoader:
+                self.math_text(t[0], t[1], t[2], colour=t[3], scale=t[4])
+
+
         """
         Saves the graph and clears the svg.canvas
         """

@@ -1,24 +1,31 @@
 from fancygraphs import *
-from convert import *
+from convert import convert_image
+import math
 
+''''
+This script takes plots the a vector field of a function that takes (x,y) and assigns
+it a vector. 
+
+'''
 
 # SVG setup
 width = 1000
 height = 1000
-xlim = 10
-ylim = 10
+xlim = 2
+ylim = 2
 name = 'VectorField.svg'
-fg = FancyGraphs(width, height, xlim, ylim, name)
 
-import math
-# Function to be plotted
+# Creates the Graph Object
+G = FancyGraphs(width, height, xlim, ylim, name, origin=[-xlim,-ylim])
+
+# Vector Function
 def V(x,y):
-    z = math.e**(1j*(x*y-y)*.3)-10
-    return [z.real, z.imag]
+    a = 1.4
+    b = 0.7
+    return [x - y*x,-a*y + b*x*y]
 
 # Parameters
-gridint = 15 # Number of vectors in the x and y directions
-
+gridint = 16 # Number of vectors in the x and y directions
 scale = 0.01
 stroke = 'white'
 arrow = True
@@ -26,18 +33,25 @@ constcolour = False
 initColour = [200, 0, 200]
 endColour = [200, 0, 0]
 constLength = True # Length of the wa
-length_scale = .25*1.5 # Length of the arrow
-arrow_scale = 0.5*2 #Size of the arrowhead
+length_scale = .4 # Length of the arrow
+arrow_scale = 0.5*2 # Size of the arrowhead
 
-fg.bg(colour="black")
-fg.grid(grid_int=[gridint, gridint])
-fg.VectorField2(V, gridint=gridint, scale=scale, stroke=stroke, arrow=arrow, constcolour=constcolour,
-               constLength=constLength, length_scale=length_scale, arrow_scale=arrow_scale, initColour=initColour,
+
+# Drawing the background and grid
+G.bg(colour="black")
+G.grid(grid_int=[gridint, gridint])
+G.axes()
+G.ticks()
+
+# Drawing the vector Field
+G.VectorField(V, gridint=gridint, scale=scale, stroke=stroke, arrow=arrow, constColour=constcolour,
+                constLength=constLength, tail_length=length_scale, arrow_scale=arrow_scale, initColour=initColour,
                 endColour=endColour)
 
 # Save and display the graph
-fg.save()
-fg.display()
+G.save()
+G.display()
+
 # Convert from svg to png
 save_file = 'VectorField.png'
 convert_image(name, save_file)

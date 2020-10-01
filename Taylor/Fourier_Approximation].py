@@ -2,24 +2,25 @@ from graph import *
 from convert import *
 import numpy as np
 
+N = 9
 
 def xfunc(x):
     total = 0
-    for i in range(1,11):
-        total+= 1/(2*i)*np.sin(i*x)
+    for i in range(1, N):
+        total += 1/(2*i)*np.sin(i*x)
     return total
 
 def yfunc(x):
     total = 0
-    for i in range(1,11):
-        total+= 1/(2*i)*np.cos(i*x)
+    for i in range(1, N):
+        total += 1/(2*i)*np.cos(i*x)
     return total
 
 frames = 300
 create_directory("ftp")
 create_directory("ftprast")
 
-t = np.arange(0,7,.01)
+t = np.arange(0, 7, .01)
 X = xfunc(t)
 Y = yfunc(t)
 ds = round(len(t)/frames)

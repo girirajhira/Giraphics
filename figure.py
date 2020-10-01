@@ -2,17 +2,17 @@ from graph import Graph
 import math
 
 class Figure(Graph):
-    def __init__(self, width, height, xlim, ylim, name, origin=[0.0, 0.0], full_svg=True, theme="dark",
+    def __init__(self, width, height, xlim, ylim, name, origin=[0.0, 0.0], theme="dark",
                  border_width=0.12, bg="white"):
-        Graph.__init__(self, width, height, xlim, ylim, name, full_svg=full_svg, theme=theme)
+        Graph.__init__(self, width, height, xlim, ylim, name, theme=theme)
         self.bw = 1 - border_width
         self.border_width = border_width
-        self.inner_graph = Graph(self.bw * width, self.bw * height, xlim, ylim, name, origin=origin, full_svg=full_svg,
+        self.inner_graph = Graph(self.bw * width, self.bw * height, xlim, ylim, name, origin=origin,
                                  theme=theme, transform="translate("+str(width*border_width/2) + " " + str(height*border_width/2) + ")", grouped=True)
         # self.bg(colour=bg)
 
-    def graph(self, func, colour="red", strokewidth=1.5, opac=1, n0=1200):
-        self.inner_graph.graph(func, colour="red", strokewidth=1.5, opac=1, n0=1200)
+    def graph(self, func, colour="red", strokewidth=1.5, opac=1, n=1200):
+        self.inner_graph.graph(func, colour="red", strokewidth=1.5, opac=1, n=1200)
         # Draw margins
 
     def graph_points(self, X, Y, colour="red", strokewidth=1, opac=1):
@@ -31,10 +31,10 @@ class Figure(Graph):
     #     self.inner_graph.axes(colour=colour, strokewidth=strokewidth, arrows=arrows)
 
     def grid(self, grids=[20, 20], colour="grey", strokewidth=0.7, opac=0.2):
-        self.inner_graph.grid(grids=grids, colour=colour, strokewidth=strokewidth, opac=opac)
+        self.inner_graph.grid(grid_int=grids, colour=colour, strokewidth=strokewidth, opac=opac)
 
     def grid2(self, grids=[20, 20], colour="white", strokewidth=0.7, opac=0.2):
-        self.inner_graph.grid(grids=grids, colour=colour, strokewidth=strokewidth, opac=opac)
+        self.inner_graph.grid(grid_int=grids, colour=colour, strokewidth=strokewidth, opac=opac)
 
     def bg(self, colour):
         self.inner_graph.bg(colour=colour)
@@ -92,20 +92,20 @@ class Figure(Graph):
 
     def save(self):
         self.svg.canvas += self.inner_graph.svg.canvas + "\n </svg>\n </g>\n"
-        self.draw_rect(0, 0, 2 * self.xlim * self.bw, 2 * self.ylim * self.bw, fill="none", stroke="black",
+        self.draw_rect(0, 0, 2 * self.xlim * self.bw, 2 * self.ylim * self.bw, fill="none", colour="black",
                        strokewidth=1.2)
         Graph.save(self)
 
-def func(x):
-    return 0.04 * x ** 2 * math.sin(6 * x) - 5
-
-f = Figure(600, 450, 15, 10, "fig.svg", origin=[-5,-5])
-f.graph(func, colour="red")
-f.grid()
-# f.grid2(colour="blue")
-# f.ticks(markers=True)
-f.xlabel(label="f(x)")
-f.ylabel()
-f.title("Title")
-f.save()
-f.display()
+# def func(x):
+#     return 0.04 * x ** 2 * math.sin(6 * x) - 5
+#
+# f = Figure(600, 450, 15, 10, "fig.svg", origin=[-5,-5])
+# f.graph(func, colour="red")
+# f.grid()
+# # f.grid2(colour="blue")
+# # f.ticks(markers=True)
+# f.xlabel(label="f(x)")
+# f.ylabel()
+# f.title("Title")
+# f.save()
+# f.display()
