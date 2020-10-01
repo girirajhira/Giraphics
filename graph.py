@@ -185,15 +185,17 @@ class Graph:
         self.svg.canvas += '<text x="%s" y="%s"  font-family="Recursive" fill="%s" font-size="%s" alignment-baseline="middle" text-anchor="middle" opacity="%s"  transform="rotate(%s,%s,%s)"> %s </text>\n' % (
             self.tranx(x), self.trany(y), colour, fontsize, opac, rotation, self.tranx(x), self.trany(y), text)
 
-    def math_text(self,expression, x, y, colour="White", scale=150):
+    def math_text(self,expression, x, y, colour="White", scale=4):
         math_to_svg(expression, os.getcwd()+"/temp.txt")
         with open("temp.txt", 'r') as file:
             code = file.read()
         os.remove(os.getcwd()+"/temp.txt")
-        self.svg.canvas += '\n <g transform="translate(' + str(self.tranx(x)) + ' ' + str(self.trany(y)) +')">'
+        dx = len(expression)*scale
+        dy = 9*scale
+        self.svg.canvas += '\n <g transform-origin="bottome" transform="translate(' + str(self.tranx(x)-dx) + ' ' + str(self.trany(y)-dy) +'),' + 'scale('+str(scale)+',' +str(scale)+')' + ' ">'
         self.svg.canvas += code.replace('currentColor', colour).replace('8.781ex', str(scale))
         self.svg.canvas += '</g> \n'
-    def add_math_text(self, expr, x, y, colour="white", scale=150):
+    def add_math_text(self, expr, x, y, colour="white", scale=4):
         self.TexLoader.append([expr,x,y,colour,scale])
 
     def ticks(self, colour="yellow", strokewidth=1, markers=False, fontsize=8):

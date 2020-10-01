@@ -22,13 +22,14 @@ class FancyGraphs(Graph):
             self.svg.draw_line(0, 0, 10 * self.xlim * math.cos(dt), 10 * self.xlim * math.sin(dt))
             # Draw Rays from the origin
 
-    def VectorField_old(self, func, gridint=10, scale=0.08, strokewidth=1.25, stroke="white", arrow=True,
+    def VectorField_old(self, func, gridint=None, scale=0.08, strokewidth=1.25, stroke="white", arrow=True,
                         constcolour=False, initColour=[0, 130, 50], endColour=[2, 66, 130], grids=[10, 10], grid=False,
                         bg=True, bgColour="black", gridColour="white", constLength=False, length_scale=1,
                         arrow_scale=1):
         """
         :type gridint: int
         """
+
         epsx = self.xlim / gridint
         epsy = self.ylim / gridint
         if bg:
@@ -79,12 +80,26 @@ class FancyGraphs(Graph):
 
     def VectorField(self, func, gridint=10, scale=0.08, strokewidth=1.25, stroke="white", arrow=True, constColour=False,
                     initColour=[0, 130, 50], endColour=[2, 66, 130],
-                    constLength=False, tail_length=1, arrow_scale=1):
+                    constLength=False, tail_length=1, arrow_scale=1, grid_multiplier=1):
         """
         :type gridint: int
         """
-        epsx = self.xlim / gridint
-        epsy = self.ylim / gridint
+
+        if gridint is None:
+            gridint = []
+            if self.xlim<5:
+                gridint.append(round(2*self.xlim*grid_multiplier))
+            else:
+                gridint.append(2 * self.xlim)
+            if self.ylim < 5:
+                gridint.append(round(2*self.ylim*grid_multiplier))
+            else:
+                gridint.append(2 * self.ylim)
+
+        epsx = self.xlim / gridint[0]
+        epsy = self.ylim / gridint[1]
+
+
 
         fl = 1
         if not constLength:
@@ -93,8 +108,8 @@ class FancyGraphs(Graph):
             if not arrow:
                 arrow_scale = 0
 
-            for i in range(-gridint, gridint + 1):
-                for j in range(-gridint, gridint + 1):
+            for i in range(-gridint[0], gridint[0] + 1):
+                for j in range(-gridint[1], gridint[1] + 1):
                     x, y = epsx * i - self.origin[1], epsy * j - self.origin[1]
                     f = func(x, y)
                     x2 = self.tranx(x + (f[0]) * tail_length)
@@ -108,17 +123,17 @@ class FancyGraphs(Graph):
             if not arrow:
                 arrow_scale = 0
             L = []
-            for i in range(-gridint, gridint + 1):
-                for j in range(-gridint, gridint + 1):
+            for i in range(-gridint[0], gridint[0] + 1):
+                for j in range(-gridint[1], gridint[1] + 1):
                     x, y = epsx * i - self.origin[1], epsy * j - self.origin[1]
                     f = func(x, y)
                     L.append(norm(f))
             M = max(L)
-            for i in range(-gridint, gridint + 1):
-                for j in range(-gridint, gridint + 1):
+            for i in range(-gridint[0], gridint[0] + 1):
+                for j in range(-gridint[1], gridint[1] + 1):
                     x, y = epsx * i - self.origin[1], epsy * j - self.origin[1]
                     f = func(x, y)
-                    fn = norm(f) * fl * gridint / (2 * self.xlim) if norm(f) * fl != 0 else 1
+                    fn = norm(f) * fl * gridint[0] / (2 * self.xlim) if norm(f) * fl != 0 else 1
                     x2 = self.tranx(x + (f[0]) * tail_length / fn)
                     y2 = self.trany(y + (f[1]) * tail_length / fn)
                     if f == [0, 0]:
@@ -252,7 +267,7 @@ def func(x, y):
         return [0, 0]
 
 
-A = FancyGraphs(1400,1400,5,5,"Dipole.svg")
-#A.VectorField(func, gridint=5,  arrow_scale=2, stroke_width=2, stroke="white", arrow = True, constcolour=False,constLength=True)
-A.VectorField(func, gridint=25,  arrow_scale=1.5, tail_length=0.5, arrow = True, constLength=True, initColour=hex_to_vec('#000099'), endColour=hex_to_vec('#ff99cc'))
-A.save()
+# A = FancyGraphs(1400,1400,5,5,"Dipole.svg")
+# #A.VectorField(func, gridint=5,  arrow_scale=2, stroke_width=2, stroke="white", arrow = True, constcolour=False,constLength=True)
+# A.VectorField(func, gridint=25,  arrow_scale=1.5, tail_length=0.5, arrow = True, constLength=True, initColour=hex_to_vec('#000099'), endColour=hex_to_vec('#ff99cc'))
+# A.save()

@@ -25,7 +25,7 @@ def V(x,y):
     return [x - y*x,-a*y + b*x*y]
 
 # Parameters
-gridint = 16 # Number of vectors in the x and y directions
+gridint = [10,10] # Number of vectors in the x and y directions
 scale = 0.01
 stroke = 'white'
 arrow = True
@@ -39,7 +39,7 @@ arrow_scale = 0.5*2 # Size of the arrowhead
 
 # Drawing the background and grid
 G.bg(colour="black")
-G.grid(grid_int=[gridint, gridint])
+G.grid(grid_int=gridint)
 G.axes()
 G.ticks()
 
