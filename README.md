@@ -1,5 +1,5 @@
 # Giraphics
-![Banner](https://github.com/tghira16/GiraFix/blob/master/res/banner.svg?raw=true =250x)
+![Banner](https://github.com/tghira16/GiraFix/blob/master/res/banner.svg?raw=true=250x)
 
 
 https://github.com/tghira16/GiraFix/blob/master/Examples
