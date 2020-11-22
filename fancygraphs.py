@@ -186,9 +186,6 @@ class FancyGraphs(Graph):
                 Y.append(self.trany(func(x, y).imag))
             self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth)
 
-    def ComplexPlot(self):
-        pass
-
     def LinearTransforms(self, M, grids=[20, 20], strokewidth=1, colour="red"):
         self.bg(colour="black")
         func = 1

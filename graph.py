@@ -119,9 +119,10 @@ class Graph:
                                      colour=colour)  # S
             self.svg.draw_arrowhead2(self.tranx(-self.xlim - ox) + 3 * scale, self.trany(0), scale, - math.pi / 2,
                                      colour=colour)  # W
+
     # Todo: Fix Grid, origin changes
 
-    def grid(self, grid_int=None, colour="#A7A7A7", grid_multiplier=1,  strokewidth=0.7, opac=1):
+    def grid(self, grid_int=None, colour="#A7A7A7", grid_multiplier=1, strokewidth=0.7, opac=1):
         """
         Creates a grid
         :param grids: list (length 2)
@@ -136,25 +137,25 @@ class Graph:
         """
         if grid_int is None:
             grid_int = []
-            if self.xlim<5:
-                grid_int.append(round(2*self.xlim*grid_multiplier))
+            if self.xlim < 5:
+                grid_int.append(round(2 * self.xlim * grid_multiplier))
             else:
                 grid_int.append(2 * self.xlim)
             if self.ylim < 5:
-                grid_int.append(round(2*self.ylim*grid_multiplier))
+                grid_int.append(round(2 * self.ylim * grid_multiplier))
             else:
                 grid_int.append(2 * self.ylim)
 
-        a = self.tranx(self.origin[0])*0
-        b = self.trany(self.origin[1])*0
-        for i in range(2*grid_int[0]):
-            self.svg.draw_line((i / grid_int[0]) * self.xscale*self.xlim + a, b, (i / grid_int[0]) * self.xscale*self.xlim + a, self.height + b,
+        a = self.tranx(self.origin[0]) * 0
+        b = self.trany(self.origin[1]) * 0
+        for i in range(2 * grid_int[0]):
+            self.svg.draw_line((i / grid_int[0]) * self.xscale * self.xlim + a, b,
+                               (i / grid_int[0]) * self.xscale * self.xlim + a, self.height + b,
                                stroke=colour, strokewidth=strokewidth, opacity=opac)
-        for i in range(2*grid_int[1]):
-            self.svg.draw_line(a, (i / grid_int[1]) * self.yscale*self.ylim + b, self.width + a,
-                               (i / grid_int[1]) * self.yscale*self.ylim + b,
+        for i in range(2 * grid_int[1]):
+            self.svg.draw_line(a, (i / grid_int[1]) * self.yscale * self.ylim + b, self.width + a,
+                               (i / grid_int[1]) * self.yscale * self.ylim + b,
                                stroke=colour, strokewidth=strokewidth, opacity=opac)
-
 
     # def text(self, x, y, text, fontsize=20, colour="white", rotation=0,
     #          font="14", opac=1):
@@ -185,18 +186,21 @@ class Graph:
         self.svg.canvas += '<text x="%s" y="%s"  font-family="Recursive" fill="%s" font-size="%s" alignment-baseline="middle" text-anchor="middle" opacity="%s"  transform="rotate(%s,%s,%s)"> %s </text>\n' % (
             self.tranx(x), self.trany(y), colour, fontsize, opac, rotation, self.tranx(x), self.trany(y), text)
 
-    def math_text(self,expression, x, y, colour="White", scale=4):
-        math_to_svg(expression, os.getcwd()+"/temp.txt")
+    def math_text(self, expression, x, y, colour="White", scale=4):
+        math_to_svg(expression, os.getcwd() + "/temp.txt")
         with open("temp.txt", 'r') as file:
             code = file.read()
-        os.remove(os.getcwd()+"/temp.txt")
-        dx = len(expression)*scale
-        dy = 9*scale
-        self.svg.canvas += '\n <g transform-origin="bottome" transform="translate(' + str(self.tranx(x)-dx) + ' ' + str(self.trany(y)-dy) +'),' + 'scale('+str(scale)+',' +str(scale)+')' + ' ">'
+        os.remove(os.getcwd() + "/temp.txt")
+        dx = len(expression) * scale
+        dy = 9 * scale
+        self.svg.canvas += '\n <g transform-origin="bottome" transform="translate(' + str(
+            self.tranx(x) - dx) + ' ' + str(self.trany(y) - dy) + '),' + 'scale(' + str(scale) + ',' + str(
+            scale) + ')' + ' ">'
         self.svg.canvas += code.replace('currentColor', colour).replace('8.781ex', str(scale))
         self.svg.canvas += '</g> \n'
+
     def add_math_text(self, expr, x, y, colour="white", scale=4):
-        self.TexLoader.append([expr,x,y,colour,scale])
+        self.TexLoader.append([expr, x, y, colour, scale])
 
     def ticks(self, colour="yellow", strokewidth=1, markers=False, fontsize=8):
         """
@@ -209,7 +213,7 @@ class Graph:
         :param fontsize: float
         :return: None
         """
-        tickx, ticky = round(2*self.xlim),round(2*self.ylim)
+        tickx, ticky = round(2 * self.xlim), round(2 * self.ylim)
         dx = self.width / tickx
         dy = self.height / ticky
         ox = self.xlim * 2 / tickx
@@ -273,7 +277,7 @@ class Graph:
         """
         eps = self.xlim / n
         X = [self.tranx(i * eps - self.origin[0]) for i in range(-n, n + 1)]
-        Y = [self.trany(func(i * eps - self.origin[0])) for i in range(-n, n+ 1)]
+        Y = [self.trany(func(i * eps - self.origin[0])) for i in range(-n, n + 1)]
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
     def graph_polar(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
@@ -297,12 +301,12 @@ class Graph:
         Y = [self.trany(func(i * eps - self.origin[0])) for i in range(-n, n + 1)]
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
-    def area(self, func, limits, colour="red", area_colour= "orange", strokewidth=0, opac=1, n=500):
-        eps = (limits[1]-limits[0])/n
-        X = [self.tranx(i*eps + limits[0] - self.origin[0]) for i in range(n + 1)]
-        X.append(self.tranx(limits[1])) # Ensure uniform area
-        Y = [self.trany(func(i * eps +limits[0] - self.origin[0])) for i in range(n+ 1)]
-        Y.append(self.trany(func(limits[0]))) # Ensure uniform area
+    def area(self, func, limits, colour="red", area_colour="orange", strokewidth=0, opac=1, n=500):
+        eps = (limits[1] - limits[0]) / n
+        X = [self.tranx(i * eps + limits[0]) for i in range(n + 1)]
+        X.append(self.tranx(limits[1]))  # Ensure uniform area
+        Y = [self.trany(func(i * eps + limits[0])) for i in range(n + 1)]
+        Y.append(self.trany(func(limits[0])))  # Ensure uniform area
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac, fill=area_colour)
 
     def dotted_graph(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
@@ -321,10 +325,9 @@ class Graph:
            :return: None
            """
         eps = self.xlim / n
-        X = [self.tranx(i * eps - self.origin[0]) if i%15>7 else None for i in range(-n, n + 1)]
-        Y = [self.trany(func(i * eps  - self.origin[0])) for i in range(-n, n + 1)]
+        X = [self.tranx(i * eps - self.origin[0]) if i % 15 > 7 else None for i in range(-n, n + 1)]
+        Y = [self.trany(func(i * eps - self.origin[0])) for i in range(-n, n + 1)]
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
-
 
     def graph_points(self, X, Y, colour="red", strokewidth=1, opac=1):
         """
@@ -386,29 +389,27 @@ class Graph:
         self.svg.draw_line(self.tranx(x1), self.trany(y1), self.tranx(x2), self.trany(y2), stroke=colour,
                            strokewidth=strokewidth, opacity=opacity, cap=cap)
 
-    def draw_rect(self, x, y, width, height, fill, colour="black", strokewidth=1):
+    def draw_rect(self, x, y, width, height, fill, colour="black", strokewidth=1, opac=1):
         self.svg.draw_rect(self.tranx(x), self.trany(y), abs(self.xscale * (width)),
-                           self.yscale * height, fill, stroke=colour, strokewidth=strokewidth)
+                           self.yscale * height, fill, stroke=colour, strokewidth=strokewidth, opacity=opac)
 
     def draw_line(self, x1, y1, x2, y2, marker="*", colour="black", strokewidth=1, opacity=1, cap="butt",
-                         segments=20, dotted=False):
+                  segments=20, dotted=False):
         if not dotted:
             self.svg.draw_line(self.tranx(x1), self.trany(y1), self.tranx(x2), self.trany(y2), stroke=colour,
                                strokewidth=strokewidth, opacity=opacity, cap=cap)
         else:
             self.svg.draw_dotted_line(self.tranx(x1), self.trany(y1), self.tranx(x2), self.trany(y2), marker=marker,
-                                  stroke=colour,
-                                  strokewidth=strokewidth, opacity=opacity, cap=cap, segments=segments)
+                                      stroke=colour,
+                                      strokewidth=strokewidth, opacity=opacity, cap=cap, segments=segments)
 
     def point(self, x, y, s=1, colour="white"):
-        self.draw_circle(x, y, 15*s/self.width, fill=colour,strokewidth=0)
+        self.draw_circle(x, y, 15 * s / self.width, fill=colour, strokewidth=0)
 
     def save(self):
-        if len(self.TexLoader)!=0:
+        if len(self.TexLoader) != 0:
             for t in self.TexLoader:
                 self.math_text(t[0], t[1], t[2], colour=t[3], scale=t[4])
-
-
         """
         Saves the graph and clears the svg.canvas
         """
