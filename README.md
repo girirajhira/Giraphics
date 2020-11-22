@@ -3,8 +3,7 @@
 
 
 https://github.com/tghira16/GiraFix/blob/master/Examples
-Giraphics is static graphics library intended for creating plots and animations.
-
+Giraphics is graphing and animation library designed to fast and simple to use. The library is inspired by [https://github.com/3b1b]'s [main] 
 ## Examples
 Sample Graph 
 
