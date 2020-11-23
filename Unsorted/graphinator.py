@@ -1,7 +1,5 @@
-from Scenic import *
-from convert import *
-from actions import *
-from utils import *
+from giraphics.utilities.convert import *
+from giraphics.utilities.utils import *
 
 Actions = {
     'sleep': 1

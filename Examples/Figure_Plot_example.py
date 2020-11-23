@@ -1,4 +1,4 @@
-from figure import *
+from giraphics.graphing.figure import *
 
 
 def func(x):

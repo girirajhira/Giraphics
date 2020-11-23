@@ -1,12 +1,10 @@
-import math
 import multiprocessing
 import os
-from utils import listlike
-import convert
+from giraphics.utilities.utils import listlike
+from giraphics.utilities import convert
 import sys
-from fancygraphs import FancyGraphs
-from timer import Timer
-import _multiprocessing
+from giraphics.graphing.fancygraphs import FancyGraphs
+from giraphics.utilities.timer import Timer
 
 '''
 TODO: Fix grid issue, too bold
@@ -198,7 +196,6 @@ def fg(s):
     return gg
 
 '''
-from math import sin
 
 
 def f1(s):

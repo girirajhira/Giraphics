@@ -1,5 +1,5 @@
-from graph import Graph
-from convert import *
+from giraphics.graphing.graph import Graph
+from giraphics.utilities.convert import *
 import numpy as np
 gg = Graph(1000,1000,100,100,namer(1) + ".svg")
 

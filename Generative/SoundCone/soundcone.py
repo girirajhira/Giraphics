@@ -1,9 +1,6 @@
-import numpy as np
-from graph import *
-from animator import *
-from convert import *
-import matplotlib.pyplot as plt
-from math import sin, cos,pi
+from giraphics.graphing.graph import *
+from giraphics.utilities.convert import *
+from math import sin, pi
 
 
 timeSteps = 360

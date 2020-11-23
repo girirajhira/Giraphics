@@ -1,7 +1,6 @@
-from svgwtr import *
-from graph import *
-from convert import *
-from utils import Timer
+from giraphics.graphing.graph import *
+from giraphics.utilities.convert import *
+from giraphics.utilities.utils import Timer
 w, h = 1000, 1000
 r = 2
 def f(s):

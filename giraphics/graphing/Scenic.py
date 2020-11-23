@@ -1,8 +1,4 @@
-from svgwtr import *
-from fancygraphs import *
-import numpy as np
-from math import sin, cos
-
+from giraphics.graphing.fancygraphs import *
 
 
 class Widget(FancyGraphs):

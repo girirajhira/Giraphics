@@ -1,7 +1,6 @@
-from svgwtr import *
-from colour import *
-from latext import *
-from mathtext import *
+from giraphics.svg.svgwtr import *
+from giraphics.utilities.latext import *
+from giraphics.utilities.mathtext import *
 import numpy as np
 import webbrowser
 import os

@@ -1,23 +1,35 @@
-from svgwtr import *
-from graph import *
-from convert import *
-from fancygraphs import *
+from giraphics.utilities.convert import *
+from giraphics.graphing.fancygraphs import *
 import numpy as np
 from math import cos, sin
 
 
-def lorentz(x0,y0,z0,N, a = 1 , s= 1, b =1 , eps = 0.01):
-    X, Y, Z = [x0], [y0], [z0]
-    x, y, z = 0,0,0
-    for i in range(0,N):
-        x += eps*s*(Y[i]- X[i])
-        y += eps*X[i]*(a-Z[i])-Y[i]*eps
-        z += eps*X[i]*Y[i] - eps*b*Z[i]
-        X.append(x)
-        Y.append(y)
-        Z.append(z)
-    return (np.array(X),np.array(Y),np.array(Z))
+def surface(func, x_int, y_int, n0 = 400):
+    x = np.linspace(x_int[0], x_int[0], n0)
+    y = np.linspace(y_int[0], y_int[0], n0)
+    z = []
+    for i in range(len(y)):
+        z.append(func(x,  np.full((len(y),), y[i])))
+    return np.array[x, y, z]
 
+def draw_triangles(surf):
+    for i in range(len(surf[0]-1)):
+        for j in range(len(surf[1])-1):
+            pass
+
+def mesh_grid(func, x_int, y_int, n0 = 400):
+    x = np.arrange(x_int[0], x_int[0], n0)
+    y = np.arrange(y_int[0], y_int[0], n0)
+    z = []
+    for i in range(len(y)):
+        z.append(func(x,  np.full((len(y),), y[i])))
+    return np.array[x, y, z]
+
+def mesh_sphere(r, cx , cy, cz, density = 6):
+    centre = np.array([cx, cy, cz])
+    theta = np.radians(np.linspace(0, 180, 6))
+    data  =
+    np.arange()
 def Rz(theta, r=1):
     return np.array([[cos(theta), -sin(theta), 0], [sin(theta), cos(theta), 0], [0, 0, 1]])
 
@@ -44,6 +56,8 @@ v01 = np.array([0, 0, 0])
 v02 = np.array([2, 8, 0])
 
 X, Y, Z = lorentz(0,1,0, 1000)
+
+
 
 for i in range(frames):
     A = Graph(1000, 1000, 10, 10, "Plotsr/g" + namer(i) + ".svg")

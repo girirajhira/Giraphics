@@ -1,6 +1,5 @@
-from Scenic import *
-from convert import *
-import numpy as np
+from giraphics.graphing.Scenic import *
+from giraphics.utilities.convert import *
 
 frames = 250 + 1
 create_directory("ftp")

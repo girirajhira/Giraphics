@@ -1,4 +1,4 @@
-from fancygraphs import *
+from giraphics.graphing.fancygraphs import *
 
 '''
 Takes a cartesian grid and transforms it according to the given function.

@@ -1,5 +1,5 @@
-from convert import *
-from graph import *
+from giraphics.utilities.convert import *
+from giraphics.graphing.graph import *
 from math import sin
 
 def fact(x):

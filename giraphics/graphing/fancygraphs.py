@@ -1,9 +1,7 @@
-import math
-import numpy as np
-from graph import *
-from utils import max2d, min2d
-from colour import *
-from colour import max, norm, hex_to_vec, vec_to_hex
+from giraphics.graphing.graph import *
+from giraphics.utilities.utils import max2d, min2d
+from giraphics.utilities.colour import *
+from giraphics.utilities.colour import max, norm, vec_to_hex
 
 '''
 ToDOs:
@@ -252,8 +250,6 @@ class FancyGraphs(Graph):
 # A.save()
 # A.display()
 
-from math import sin, sqrt
-from math import e
 def func(x, y):
 
     if (x != 1 !=  x != -1) or y != 0:

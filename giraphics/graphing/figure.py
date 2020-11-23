@@ -1,5 +1,5 @@
-from graph import Graph
-import math
+from giraphics.graphing.graph import Graph
+
 
 class Figure(Graph):
     def __init__(self, width, height, xlim, ylim, name, origin=[0.0, 0.0], theme="dark",

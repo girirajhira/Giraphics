@@ -1,5 +1,5 @@
-from graph import *
-from convert import *
+from giraphics.graphing.graph import *
+from giraphics.utilities.convert import *
 from math import sin
 from random import randint
 

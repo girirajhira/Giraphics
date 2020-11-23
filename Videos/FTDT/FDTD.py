@@ -1,9 +1,7 @@
-import numpy as np
-from graph import *
-from animator import *
-from convert import *
-import matplotlib.pyplot as plt
-from math import sin, cos
+from giraphics.graphing.graph import *
+from giraphics.utilities.convert import *
+from math import sin
+
 timeSteps = 300
 spaceMesh = 300
 ca = 0.990632

@@ -1,6 +1,6 @@
-from graph import *
-from convert import *
-import matplotlib.pyplot as plt
+from giraphics.graphing.graph import *
+from giraphics.utilities.convert import *
+
 S = Model(1000, 1000 ,10 ,10 ,"springmdoel.svg", origin=[-9,-8])
 from math import sin, cos, exp
 def spring(L, height = 1.5, end_x=0, end_y=0, units=10):

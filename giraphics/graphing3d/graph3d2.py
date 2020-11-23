@@ -1,7 +1,5 @@
-from svgwtr import *
-from graph import *
-from convert import *
-from fancygraphs import *
+from giraphics.utilities.convert import *
+from giraphics.graphing.fancygraphs import *
 import numpy as np
 from math import pi
 from numpy import sin, cos
@@ -121,4 +119,4 @@ for i in range(frames):
     A.save()
 
 create_raster_batch("Plotsr", 'g', 'p', 'plotsrast', frames)
-create_mpeg('surf1.mp4', 'p', frames, dir=os.getcwd() + "/plotsrast")
+create_mpeg('../../surf1.mp4', 'p', frames, dir=os.getcwd() + "/plotsrast")

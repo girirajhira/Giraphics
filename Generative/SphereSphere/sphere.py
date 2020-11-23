@@ -1,4 +1,4 @@
-from fancygraphs import *
+from giraphics.graphing.fancygraphs import *
 from math import sin, cos
 from random import gauss
 

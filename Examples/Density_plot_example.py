@@ -1,5 +1,5 @@
-from fancygraphs import *
-from convert import convert_image
+from giraphics.graphing.fancygraphs import *
+from giraphics.utilities.convert import convert_image
 import math
 
 ''''

@@ -1,4 +1,4 @@
-from graph import *
+from giraphics.graphing.graph import *
 
 # We first create a Graph
 

@@ -1,5 +1,4 @@
-from svgwtr import *
-from fancygraphs import *
+from giraphics.graphing.fancygraphs import *
 import numpy as np
 
 
@@ -40,7 +39,6 @@ class Scene():
         for g in args:
             self.svg.canvas += g.svg.canvas + '\n'
 
-import math
 
 def f(X):
     return  X*X

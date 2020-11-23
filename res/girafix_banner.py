@@ -1,4 +1,4 @@
-from fancygraphs import FancyGraphs
+from giraphics.graphing.fancygraphs import FancyGraphs
 from math import  sin, cos
 g = FancyGraphs(1200, 600, 6, 3, "banner.svg")
 

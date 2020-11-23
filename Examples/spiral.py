@@ -1,4 +1,4 @@
-from graph import *
+from giraphics.graphing.graph import *
 import numpy as np
 
 f = Graph(1000, 1000, 5, 5, "spiral.svg")
