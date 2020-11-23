@@ -1,8 +1,6 @@
 # Giraphics
 ![Banner](https://github.com/tghira16/GiraFix/blob/master/res/banner.svg?raw=true=250x)
 
-
-https://github.com/tghira16/GiraFix/blob/master/Examples
 Giraphics is graphing and animation library designed to fast and simple to use. The library is inspired by [3b1b]'s [manim] library, but built independently.
 
 ## System Requirements
