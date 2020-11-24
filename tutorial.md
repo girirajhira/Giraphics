@@ -1,17 +1,13 @@
 # Tutorial 
-We will go into the workings of Graphics. 
 
-Lets start with the basics of how Graphics works. Graphics is essentially something that automates writing an SVG. For every
-
-The most basic example of Giraphics is the Graph object. Graph has a canvas which it applies all the features like curves, grids, axes etc.
-Lets look at an example where the
-```
-width = 600
-height = 600
-xlim = 12
-ylim = 10
-G = Graph(width, height, 12, 10, 'firstgraph.svg')
-
-G.bg(colour="black")
+## Plotting Graphs
+### Basic Graphs
+To create a graph we start by creating a `Graph` Object
 
 ```
+g = Graph(width, height, xlim, ylim, filename, origin)
+```
+The filename should have the format of svg. `xlim` and `ylim` define half the units of 
+
+
+## Animations

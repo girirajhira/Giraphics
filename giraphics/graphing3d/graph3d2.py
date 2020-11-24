@@ -119,4 +119,4 @@ for i in range(frames):
     A.save()
 
 create_raster_batch("Plotsr", 'g', 'p', 'plotsrast', frames)
-create_mpeg('../../surf1.mp4', 'p', frames, dir=os.getcwd() + "/plotsrast")
+create_mpeg('../../sample_projects/Videos/surf1.mp4', 'p', frames, dir=os.getcwd() + "/plotsrast")
