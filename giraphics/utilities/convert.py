@@ -1,27 +1,27 @@
 import multiprocessing
-from threading import Thread
 import os
 
 dirName = "Plotspng2"
 
 
 # Creating Directories
-def create_directory(dirName):
+def create_directory(dirName, warnings=True):
     try:
         os.mkdir(dirName)
-        print("Directory ", dirName, " Created ")
+        if warnings:
+            print("Directory ", dirName, " created ")
     except FileExistsError:
-        print("Directory ", dirName, " already exists")
+        if warnings:
+            print("Directory ", dirName, " already exists")
 
 # Serial file namer
 def namer(x):
     return (f'{x:04}')
 
 def convert_mpeg(outputfile):
-    command = 'ffmpeg -r 60 -f image2 -s 1920x1080 -i ' + os.getcwd() + '/Plotspng/p%04d.png -vcodec libx264 -crf 25  -pix_fmt yuv420p ' + outputfile
+    command = 'ffmpeg -r 60 -f image2 -s 1920x1080 -i ' + os.getcwd() + '/Plotspng/p%04d.png -vcodec libx264 -crf 25  -pix_fmt yuv420p -loglevel warning ' + outputfile
     os.system(command)
     print("MPEG Exported!")
-
 
 # converts image formats
 def convert_image(inputfile, outputfile):
@@ -90,8 +90,13 @@ def create_raster_batch(dir, filename, savename, savedir, num):
 
 create_raster_batch("ftp", 'g', 'p', 'ftprast', 1)
 
-def create_mpeg(filename, batchname, num, dir=os.getcwd(), framerate='60'):
-    command = ('ffmpeg -r %s -f image2 -s 1920x1080 -i %s/%s%s04d.png -vcodec libx264 -crf 25  -pix_fmt yuv420p %s') %(framerate,dir, batchname, '%',filename)
+def create_mpeg(filename, batchname, num, dir=os.getcwd(), framerate='60', warnings=True):
+    if warnings:
+        w = '-loglevel warning'
+    else:
+        w = ''
+    command = ('ffmpeg -r %s -f image2 -s 1920x1080 -i %s/%s%s04d.png -vcodec libx264 -crf 25 %s -pix_fmt yuv420p %s') % (framerate,dir, batchname, w, filename)
+    print(command)
     os.system(command)
 
 

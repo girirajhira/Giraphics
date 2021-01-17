@@ -163,12 +163,9 @@ class SVG:
         self.canvas += '<image x="%s" y="%s" width="%s" height="%s" href="%s"/>' % (x, y, width, height, href)
 
     def save(self, write_out=True):
-        if self.grouped:
-            self.canvas += '\n </svg> \n </g> \n'
-        else:
-            self.canvas += '\n </svg>'
+        self.canvas += '\n </svg>'
         if write_out:
-            f = open(self.path, "w+")
+            f = open(self.path, "w")
             f.write(self.canvas)
             f.close()
 

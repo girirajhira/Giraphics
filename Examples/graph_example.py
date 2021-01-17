@@ -21,7 +21,7 @@ def f(x):
 
 print(f(0.7))
 G.area(f, [0.7, 1.8], opac=0.7)
-G.graph(f,colour="cyan")
+G.graph(f, colour="cyan")
 G.draw_line(0.7, 0, 0.7, f(0.7), colour="white")
 G.draw_line(1.8, 0, 1.8,  f(1.8), colour="white")
 G.draw_line(.7, f(0.7), 1.8,  f(0.7), colour="white", dotted=True)

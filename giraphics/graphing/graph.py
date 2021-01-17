@@ -1,6 +1,9 @@
-from giraphics.svg.svgwtr import *
+from giraphics.svg.svgkit import *
 from giraphics.utilities.latext import *
 from giraphics.utilities.mathtext import *
+from giraphics.utilities.convert import *
+from IPython.display import SVG as IPSVG
+from IPython.display import Image
 import numpy as np
 import webbrowser
 import os
@@ -83,7 +86,7 @@ class Graph:
         """
         Sets the background colour
         :param colour: colour name or in Hexadecimal
-        :return: None
+        :return: Nonef
         """
         self.svg.draw_rect(self.tranx(-self.origin[0]), self.trany(-self.origin[1]), self.width, self.height, colour)
 
@@ -414,6 +417,15 @@ class Graph:
         """
         self.svg.save()
         self.svg.canvas = ""
+
+    def jupyter_display(self, raster=False):
+        self.save()
+        print(os.getcwd())
+        if not raster:
+            return IPSVG(filename=os.getcwd()+'/'+self.name)
+        else:
+            convert_image(self.name+'.svg', self.name+'.png')
+            return Image(filename=self.name+'.png')
 
     def display(self):
         """

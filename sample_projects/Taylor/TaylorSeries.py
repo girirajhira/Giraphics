@@ -27,7 +27,7 @@ def taylor_series_sine(t, max_order=30):
         return total
     return f
 
-frames = 780 + 1
+frames =120
 create_directory("ftp")
 create_directory("ftprast")
 
@@ -43,4 +43,4 @@ for i in range(frames):
 
 create_raster_batch("ftp", 'g', 'p', 'ftprast', frames)
 # Creating the final video
-create_mpeg('SineExample2.mp4', 'p', frames, dir=os.getcwd() + "/ftprast", framerate=60)
+create_mpeg('SineExample3.mp4', 'p', frames, dir=os.getcwd() + "/ftprast", framerate=60)

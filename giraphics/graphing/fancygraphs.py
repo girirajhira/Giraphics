@@ -1,7 +1,7 @@
-from giraphics.graphing.graph import *
-from giraphics.utilities.utils import max2d, min2d
 from giraphics.utilities.colour import *
 from giraphics.utilities.colour import max, norm, vec_to_hex
+from giraphics.utilities.utils import max2d, min2d
+from giraphics.graphing.graph import Graph
 
 '''
 ToDOs:
@@ -85,19 +85,17 @@ class FancyGraphs(Graph):
 
         if gridint is None:
             gridint = []
-            if self.xlim<5:
-                gridint.append(round(2*self.xlim*grid_multiplier))
+            if self.xlim < 5:
+                gridint.append(round(2 * self.xlim * grid_multiplier))
             else:
                 gridint.append(2 * self.xlim)
             if self.ylim < 5:
-                gridint.append(round(2*self.ylim*grid_multiplier))
+                gridint.append(round(2 * self.ylim * grid_multiplier))
             else:
                 gridint.append(2 * self.ylim)
 
         epsx = self.xlim / gridint[0]
         epsy = self.ylim / gridint[1]
-
-
 
         fl = 1
         if not constLength:
@@ -222,6 +220,13 @@ class FancyGraphs(Graph):
                                cl((field[k][j] - min) / (max - min)), strokewidth=0)
                 # self.text(j*self.xlim/xres, k*self.ylim/yres, str(round(j*self.xlim/xres,1)) +"," +str(round(k*self.ylim/yres,1)) , colour="red",fontsize=1)
 
+    def histogram(self, data, colour="yellow", width=3):
+        dx = 2 * self.xlim / (len(data) + 1)
+        dy = 2 * self.ylim / (max(data) + 2)
+        ox = -1 * self.xlim
+        oy = -1 * self.ylim
+        for i in range(len(data)):
+            self.draw_line(i * dx + ox, oy, i * dx + ox, data[i] * dy + oy, colour=colour, strokewidth=width)
 
     def Penrose(self, grids=10):
         self.bg(colour="black")
@@ -230,7 +235,6 @@ class FancyGraphs(Graph):
         self.draw_line(-self.xlim, 0, 0, -self.ylim, colour="yellow")
         self.draw_line(self.xlim, 0, 0, -self.ylim, colour="yellow")
         self.axes()
-
 
 # A = FancyGraphs(500, 500, 5, 5, "penrose.svg")
 # A.Penrose()
@@ -250,17 +254,23 @@ class FancyGraphs(Graph):
 # A.save()
 # A.display()
 
-def func(x, y):
-
-    if (x != 1 !=  x != -1) or y != 0:
-        Ex = (x + 1) / ((x + 1) ** 2 + y ** 2) - (x - 1) / ((x - 1) ** 2 + y ** 2)
-        Ey = y / ((x + 1) ** 2 + y ** 2) - y / ((x - 1) ** 2 + y ** 2)
-        return [Ex, Ey]
-    else:
-        return [0, 0]
-
+# def func(x, y):
+#
+#     if (x != 1 !=  x != -1) or y != 0:
+#         Ex = (x + 1) / ((x + 1) ** 2 + y ** 2) - (x - 1) / ((x - 1) ** 2 + y ** 2)
+#         Ey = y / ((x + 1) ** 2 + y ** 2) - y / ((x - 1) ** 2 + y ** 2)
+#         return [Ex, Ey]
+#     else:
+#         return [0, 0]
+#
 
 # A = FancyGraphs(1400,1400,5,5,"Dipole.svg")
 # #A.VectorField(func, gridint=5,  arrow_scale=2, stroke_width=2, stroke="white", arrow = True, constcolour=False,constLength=True)
 # A.VectorField(func, gridint=25,  arrow_scale=1.5, tail_length=0.5, arrow = True, constLength=True, initColour=hex_to_vec('#000099'), endColour=hex_to_vec('#ff99cc'))
 # A.save()
+
+# A = FancyGraphs(500,500,5,5,"histo.svg", origin=[3,0])
+# A.bg(colour="black")
+# A.histogram([3,2,3,1,10])
+# A.save()
+# A.display()
