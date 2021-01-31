@@ -5,8 +5,15 @@ from IPython.display import Image, SVG, Video
 
 
 class Frame_graphic(FancyGraphs):
-    def create_frame(self, i):
-        self.svg.path = "vectors/g" + namer(i) + ".svg"
+    def __init__(self, width, height, xlim, ylim, name, origin=[0.0, 0.0], theme="dark",
+                 transform="none", grouped=False):
+        FancyGraphs.__init__(self, width, height, xlim, ylim, name, origin=[0.0, 0.0], theme="dark",
+                 transform="none", grouped=False)
+        self.frame_index = 0
+
+    def press(self):
+        self.svg.path = "vectors/g" + namer(self.frame_index) + ".svg"
+        self.frame_index += 1
         FancyGraphs.save(self)
         self.svg.__init__(self.svg.path, self.width, self.height, transform="none", grouped=False)
 
@@ -32,10 +39,3 @@ class Animation:
             clean_up('vectors', 'rasters')
 
 
-A = Animation('anime33.mp4', 120, 1000, 1000, 10, 10)
-for i in range(0,120):
-    A.plate.bg(colour="black")
-    A.plate.draw_circle(0, 0, i * 0.1, fill="red")
-    A.plate.create_frame(i)
-A.develop()
-print(6)

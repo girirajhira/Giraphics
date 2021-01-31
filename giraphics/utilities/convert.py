@@ -85,18 +85,17 @@ def create_raster_batch2(dir, filename, savename, savedir, num):
 
 def create_raster_batch(dir, filename, savename, savedir, num):
     for i in range(num):
-        command = ("rsvg-convert %s/%s/%s%s.svg -o %s/%s/%s%s.png") % (os.getcwd(), dir, filename, namer(i), os.getcwd(), savedir, savename, namer(i))
+        command = ("rsvg-convert {}/{}/{}{}.svg -o {}/{}/{}{}.png").format(os.getcwd(), dir, filename, namer(i), os.getcwd(), savedir, savename, namer(i))
         os.system(command)
 
-create_raster_batch("ftp", 'g', 'p', 'ftprast', 1)
+# create_raster_batch("ftp", 'g', 'p', 'ftprast', 1)
 
 def create_mpeg(filename, batchname, num, dir=os.getcwd(), framerate='60', warnings=True):
     if warnings:
         w = '-loglevel warning'
     else:
         w = ''
-    command = ('ffmpeg -r %s -f image2 -s 1920x1080 -i %s/%s%s04d.png -vcodec libx264 -crf 25 %s -pix_fmt yuv420p %s') % (framerate,dir, batchname, w, filename)
-    print(command)
+    command = ('ffmpeg -r {} -f image2 -s 1920x1080 -i {}/{}%04d.png -vcodec libx264 -crf 25 {} -pix_fmt yuv420p {}').format(framerate,dir, batchname, w, filename)
     os.system(command)
 
 
@@ -110,10 +109,10 @@ def onlyExport(output):
     convert_mpeg(output)
 
 def clean_up(a, b):
-    command = "rm " + a
+    command = "rmdir " + a
     os.system(command)
 
-    command = "rm " + b
+    command = "rm -R" + b
     os.system(command)
 '''
 # Convert SVG -> PNG
