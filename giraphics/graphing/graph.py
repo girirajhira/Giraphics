@@ -262,6 +262,7 @@ class Graph:
         """
         self.svg.draw_arrow(x1, y1, x2, y2, scale, stroke=colour, strokewidth=strokewidth)
 
+
     def graph(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
         """
         Graphs the given function
@@ -382,6 +383,13 @@ class Graph:
     def draw_arrow(self, x1, y1, x2, y2, scale=1, colour="black", strokewidth=1):
         self.svg.draw_arrow(self.tranx(x1), self.trany(y1), self.tranx(x2), self.trany(y2), scale, stroke=colour,
                             strokewidth=strokewidth)
+
+    def draw_double_arrow(self, x1, y1, x2, y2, scale=1, colour="black", strokewidth=1):
+        self.svg.draw_arrow(self.tranx(x1), self.trany(y1), self.tranx(x2), self.trany(y2), scale, stroke=colour,
+                            strokewidth=strokewidth)
+        self.svg.draw_arrow(self.tranx(x2), self.trany(y2), self.tranx(x1), self.trany(y1), scale, stroke=colour,
+                            strokewidth=strokewidth)
+
 
     def draw_circle(self, x, y, r, fill="none", colour="black", strokewidth=1):
         self.svg.draw_circ(self.tranx(x), self.trany(y), self.xscale * r, fill=fill, stroke=colour,
