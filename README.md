@@ -16,6 +16,9 @@ Basic graphing and plotting can be done without any other software, however, the
 
 Individual packages can be installed for specific functionality, but installation of all packages is reccomended.
 
+## Tutorial 
+You can find the tutorial [here]
+
 ## Contribution
 You can make pull requests.
 
@@ -33,3 +36,4 @@ Mit License
 [graph]: <https://github.com/tghira16/GiraFix/blob/master/Examples/graph_example.py>
 [complexplot]: <https://github.com/tghira16/GiraFix/blob/master/Examples/Complex_Function_Example.py>
 [vectorfield]: <https://github.com/tghira16/GiraFix/blob/master/Examples/Vector_field_example.py>
+[here]: <https://github.com/tghira16/Giraphics/blob/master/tutorial.md>
