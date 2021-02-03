@@ -1,26 +1,26 @@
 from distutils.core import setup
 setup(
-  name = 'Giraphics',         # How you named your package folder (MyLib)
-  packages = ['giraphics'],   # Chose the same as "name"
-  version = '0.2',      # Start with a small number and increase it with every change you make
-  license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
-  description = 'Lightweight graphing and animations',   # Give a short description about your library
-  author = 'T. G. Hiranandani',                   # Type in your name
-  author_email = 'your.email@domain.com',      # Type in your E-Mail
-  url = 'https://github.com/tghira/giraphics',   # Provide either the link to your github or to your website
-  download_url = 'https://github.com/tghira/giraphics/archive/v_01.tar.gz',    # I explain this later on
-  keywords = ['graphs', 'animations', 'graphics', 'vector-graphics'],   # Keywords that define your package best
+  name = 'giraphics',
+  packages = ['giraphics'],
+  version = '0.2',
+  license='MIT',
+  description = 'Lightweight graphing and animations',
+  author = 'T. G. Hiranandani',
+  author_email = 'giraphics@protonmail.com',
+  url = 'https://github.com/tghira/giraphics',
+  download_url = 'https://github.com/tghira16/Giraphics/archive/1.tar.gz',
+  keywords = ['graphs', 'animations', 'graphics', 'vector-graphics'],
   install_requires=[
           'numpy',
           'IPython'
 
       ],
   classifiers=[
-    'Development Status :: 1 - Alpha',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
-    'Intended Audience :: Educators, Scientists',      # Define that your audience are developers
+    'Development Status :: 1 - Alpha',
+    'Intended Audience :: Educators, Scientists',
     'Topic :: Graphics Animation :: Build Tools',
-    'License :: OSI Approved :: MIT License',   # Again, pick a license
-    'Programming Language :: Python :: 3',      #Specify which pyhton versions that you want to support
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
