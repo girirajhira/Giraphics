@@ -124,7 +124,7 @@ class Graph:
 
     # Todo: Fix Grid, origin changes
 
-    def grid(self, grid_int=None, colour="#A7A7A7", grid_multiplier=1, strokewidth=0.7, opac=1):
+    def grid(self, grid_int=None, colour="#A7A7A7", grid_multiplier=1, strokewidth=0.7, opac=0.5):
         """
         Creates a grid
         :param grids: list (length 2)
