@@ -16,7 +16,7 @@ setup(
 
       ],
   classifiers=[
-    'Development Status :: 1 - Alpha',
+    'Development Status :: 2 - Pre-Alpha',
     'Intended Audience :: Educators, Scientists',
     'Topic :: Graphics Animation :: Build Tools',
     'License :: OSI Approved :: MIT License',
