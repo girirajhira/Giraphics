@@ -10,14 +10,14 @@ def f(s):
 g = Graph(w,h, 10,10, "b1.svg")
 g.bg("black")
 for i in range(-10,10,2):
-    g.graph(f(i))
+    g.plot(f(i))
 g.save()
 
 
 g = Graph(w,h, 10,10, "b2.svg")
 g.bg("black")
 for i in range(-10,10,2):
-    g.graph(f(i))
+    g.plot(f(i))
 g.save()
 t = Timer()
 t.start()

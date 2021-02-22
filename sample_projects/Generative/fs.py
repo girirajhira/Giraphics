@@ -20,7 +20,7 @@ for j in range(0, 80):
     t = 0.02*j
     for i in range(0,50):
         e = eps * i - 8
-        G.graph(g(e+t*randint(0,4), t), colour="white",opac=abs(sin(e+t)*2), n0=250)
+        G.plot(g(e + t * randint(0, 4), t), colour="white", opac=abs(sin(e + t) * 2), n0=250)
     G.save()
 
 create_raster_batch("Plots", 'g', 'p', 'plotsrast', 80)

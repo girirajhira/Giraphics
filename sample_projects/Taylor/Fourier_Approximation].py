@@ -28,7 +28,7 @@ ds = round(len(t)/frames)
 for i in range(frames):
     f = Graph(800, 800, 5, 5, "ftp/g"+namer(i)+".svg", origin=[-0, -0])
     f.bg()
-    # f.graph(func)
+    # f.plot(func)
     # f.math_text("sin(x)", 3.14 ,1)
     f.save()
 

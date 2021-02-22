@@ -11,12 +11,12 @@ class Figure(Graph):
                                  theme=theme, transform="translate("+str(width*border_width/2) + " " + str(height*border_width/2) + ")", grouped=True)
         # self.bg(colour=bg)
 
-    def graph(self, func, colour="red", strokewidth=1.5, opac=1, n=1200):
-        self.inner_graph.graph(func, colour="red", strokewidth=1.5, opac=1, n=1200)
+    def plot(self, func, colour="red", strokewidth=1.5, opac=1, n=1200):
+        self.inner_graph.plot(func, colour="red", strokewidth=1.5, opac=1, n=1200)
         # Draw margins
 
-    def graph_points(self, X, Y, colour="red", strokewidth=1, opac=1):
-        self.inner_graph.graph_points(X, Y,colour=colour, strokewidth=strokewidth, opac=opac)
+    def plot_points(self, X, Y, colour="red", strokewidth=1, opac=1):
+        self.inner_graph.plot_points(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
     def scatter(self, X, Y, s=1, colour="white", opac=1):
         self.inner_graph.scatter(X,Y,s=s, colour=colour, opac=opac)
@@ -100,7 +100,7 @@ class Figure(Graph):
 #     return 0.04 * x ** 2 * math.sin(6 * x) - 5
 #
 # f = Figure(600, 450, 15, 10, "fig.svg", origin=[-5,-5])
-# f.graph(func, colour="red")
+# f.plot(func, colour="red")
 # f.grid()
 # # f.grid2(colour="blue")
 # # f.ticks(markers=True)

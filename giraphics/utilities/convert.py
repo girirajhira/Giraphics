@@ -1,5 +1,6 @@
 import multiprocessing
 import os
+import shutil
 
 dirName = "Plotspng2"
 
@@ -65,7 +66,6 @@ def generate_frames(worker, frames, *args):
         jobs.append(p)
         p.start()
 
-
 # User Functions
 def create_raster(filename, dir=os.getcwd(), savedir=os.getcwd()):
     command = ("convert " + os.getcwd() + "/" + filename + ".svg " + savedir + "/" + filename + ".png")
@@ -75,13 +75,23 @@ def create_raster2(filename, dir=os.getcwd(), savedir=os.getcwd()):
     command = ("rsvg-convert " + os.getcwd() + "/" + filename + ".svg  -o " + savedir + "/" + filename + ".png")
     os.system(command)
 
-
-
 def create_raster_batch2(dir, filename, savename, savedir, num):
     for i in range(num):
         command = ("convert " + os.getcwd() + "/" + dir + '/' + filename + str(
             namer(i)) + ".svg " + os.getcwd() + '/' + savedir + "/" + savename + namer(i) + ".png")
         os.system(command)
+
+def vec2raster(dir, filename, i, savedir, savename):
+    command = ("rsvg-convert {}/{}/{}{}.svg -o {}/{}/{}{}.png").format(os.getcwd(), dir, filename, namer(i),
+                                                                       os.getcwd(), savedir, savename, namer(i))
+    os.system(command)
+
+def create_raster_batch1(dir, filename, savename, savedir, num):
+    jobs = []
+    for i in range(num):
+        p = multiprocessing.Process(target=vec2raster, args=(dir, filename, i, savename, savedir,))
+        jobs.append(p)
+        p.start()
 
 def create_raster_batch(dir, filename, savename, savedir, num):
     for i in range(num):
@@ -89,31 +99,29 @@ def create_raster_batch(dir, filename, savename, savedir, num):
         os.system(command)
 
 # create_raster_batch("ftp", 'g', 'p', 'ftprast', 1)
-
-def create_mpeg(filename, batchname, num, dir=os.getcwd(), framerate='60', warnings=True):
+def create_mpeg(filename, batchname, num, dir, framerate='60', warnings=True, overwrite=True):
     if warnings:
         w = '-loglevel warning'
     else:
         w = ''
-    command = ('ffmpeg -r {} -f image2 -s 1920x1080 -i {}/{}%04d.png -vcodec libx264 -crf 25 {} -pix_fmt yuv420p {}').format(framerate,dir, batchname, w, filename)
+    if overwrite:
+        y = '-y'
+    else:
+        y = ''
+    command = ('ffmpeg -r {} {} -f image2 -s 1920x1080 -i {}/{}%04d.png -vcodec libx264 -crf 25 {} -pix_fmt yuv420p {}').format(framerate, y, dir,batchname, w, filename)
     os.system(command)
-
 
 # creat_mpeg + create_raster_batch
 def create_animation(dir, filename, num, savefile, savename='p', framerate=60):
     create_raster_batch(dir, filename, savename, "TempFiles", num)
     create_mpeg(savefile, savename, num, framerate=framerate)
 
-
 def onlyExport(output):
     convert_mpeg(output)
 
 def clean_up(a, b):
-    command = "rmdir " + a
-    os.system(command)
-
-    command = "rm -R" + b
-    os.system(command)
+    shutil.rmtree(a)
+    shutil.rmtree(b)
 '''
 # Convert SVG -> PNG
 for i in range(0,100):

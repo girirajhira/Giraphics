@@ -37,8 +37,8 @@ for i in range(frames):
     g.bg("black")
     g.grid()
     g.axes("yellow")
-    g.dotted_graph(sin, colour="yellow")
-    g.graph(taylor_series_sine(t, max_order=round(frames/80)),colour="white", strokewidth=1.5)
+    g.dotted_plot(sin, colour="yellow")
+    g.plot(taylor_series_sine(t, max_order=round(frames / 80)), colour="white", strokewidth=1.5)
     g.save()
 
 # Crating

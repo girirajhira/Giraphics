@@ -40,7 +40,7 @@ for i in range(frames):
     g.include_model(S)
     S.clear()
     g.axes("yellow")
-    g.graph(harmonic(i))
+    g.plot(harmonic(i))
     g.save()
 
 create_raster_batch("ftp", 'g', 'p', 'ftprast', frames)

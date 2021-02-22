@@ -6,7 +6,7 @@ def func(x):
 
 f = Figure(600, 450, 15, 10, "fig.svg", origin=[-5,-5])
 f.grid()
-f.graph(func, colour="red")
+f.plot(func, colour="red")
 # f.grid2(colour="blue")
 f.ticks(markers=True)
 f.xlabel(label="f(x)")

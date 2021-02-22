@@ -22,7 +22,7 @@ for i in range(frames):
     # Graph
     g.grid()
     g.axes("yellow")
-    g.graph(yg(t), colour="yellow")
+    g.plot(yg(t), colour="yellow")
     # Pendulum drawing
     A.draw_rect(0,y(t), 1.5, 1.5, fill="white")
     A.draw_line(0,0, 0, y(t), stroke="white")

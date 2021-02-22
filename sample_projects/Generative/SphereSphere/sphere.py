@@ -18,6 +18,6 @@ for i in range(0,500):
 for j in range(0, 12):
     SX = [i*0.02*sin(0.02*i+j) for i in range(0,600)]
     SY = [i*0.02*cos(0.02*i+j) for i in range(0,600)]
-    g.graph_points(SX, SY)
+    g.plot_points(SX, SY)
 g.save()
 g.display()

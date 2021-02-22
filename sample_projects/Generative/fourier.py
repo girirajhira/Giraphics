@@ -29,8 +29,8 @@ ds = round(len(t) / frames)
 for i in range(frames):
     f = Graph(1440, 1440, 2, 2, "ftp/g" + namer(i) + ".svg", origin=[-0, -0])
     f.bg()
-    f.graph_points(X[:ds * i], Y[:ds * i], strokewidth=1.7)
-    # f.graph(func)
+    f.plot_points(X[:ds * i], Y[:ds * i], strokewidth=1.7)
+    # f.plot(func)
     # f.math_text("sin(x)", 3.14 ,1)
     f.save()
 

@@ -1,3 +1,5 @@
+import math
+
 from giraphics.utilities.colour import *
 from giraphics.utilities.colour import max, norm, vec_to_hex
 from giraphics.utilities.utils import max2d, min2d
