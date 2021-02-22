@@ -39,7 +39,7 @@ G.VectorField(V, gridint=gridint, scale=scale, stroke=stroke, arrow=arrow, const
                 constLength=constLength, tail_length=length_scale, arrow_scale=arrow_scale, initColour=initColour,
                 endColour=endColour)
 
-# Save and display the graph
+# Save and display the plot
 G.save()
 G.display()
 

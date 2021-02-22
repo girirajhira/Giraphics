@@ -65,7 +65,7 @@ class Animator:
             if label:
                 G.embed_latex_anim(expr % (i, i), self.xlim - 2, self.ylim - 2)
             for i in range(len(func)):
-                G.graph(func[i], strokewidth=strokewidths[i], colour=colours[i], opac=opac)
+                G.plot(func[i], strokewidth=strokewidths[i], colour=colours[i], opac=opac)
             G.save()
             if display:
                 G.display()

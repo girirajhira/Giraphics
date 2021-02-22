@@ -21,5 +21,5 @@ for i in range(0, frames):
     A.plate.draw_circle(r(t)*cos(t), r(t)*sin(t), 0.3, fill="red")
     A.plate.draw_circle(r(t)*cos(t+pi), r(t)*sin(t+pi), 0.3, fill="red")
     A.plate.press()
-A.develop(cleanup=False)
+A.develop(cleanup=True)
 

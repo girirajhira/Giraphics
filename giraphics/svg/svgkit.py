@@ -1,7 +1,7 @@
 # Dependencies #
-import numpy as np
 import math
-
+import numpy as np
+# from numba import njit, jit
 
 class SVG:
     def __init__(self, path, width, height, transform="none", grouped=False):

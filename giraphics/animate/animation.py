@@ -31,10 +31,10 @@ class Animation:
         self.ylim = ylim
         self.plate = Frame_graphic(width, height, xlim, ylim, '', origin=origin)
 
-    def develop(self, cleanup=False):
+    def develop(self, cleanup=True, warnings=True):
         # Creating
         create_raster_batch("vectors", 'g', 'p', "rasters", self.frames)
-        create_mpeg(self.name, 'p', self.frames, dir=os.getcwd() + "/rasters", framerate=self.framerate, warnings=True)
+        create_mpeg(self.name, 'p', self.frames, "rasters", framerate=self.framerate, warnings=warnings)
         if cleanup:
             clean_up('vectors', 'rasters')
 

@@ -33,7 +33,7 @@ Mit License
 [manim]: <https://github.com/3b1b/manim>
 [librsvg]: <https://github.com/GNOME/librsvg>
 [tex2svg]: <https://github.com/mathjax/mathjax-node-cli/blob/master/bin/tex2svg>
-[graph]: <https://github.com/tghira16/GiraFix/blob/master/Examples/graph_example.py>
+[plot]: <https://github.com/tghira16/GiraFix/blob/master/Examples/graph_example.py>
 [complexplot]: <https://github.com/tghira16/GiraFix/blob/master/Examples/Complex_Function_Example.py>
 [vectorfield]: <https://github.com/tghira16/GiraFix/blob/master/Examples/Vector_field_example.py>
 [here]: <https://github.com/tghira16/Giraphics/blob/master/tutorial.md>

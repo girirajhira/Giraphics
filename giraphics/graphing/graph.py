@@ -8,6 +8,7 @@ import numpy as np
 import webbrowser
 import os
 import platform
+# from numba import njit, jit
 
 
 class Graph:
@@ -56,6 +57,7 @@ class Graph:
                 'secondary': 'black'
             }
 
+    
     def tranx(self, x):
         """
         converts the x coordinate to svg coordinate
@@ -70,7 +72,6 @@ class Graph:
 
         else:
             return None
-
     def trany(self, y):
         """
         converts the y coordinate to svg coordinate
@@ -263,7 +264,7 @@ class Graph:
         self.svg.draw_arrow(x1, y1, x2, y2, scale, stroke=colour, strokewidth=strokewidth)
 
 
-    def graph(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
+    def plot(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
         """
         Graphs the given function
         :param func: function
@@ -312,7 +313,7 @@ class Graph:
         Y.append(self.trany(func(limits[0])))  # Ensure uniform area
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac, fill=area_colour)
 
-    def dotted_graph(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
+    def dotted_plot(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
         """
            Graphs the given function width a dotted line
            :param func: function
@@ -332,7 +333,7 @@ class Graph:
         Y = [self.trany(func(i * eps - self.origin[0])) for i in range(-n, n + 1)]
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
-    def graph_points(self, X, Y, colour="red", strokewidth=1, opac=1):
+    def plot_points(self, X, Y, colour="red", strokewidth=1, opac=1):
         """
         Graphs the inputted points
         :param X:
@@ -421,7 +422,7 @@ class Graph:
             for t in self.TexLoader:
                 self.math_text(t[0], t[1], t[2], colour=t[3], scale=t[4])
         """
-        Saves the graph and clears the svg.canvas
+        Saves the plot and clears the svg.canvas
         """
         self.svg.save()
         self.svg.canvas = ""
@@ -437,7 +438,7 @@ class Graph:
 
     def display(self):
         """
-        Displays the graph in a webbrowser
+        Displays the plot in a webbrowser
         """
         if platform.system() == "Darwin":
             webbrowser.get("open -a /Applications/Google\ Chrome.app %s").open(os.getcwd() + "/" + self.name)
@@ -455,7 +456,7 @@ def sq(x):
     return x * x
 
 f = Figure(600, 500, 15, 10, "fig.svg", origin=[-0, -0])
-f.graph(func)
+f.plot(func)
 f.axes(colour="black")
 f.scatter([0.1 * i for i in range(-1500, 1500)], [sq(0.1 * i) for i in range(-1500, 1500)], colour="black")
 f.save()
@@ -479,12 +480,12 @@ g.ticks(markers=True)
 #g.grid(grids=[10,10], colour="white", stroke_width=0.5, opac=0.5)
 #g.ticks(markers=True, tick=5)
 
-#g.graph(f, "blue")
+#g.plot(f, "blue")
 # g.embed_latex("$x^2+y^2=1$", 0, 0)
 #dt = math.pi * 2 / 100
 #g.svg.draw_arrow(23, 200, 34, 44, stroke="white")m
-g.graph(g1)
-g.graph(g2)
+g.plot(g1)
+g.plot(g2)
 g.save()
 
 
@@ -500,7 +501,7 @@ if __name__ == "__main__":
     A.bg(colour="black")
     A.axes(colour="yellow")
     for i in range(12):
-        A.graph(f(i))
+        A.plot(f(i))
     A.grid(colour="white")
     A.save()
     A.display()
@@ -521,8 +522,8 @@ if __name__ == "__main__":
 # A.axes()
 # A.grid()
 # A.ticks(markers=True)
-# A.graph(f)
-# A.graph(g)
+# A.plot(f)
+# A.plot(g)
 #
 # A.draw_dotted_line(0, 0, 6, 7, stroke="white", marker=".")
 # A.save()
@@ -533,4 +534,13 @@ if __name__ == "__main__":
 # g.bg(colour="black")
 # g.math_text('GiraFix', 0,0)
 # g.save()
-# g.display()
+# # g.display()
+# G = Graph(1000,1000,10,10,'ss')
+#
+# from giraphics.utilities.timer import Timer
+#
+#
+# t = Timer()
+# t.start()
+# G.tranx1(100)
+# t.stop()

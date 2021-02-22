@@ -111,7 +111,7 @@ A = Animation('QHO_kick_eigen1.mp4', time_intervals, 1980, 1080, 10, 3)
 for i in range(time_intervals):
     print(i)
     A.plate.bg()
-    A.plate.graph_points(X, np.abs(time_evo_pos[i]))
+    A.plate.plot_points(X, np.abs(time_evo_pos[i]))
     A.plate.press()
 
 A.develop()

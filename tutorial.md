@@ -7,37 +7,37 @@ Essentially graphs are different Features that we apply to a svg. Features are t
 They are applied in the order they are called, we first apply the background then work our way up to the feaures we want on top. 
 Once we are done we simply save the file.
  
-To create a graph we start by creating a `Graph` Object
+To create a plot we start by creating a `Graph` Object
 
 ```
 g = Graph(width, height, xlim, ylim, filename, origin)
 ```
 * The filename should have the format of svg.
  * `width` and `height` define the resolution of the `Graph` in pixels.
- * `xlim` and `ylim` sets the units of the graph from the centre to the edges in the x and y directions.
- * `origin` is a optional argument that defines the location of the origin relative to the centre of the graph
+ * `xlim` and `ylim` sets the units of the plot from the centre to the edges in the x and y directions.
+ * `origin` is a optional argument that defines the location of the origin relative to the centre of the plot
  A schematic is shown below
  
  ![Banner](https://github.com/tghira16/GiraFix/blob/master/res/schematic.svg?raw=true=250x)
 
-We may then start adding features to graph. 
+We may then start adding features to plot. 
 * `Graph.bg()` adds a black background by default but takes and optional argument
 `colour` that takes colour names or hexadecimal
-* `Graph.graph(f)` takes a function `f` as input and plots it. It takes optional arguments for `colour`, `strokewidth` , `opac` (opacity)
+* `Graph.plot(f)` takes a function `f` as input and plots it. It takes optional arguments for `colour`, `strokewidth` , `opac` (opacity)
 and resolution `n`.
-* `Graph.graph_points(X,Y)` is the sames as `graph()` except it plots the lists `X` and `Y`
+* `Graph.plot_points(X,Y)` is the sames as `plot()` except it plots the lists `X` and `Y`
 * `Graph.scatter(X,Y)`  scatter plots the lists `X` and `Y`.
 * `Graph.axes()` plots a set of x and y axes. It takes optional arguments of `colour`, `strokewidth`, `opac` and 
 whether to add `arrows`.
-* `Graph.grid()` adds grids to the graph. It takes optional arguments for `colour`,  `strokewidth`, `opac` and `grid_int` that
+* `Graph.grid()` adds grids to the plot. It takes optional arguments for `colour`,  `strokewidth`, `opac` and `grid_int` that
 sets the number of grid lines horizontallly and vertically.
 
-Once we are done adding features we save the graph with `Graph.save()` and if we want to display it in the browser we first save and then use `Graph.save()`. 
+Once we are done adding features we save the plot with `Graph.save()` and if we want to display it in the browser we first save and then use `Graph.save()`. 
 
 Here is an example,
 
 ```
-from giraphics.graphing.graph import Graph
+from giraphics.graphing.plot import Graph
 
 
 def func(x):
@@ -48,7 +48,7 @@ g = Graph(800,600,8,6, 'example1.svg')
 g.bg()
 g.grid()
 g.axes()
-g.graph(func)
+g.plot(func)
 
 g.save()
 g.display()

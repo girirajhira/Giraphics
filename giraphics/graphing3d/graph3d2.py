@@ -21,7 +21,7 @@ for i in range(frames):
     A.bg("black")
     V = np.matmul(Ry(i*epss), P)
     #print(i*epss)
-    A.graph_points(V[0][:], V[1][:])
+    A.plot_points(V[0][:], V[1][:])
     A.save()
 print('l')
 create_raster_batch("Plotsr", 'g', 'p', 'plotsrast', frames)
@@ -40,7 +40,7 @@ for i in range(frames):
     A.bg("black")
     #print(i*epss)
     V = f(i, eps=N/frames)
-    A.graph_points(V(P)[0][:], V(P)[1][:], colour="yellow")
+    A.plot_points(V(P)[0][:], V(P)[1][:], colour="yellow")
     A.save()
 print('l')
 create_raster_batch("Plotsr", 'g', 'p', 'plotsrast', frames)
@@ -57,10 +57,10 @@ class Graph3d(FancyGraphs):
         P = np.matmul(rotator, np.column_stack((X,Y,Z)).T)
         for i in range(yn):
             # x lines
-            self.graph_points(P[0], np.full(X.shape, P[1][i], dtype=float))
+            self.plot_points(P[0], np.full(X.shape, P[1][i], dtype=float))
         for j in range(xn):
             # y lines
-            self.graph_points(np.full(X.shape, P[0][j], dtype=float), P[1])
+            self.plot_points(np.full(X.shape, P[0][j], dtype=float), P[1])
 
     def mesh_sphere(self, r, cx, cy, cz, rotator=Rz(1), density=12, dphi=0.05, dtheta=0.05, latitudes=True, longitudes=True, colour="white"):
         centre = np.array([cx, cy, cz])
@@ -72,7 +72,7 @@ class Graph3d(FancyGraphs):
                 Y = r*sin(theta[i])*sin(phi) + cy
                 Z = r*cos(theta[i])*np.full(phi.shape, 1, dtype=float) + cz
                 P = np.matmul(rotator, np.column_stack((X,Y,Z)).T)
-                self.graph_points(P[0], P[1], colour=colour)
+                self.plot_points(P[0], P[1], colour=colour)
         if longitudes:
             theta = np.arange(0, pi+dtheta, dtheta)
             phi = np.linspace(0, 2 * pi, density)
@@ -81,7 +81,7 @@ class Graph3d(FancyGraphs):
                 Y = r * sin(theta) * sin(phi[i]) + cy
                 Z = r * cos(theta) + cz
                 P = np.matmul(rotator, np.column_stack((X, Y, Z)).T)
-                self.graph_points(P[0], P[1], colour=colour)
+                self.plot_points(P[0], P[1], colour=colour)
 
     def axes_3d(self, rotator):
         vecspos = np.array([[1,0,0], [0,1,0], [0,0,1]])*self.xlim

@@ -7,6 +7,6 @@ G.bg()
 
 t = np.linspace(-10,10,300)
 
-G.graph_points(t, t*t)
+G.plot_points(t, t * t)
 G.save()
 G.display()

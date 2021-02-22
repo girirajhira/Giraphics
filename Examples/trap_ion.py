@@ -99,10 +99,10 @@ for i in range(frames):
 
     # #Position Basis
     # g.draw_line(-5, 0, 5, 0, colour="yellow")
-    # g.graph_points(X, np.abs(time_evo_pos[t]), colour="white", strokewidth=1.5)
-    # g.graph_points(X, (time_evo_pos[t]).real, colour="blue", strokewidth=.8)
-    # g.graph_points(X, (time_evo_pos[t]).imag, colour="red", strokewidth=.8)
-    # g.graph_points(X, potential(X), colour="yellow", strokewidth=1.2)
+    # g.plot_points(X, np.abs(time_evo_pos[t]), colour="white", strokewidth=1.5)
+    # g.plot_points(X, (time_evo_pos[t]).real, colour="blue", strokewidth=.8)
+    # g.plot_points(X, (time_evo_pos[t]).imag, colour="red", strokewidth=.8)
+    # g.plot_points(X, potential(X), colour="yellow", strokewidth=1.2)
     # # ep = expectation(X, np.abs(time_evo_pos[t]))
     # # g.point(ep,potential(ep), s=3, colour="green")
 

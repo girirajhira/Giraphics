@@ -1,19 +1,17 @@
 from distutils.core import setup
 setup(
   name = 'giraphics',
-  version = '0.4',
+  version = '0.0.5',
   license='MIT',
-  packages=["giraphics", "giraphics/graphing", "giraphics/animate"],
+  packages=['giraphics', 'giraphics.graphing', 'giraphics.animate', 'giraphics.svg', 'giraphics.graphing3d',
+            'giraphics.utilities'],
   description = 'Lightweight graphing and animations',
   author = 'T. G. Hiranandani',
   author_email = 'giraphics@protonmail.com',
   url = 'https://github.com/tghira/giraphics',
-  download_url = 'https://github.com/tghira16/Giraphics/archive/ver_1.tar.gz',
   keywords = ['graphs', 'animations', 'graphics', 'vector-graphics'],
   install_requires=[
           'numpy',
-          'IPython'
-
       ],
 
   classifiers=[

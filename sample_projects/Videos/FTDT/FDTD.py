@@ -39,8 +39,8 @@ for t in range(timeSteps):
 
 G = Graph(1600, 1600, 5 * 10 ** (-9)/2, 2, "savee.svg", origin=[-5 * 10 ** (-9)/2, 0])
 G.bg("black")
-G.graph_points(x, mu*c*np.array(hList[700]), colour="white", strokewidth=2)
-G.graph_points(x, (eList[700][:-1]), colour="yellow", strokewidth=2)
+G.plot_points(x, mu*c*np.array(hList[700]), colour="white", strokewidth=2)
+G.plot_points(x, (eList[700][:-1]), colour="yellow", strokewidth=2)
 
 G.save()
 '''
@@ -54,8 +54,8 @@ create_directory("ftprast")
 for j in range(0, timeSteps):
     G = Graph(1600, 1600, 4*10**(-9)/2,2, "ftp/g"+namer(j)+".svg", origin=[-4*10**(-9)/2,0])
     G.bg("black")
-    G.graph_points(x, mu*c*np.array(hList[j]), colour="white", strokewidth=2)
-    G.graph_points(x, (eList[j][:-1]), colour="yellow", strokewidth=2)
+    G.plot_points(x, mu * c * np.array(hList[j]), colour="white", strokewidth=2)
+    G.plot_points(x, (eList[j][:-1]), colour="yellow", strokewidth=2)
     G.save()
 
 create_raster_batch("ftp", 'g', 'p', 'ftprast', timeSteps)
