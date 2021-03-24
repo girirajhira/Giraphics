@@ -38,4 +38,5 @@ class Animation:
         if cleanup:
             clean_up('vectors', 'rasters')
 
-
+    def show(self):
+        Video(name)

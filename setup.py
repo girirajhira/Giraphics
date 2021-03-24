@@ -12,6 +12,7 @@ setup(
   keywords = ['graphs', 'animations', 'graphics', 'vector-graphics'],
   install_requires=[
           'numpy',
+          'IPython',
       ],
 
   classifiers=[
