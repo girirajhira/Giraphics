@@ -39,4 +39,4 @@ class Animation:
             clean_up('vectors', 'rasters')
 
     def show(self):
-        Video(name)
+        Video(self.name)
