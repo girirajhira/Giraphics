@@ -32,7 +32,7 @@ whether to add `arrows`.
 * `Graph.grid()` adds grids to the plot. It takes optional arguments for `colour`,  `strokewidth`, `opac` and `grid_int` that
 sets the number of grid lines horizontallly and vertically.
 
-Once we are done adding features we save the plot with `Graph.save()` and if we want to display it in the browser we first save and then use `Graph.save()`. 
+Once we are done adding features we save the plot with `Graph.save()` and if we want to display it in the browser we first save and then use `Graph.display()`. 
 
 Here is an example,
 
@@ -76,11 +76,10 @@ from giraphics.animate.animation import Animation
 
 Then we create the `Animation` object. This takes name, number of frames, width, height, xlim and ylim as positional arguments and frame rate and origin are optional arguments with defualt values of 60 fps and [0, 0].
 
-We interact with object by writing to the `Animation.plate` which is an instance `Graph` object. Once we are done with a plate we 
-call `press()`. Usually this all fits in a `for` loop and the iterate over time.  Finally we develop the animation by calling `develop()`. `develop()` has optional argument for `cleanup` which  removes the intermediate files. For exmaple,
+We interact with the object by writing to the `Animation.plate` which is an instance of the `Graph` object. Once we are done with a plate we call `press()`. Usually this all fits in a `for` loop and the iterate over time.  Finally we develop the animation by calling `develop()`. `develop()` has optional argument for `cleanup` which  removes the temporary files. For exmaple,
 
 ```
-A  = Animation('hello_world.mp4', xlim, ylim, width, height)
+A  = Animation('hello_world.mp4', frames, xlim, ylim, width, height)
 for t in range(frames):
     A.bg(colour="black")
     A.plate.draw_circle(x, y, t, colour="white")
@@ -99,5 +98,8 @@ A.develop()
 ### Scenes
 
 ## 3D Graphing & Animation
+
+## Giraphics+Jupyter
+We can use `Gaph.jdisplay()` to display the graph in Jupyter and use `Animation.display` for videos.
 
 Coming soon!
