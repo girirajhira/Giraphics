@@ -3,7 +3,7 @@
 
 Giraphics is graphing and animation library designed to fast and simple to use. The library is inspired by [3b1b]'s [manim] library, but built independently.
 ## Installation
-The core package can be installed with `pip`
+The core package can be installed with `pip`.
 
 ```
 pip install giraphics
