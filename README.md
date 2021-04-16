@@ -19,13 +19,16 @@ Individual packages can be installed for specific functionality, but installatio
 Here are some example with what can be made with the `Giraphics`
 
 ### Animation 
-*Here is an example of the Sine series, every second we add a new term the Taylor expansion of Sine.
+* Here is an example of the Sine series, every second we add a new term the Taylor expansion of Sine.
 ![Sine Series](https://github.com/tghira16/Giraphics/blob/2ee931665e40ac08abc7c3d5c1e786850b206071/Examples/TaylorSeriesSine.gif)
 
-*Here is a stationary phase approximation to a Quantum Anharmonic Oscillator. This particular approximation relies on evolving under classical evolution. 
+* Here is a stationary phase approximation to a Quantum Anharmonic Oscillator. This particular approximation relies on evolving under classical evolution. 
 The red curve represents numerical solution of Schroedingers equation, while the blue curve represents the approximation. Lines below the plot show where the grid gets evolved to. The approximation manages to get the expectation of the postion and the phase reasonably well.
-![](https://github.com/tghira16/Giraphics/blob/9fadce9292134ad908eae19e52d6eb01a59e254d/Examples/QHO_kick_eigen22%20copy.gif)
-
+![qho](https://github.com/tghira16/Giraphics/blob/9fadce9292134ad908eae19e52d6eb01a59e254d/Examples/QHO_kick_eigen22%20copy.gif)
+ * This is the conformal map that takes $$z -> z^2$$.
+ ![Conformal Map](https://github.com/tghira16/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/SquareTransform.gif)
+ * This is a linear transformation that visualised as a grid transformation.
+ ![https://github.com/tghira16/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/LinTrans02.gif]
 
 ## Tutorial 
 You can find the tutorial [here]
