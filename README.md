@@ -15,6 +15,12 @@ Basic graphing and plotting can be done without any other software, however, the
 * [tex2svg]: Used to render LaTex
 
 Individual packages can be installed for specific functionality, but installation of all packages is reccomended.
+## Examples
+Here are some example with what can be made with the `Giraphics`
+### Vector fields
+### Animation 
+Here is an example of the Sine series, every second we add a new term the Taylor expansion of Sine.
+
 
 ## Tutorial 
 You can find the tutorial [here]
