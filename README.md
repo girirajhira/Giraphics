@@ -17,9 +17,13 @@ Basic graphing and plotting can be done without any other software, however, the
 Individual packages can be installed for specific functionality, but installation of all packages is reccomended.
 ## Examples
 Here are some example with what can be made with the `Giraphics`
+
 ### Vector fields
+![s]
+
 ### Animation 
 Here is an example of the Sine series, every second we add a new term the Taylor expansion of Sine.
+![Sine Series](https://github.com/tghira16/Giraphics/blob/2ee931665e40ac08abc7c3d5c1e786850b206071/Examples/TaylorSeriesSine.gif)
 
 
 ## Tutorial 
