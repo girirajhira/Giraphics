@@ -100,6 +100,6 @@ A.develop()
 ## 3D Graphing & Animation
 
 ## Giraphics+Jupyter
-We can use `Gaph.jdisplay()` to display the graph in Jupyter and use `Animation.display` for videos.
+We can use `Graph.jdisplay()` to display the graph in Jupyter and use `Animation.display` for videos.
 
 Coming soon!
