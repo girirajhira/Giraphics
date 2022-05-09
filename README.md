@@ -35,6 +35,7 @@ The red curve represents numerical solution of Schroedingers equation, while the
  
  ![QCO](https://github.com/tghira16/Giraphics/blob/master/res/QuarticOscillator.gif?raw=true)
  * Lorentz attractor
+
  ![QCO](https://github.com/tghira16/Giraphics/blob/master/res/lorentz.gif?raw=true)
 
 ## Tutorial 
