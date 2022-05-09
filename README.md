@@ -32,6 +32,7 @@ The red curve represents numerical solution of Schroedingers equation, while the
  * This is a double pendulum with different initial conditions.
  ![Double Pendulum](https://github.com/tghira16/Giraphics/blob/master/res/DoublePendulum.gif)
  * This is a quantum quartic oscillator. 
+ 
  ![QCO](https://github.com/tghira16/Giraphics/blob/master/res/QuarticOscillator.gif?raw=true)
  * Lorentz attractor
  ![QCO](https://github.com/tghira16/Giraphics/blob/master/res/lorentz.gif?raw=true)
