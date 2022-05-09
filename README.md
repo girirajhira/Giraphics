@@ -29,6 +29,8 @@ The red curve represents numerical solution of Schroedingers equation, while the
  ![Conformal Map](https://github.com/tghira16/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/SquareTransform.gif)
  * This is a linear transformation that visualised as a transformation of the grid.
  ![Linear Transformation](https://github.com/tghira16/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/LinTrans02.gif)
+ * This is a double pendulum with different initial conditions.
+ ![Double Pendulum](https://github.com/tghira16/Giraphics/blob/master/res/DoublePendulum.gif)
 
 ## Tutorial 
 You can find the tutorial [here]
