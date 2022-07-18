@@ -1,14 +1,15 @@
 from giraphics.svg.svgkit import *
 from giraphics.utilities.latext import *
 from giraphics.utilities.mathtext import *
+from giraphics.utilities.latex2 import latex_expression
 from giraphics.utilities.convert import *
+from giraphics.utilities.latex_svg_decoder import *
 from IPython.display import SVG as IPSVG
 from IPython.display import Image
 import numpy as np
 import webbrowser
 import os
 import platform
-# from numba import njit, jit
 
 
 class Graph:
@@ -43,7 +44,9 @@ class Graph:
         self.origin = np.array(origin)
         self.xscale = width / (2 * xlim)
         self.yscale = height / (2 * ylim)
-        self.TexLoader = []
+        # self.TexLoader = []
+        self.insets = []
+        self.history_latex = {}
         if theme == "dark":
             self.theme = {
                 'background': 'black',
@@ -57,7 +60,6 @@ class Graph:
                 'secondary': 'black'
             }
 
-    
     def tranx(self, x):
         """
         converts the x coordinate to svg coordinate
@@ -166,7 +168,7 @@ class Graph:
     #     self.tranx(x), self.trany(y), colour, fontsize, opac, rotation, text)
 
     def text(self, x, y, text, fontsize=20, colour="white", rotation=0,
-             font="14", opac=1):
+             font="14", opac=1, fontfamily = 'sans-serif'):
         """
         Draws specified text at the given coordinates (in standard units)
         :param x: float
@@ -186,24 +188,23 @@ class Graph:
         :param opac: float (0-1)
         :return: None
         """
-        self.svg.canvas += '<text x="%s" y="%s"  font-family="Recursive" fill="%s" font-size="%s" alignment-baseline="middle" text-anchor="middle" opacity="%s"  transform="rotate(%s,%s,%s)"> %s </text>\n' % (
-            self.tranx(x), self.trany(y), colour, fontsize, opac, rotation, self.tranx(x), self.trany(y), text)
+        self.svg.canvas += f'<text x="{self.tranx(x)}" y="{self.trany(y)}"  font-family="{fontfamily}" fill="%s" font-size="{fontsize}" alignment-baseline="middle" text-anchor="middle" color="{colour}" opacity="{opac}"  transform="rotate({rotation},{self.tranx(x)},{self.trany(y)})"> {text} </text>\n'
 
-    def math_text(self, expression, x, y, colour="White", scale=4):
-        math_to_svg(expression, os.getcwd() + "/temp.txt")
-        with open("temp.txt", 'r') as file:
-            code = file.read()
-        os.remove(os.getcwd() + "/temp.txt")
-        dx = len(expression) * scale
-        dy = 9 * scale
-        self.svg.canvas += '\n <g transform-origin="bottome" transform="translate(' + str(
-            self.tranx(x) - dx) + ' ' + str(self.trany(y) - dy) + '),' + 'scale(' + str(scale) + ',' + str(
-            scale) + ')' + ' ">'
-        self.svg.canvas += code.replace('currentColor', colour).replace('8.781ex', str(scale))
-        self.svg.canvas += '</g> \n'
-
-    def add_math_text(self, expr, x, y, colour="white", scale=4):
-        self.TexLoader.append([expr, x, y, colour, scale])
+    # def math_text(self, expression, x, y, colour="White", scale=4):
+    #     math_to_svg(expression, os.getcwd() + "/temp.txt")
+    #     with open("temp.txt", 'r') as file:
+    #         code = file.read()
+    #     os.remove(os.getcwd() + "/temp.txt")
+    #     dx = len(expression) * scale
+    #     dy = 9 * scale
+    #     self.svg.canvas += '\n <g transform-origin="bottome" transform="translate(' + str(
+    #         self.tranx(x) - dx) + ' ' + str(self.trany(y) - dy) + '),' + 'scale(' + str(scale) + ',' + str(
+    #         scale) + ')' + ' ">'
+    #     self.svg.canvas += code.replace('currentColor', colour).replace('8.781ex', str(scale))
+    #     self.svg.canvas += '</g> \n'
+    #
+    # def add_math_text(self, expr, x, y, colour="white", scale=4):
+    #     self.TexLoader.append([expr, x, y, colour, scale])
 
     def ticks(self, colour="yellow", strokewidth=1, markers=False, fontsize=8):
         """
@@ -242,7 +243,7 @@ class Graph:
                               str((round((i - self.ylim - self.origin[1]) * oy, 2))),
                               fontsize=fontsize, colour=colour, opac=0.6)
 
-    def arrow(self, x1, y1, x2, y2, scale, colour, strokewidth):
+    def arrow(self, x1, y1, x2, y2, scale = 1, colour = 'white', strokewidth = 2):
         """
         Draws a line from (x1, y1) to (x2, y2)
         :param x1: float
@@ -363,26 +364,110 @@ class Graph:
             self.svg.draw_circ(self.tranx(-X[i]), self.trany(Y[i]), s, fill=colour, stroke=colour,
                                strokewidth=0, opac=opac)
 
-    def param_label(self, x, y, label, s, stroke="white", strokewidth=12):
-        text = "%s = %s" % (label, s)
-        self.text(x, y, text, strokewidth=strokewidth, stroke=stroke)
+    # def param_label(self, x, y, label, s, stroke="white", strokewidth=12):
+    #     text = "%s = %s" % (label, s)
+    #     self.text(x, y, text, strokewidth=strokewidth, stroke=stroke)
+    #
+    # def embed_latex(self, expr, x, y, width=200, height=200, colour="white", size=45):
+    #     A = LaText("expr.png", 0.5, 0.5, expr, colour=colour, size=size)
+    #     A.save()
+    #     self.svg.embed_image(self.tranx(x) - width / 2, self.trany(y) - height / 2, width=width,
+    #                          height=height, href=os.getcwd() + "/expr.png")
+    #
+    # def add_latex_old(self, expr, x0, y0, scale=1, rotation=0, centre_align = True, colour = None, preamble=None,
+    #               usepackages=None, cleanup = True, background = False, bg_colour = 'black', bg_opacity = .4,
+    #               box = False, boxcolour = 'white', boxwidth = 2, boxmult = 1.5):
+    #     '''Depreacated'''
+    #     # R(x + y) -  = Rx + Ry
+    #     if expr in self.history_latex:
+    #         tex_info = self.history_latex[expr]
+    #         expr_code, w_expr, h_expr = tex_info[0], tex_info[1], tex_info[2]
+    #     else:
+    #         expr_code, w_expr, h_expr = latex_expression(expr, colour=colour, preamble=preamble, usepackages=usepackages,cleanup=cleanup)
+    #         self.history_latex[expr] = [expr_code, w_expr, h_expr, colour]
+    #
+    #     mata = scale*np.cos(rotation)
+    #     matc =  scale*np.sin(rotation)
+    #     matb = -scale*np.sin(rotation)
+    #     matd = scale*np.cos(rotation)
+    #     if centre_align:
+    #         mate = self.width/2 + x0*self.xscale - scale*(np.cos(rotation)*w_expr + np.sin(rotation)*h_expr)/2
+    #         matf = self.height/2 - y0*self.yscale  - scale*(-np.sin(rotation)*w_expr + np.cos(rotation)*h_expr)/2
+    #     else:
+    #         mate = self.width/2  + x0*self.xscale
+    #         matf = self.height/2 - y0*self.yscale
+    #
+    #     if background:
+    #         self.svg.draw_rect(mate, matf, w_expr*scale, h_expr*scale, fill=bg_colour, opacity=bg_opacity, strokewidth=0)
+    #
+    #     if box:
+    #         self.svg.draw_rect(mate, matf, w_expr*scale*boxmult, h_expr*scale*boxmult, 'None', strokewidth=boxwidth, stroke=boxcolour)
+    #
+    #     self.svg.canvas += f'<g transform="matrix({mata}, {matb},{matc}, {matd}, {mate}, {matf})">\n'
+    #     # self.svg.canvas += f'<svg width="100%" height="100%" >\n'
+    #     self.svg.canvas += expr_code
+    #     # self.svg.canvas += '</svg>\n'
+    #     self.svg.canvas += '</g>\n'
 
-    def embed_latex(self, expr, x, y, width=200, height=200, colour="white", size=45):
-        A = LaText("expr.png", 0.5, 0.5, expr, colour=colour, size=size)
-        A.save()
-        self.svg.embed_image(self.tranx(x) - width / 2, self.trany(y) - height / 2, width=width,
-                             height=height, href=os.getcwd() + "/expr.png")
 
-    def embed_latex_anim(self, expr, x, y, width=200, height=200, colour="white", size=45):
-        A = LaText(os.getcwd() + "/Plots/expr.png", 0.5, 0.5, expr, colour=colour, size=size)
-        A.save()
-        self.svg.embed_image(self.tranx(x) - width / 2, self.trany(y) - height / 2, width=width,
-                             height=height, href=os.getcwd() + "/Plots/expr.png")
+    def add_latex(self, expr, x0, y0, scale=1, rotation=0, centre_align=True, colour=None, preamble=None,
+                  usepackages=None, cleanup=True, opacity = 1, background=False, bg_colour='black', bg_opacity=.4,
+                  box=False, boxcolour='white', boxwidth=2, boxmult=1.6):
+        if expr in self.history_latex:
+            tex_info = self.history_latex[expr]
+            expr_code, w_expr, h_expr = tex_info[0].replace('fill-opacity:1', f'fill-opacity:{round(opacity,3)}'), tex_info[1], tex_info[2]
+        else:
+            expr_code, w_expr, h_expr = latex_expression(expr, colour=colour, preamble=preamble, usepackages=usepackages,
+                                                         cleanup=cleanup)
+            # Data processing
+            index = len(self.history_latex)
+            symbols = get_svg_symbol_ids(expr_code)
+            clips = get_svg_clip_ids(expr_code)
+            for symb in symbols:
+                expr_code = expr_code.replace(symb, symb + f'-{index}')
+            for clip in clips:
+                expr_code = expr_code.replace(clip, clip + f'-{index}')
 
-    # Construction
+            self.history_latex[expr] = [expr_code, w_expr, h_expr, colour]
+
+            expr_code = expr_code.replace('fill-opacity:1', f'fill-opacity:{round(opacity,3)}')
+
+        mata = scale * np.cos(rotation)
+        matc = scale * np.sin(rotation)
+        matb = -scale * np.sin(rotation)
+        matd = scale * np.cos(rotation)
+        if centre_align:
+            mate = self.width / 2 + x0 * self.xscale - scale * (np.cos(rotation) * w_expr + np.sin(rotation) * h_expr) / 2
+            matf = self.height / 2 - y0 * self.yscale - scale * (-np.sin(rotation) * w_expr + np.cos(rotation) * h_expr) / 2
+        else:
+            mate = self.width / 2 + x0 * self.xscale
+            matf = self.height / 2 - y0 * self.yscale
+
+        if background:
+            self.svg.draw_rect(mate + scale*w_expr/2, matf + scale*h_expr/2, w_expr * scale, h_expr * scale, fill=bg_colour, opacity=bg_opacity,
+                               strokewidth=0)
+
+        if box:
+            self.svg.draw_rect(mate+scale*w_expr/2, matf + scale*h_expr/2, w_expr * scale * boxmult, h_expr * scale * boxmult, 'None', strokewidth=boxwidth,
+                               stroke=boxcolour)
+
+        self.svg.canvas += f'<g transform="matrix({mata}, {matb},{matc}, {matd}, {mate}, {matf})">\n'
+        self.svg.canvas += expr_code
+        self.svg.canvas += '</g>\n'
+
+    # def embed_latex_anim(self, expr, x, y, width=200, height=200, colour="white", size=45):
+    #     A = LaText(os.getcwd() + "/Plots/expr.png", 0.5, 0.5, expr, colour=colour, size=size)
+    #     A.save()
+    #     self.svg.embed_image(self.tranx(x) - width / 2, self.trany(y) - height / 2, width=width,
+    #                          height=height, href=os.getcwd() + "/Plots/expr.png")
+
+    # Constructions
 
     def draw_arrow(self, x1, y1, x2, y2, scale=1, colour="black", strokewidth=1):
         self.svg.draw_arrow(self.tranx(x1), self.trany(y1), self.tranx(x2), self.trany(y2), scale, stroke=colour,
+                            strokewidth=strokewidth)
+    def draw_arrow2(self, x1, y1, x2, y2, scale=1, colour="black", strokewidth=1):
+        self.svg.draw_arrow2(self.tranx(x1), self.trany(y1), self.tranx(x2), self.trany(y2), scale, stroke=colour,
                             strokewidth=strokewidth)
 
     def draw_double_arrow(self, x1, y1, x2, y2, scale=1, colour="black", strokewidth=1):
@@ -390,7 +475,6 @@ class Graph:
                             strokewidth=strokewidth)
         self.svg.draw_arrow(self.tranx(x2), self.trany(y2), self.tranx(x1), self.trany(y1), scale, stroke=colour,
                             strokewidth=strokewidth)
-
 
     def draw_circle(self, x, y, r, fill="none", colour="black", strokewidth=1):
         self.svg.draw_circ(self.tranx(x), self.trany(y), self.xscale * r, fill=fill, stroke=colour,
@@ -417,15 +501,23 @@ class Graph:
     def point(self, x, y, s=1, colour="white"):
         self.draw_circle(x, y, 15 * s / self.width, fill=colour, strokewidth=0)
 
-    def save(self):
-        if len(self.TexLoader) != 0:
-            for t in self.TexLoader:
-                self.math_text(t[0], t[1], t[2], colour=t[3], scale=t[4])
-        """
-        Saves the plot and clears the svg.canvas
-        """
+
+    def save(self, clear = False):
         self.svg.save()
-        self.svg.canvas = ""
+
+        if clear:
+            self.svg.canvas = ""
+
+    # def save(self, clear=False):
+    #     if len(self.TexLoader) != 0:
+    #         for t in self.TexLoader:
+    #             self.math_text(t[0], t[1], t[2], colour=t[3], scale=t[4])
+    #     """
+    #     Saves the plot and clears the svg.canvas
+    #     """
+    #     self.svg.save()
+    #     if clear:
+    #         self.svg.canvas = ""
 
     def jupyter_display(self, raster=False):
         self.save()
@@ -508,7 +600,7 @@ if __name__ == "__main__":
 
 '''
 
-#
+
 # def f(x):
 #     return x
 #
@@ -516,31 +608,29 @@ if __name__ == "__main__":
 # def g(x):
 #     return x * x
 #
-#
-# A = Graph(400, 400, 5, 5, 'svg.svg', origin=[-5, -5])
-# A.bg()
+# #
+A = Graph(400, 400, 5, 5, 'svg2.svg', origin=[0, 0])
+A.bg(colour='black')
 # A.axes()
-# A.grid()
+# A.draw_arrow2(0,0,3,3,scale=2)
 # A.ticks(markers=True)
 # A.plot(f)
 # A.plot(g)
+# A.add_latex('$x_1$', 0, 0, background=False, colour='white', scale=4, centre_align=False,
+#             box=True,boxcolour='white', boxwidth=2, opacity=1)
+
+# A.add_latex2('a', 0, 0, scale=6, rotation=0*np.pi/2, colour=[0,0,0])
 #
-# A.draw_dotted_line(0, 0, 6, 7, stroke="white", marker=".")
-# A.save()
-# A.display()
+# A.add_latex2('b', 2, 3, scale=6, rotation=0*np.pi/2, colour=[0,0,0])
 #
-#
-# g = Graph(1000,1000,3,3,'giraphics.svg')
-# g.bg(colour="black")
-# g.math_text('GiraFix', 0,0)
-# g.save()
-# # g.display()
-# G = Graph(1000,1000,10,10,'ss')
-#
-# from giraphics.utilities.timer import Timer
-#
-#
-# t = Timer()
-# t.start()
-# G.tranx1(100)
-# t.stop()
+# # # A.draw_dotted_line(0, 0, 6, 7, stroke="white", marker=".")
+# A.add_inset(2,2,2,2,position=[3,3])
+# A.bg(colour='blue')
+A.grid()
+A.draw_arrow(0,0, 4,4,colour='white')
+A.axes()
+A.draw_rect(0,0,8,8,'none', colour='white')
+A.draw_arrow2(0,0, -4,-4, colour='white')
+A.save()
+
+A.display()

@@ -22,6 +22,7 @@ def norm(x):
     for v in x:
         t += v**2
     return t**(0.5)
+
 def max(x):
     m = 0
     for i in range(len(x)):
@@ -30,10 +31,19 @@ def max(x):
     return x[m]
 
 def linear(init, end):
+    '''deprecated'''
     init = np.array(init)
     end = np.array(end)
     def f(s):
         return vec_to_hex(init + (end - init) * s)
     return f
 
+def colourScale(start_colour, end_colour):
+    if isinstance(start_colour, str):
+        start_colour = hex_to_vec(start_colour)
+    if isinstance(end_colour, str):
+        end_colour= hex_to_vec(start_colour)
+    def f(t):
+        return vec_to_hex(init + (end - init) * s)
+    return f
 

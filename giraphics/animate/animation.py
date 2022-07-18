@@ -10,12 +10,15 @@ class Frame_graphic(FancyGraphs):
         FancyGraphs.__init__(self, width, height, xlim, ylim, name, origin=[0.0, 0.0], theme="dark",
                  transform="none", grouped=False)
         self.frame_index = 0
+        self.last_frame = ''
 
     def press(self):
         self.svg.path = "vectors/g" + namer(self.frame_index) + ".svg"
         self.frame_index += 1
-        FancyGraphs.save(self)
+        self.last_frame = self.svg.canvas
+        FancyGraphs.save(self,clear=True)
         self.svg.__init__(self.svg.path, self.width, self.height, transform="none", grouped=False)
+
 
 
 class Animation:
@@ -31,12 +34,17 @@ class Animation:
         self.ylim = ylim
         self.plate = Frame_graphic(width, height, xlim, ylim, '', origin=origin)
 
-    def develop(self, cleanup=True, warnings=True):
+
+    def pause(self, frames):
+        for i in range(frames):
+            self.plate.svg.canvas = self.plate.last_frame
+            self.plate.press()
+
+    def develop(self, cleanup=True, warnings=True, workers = 2):
         # Creating
-        create_raster_batch("vectors", 'g', 'p', "rasters", self.frames)
+        create_raster_batch("vectors", 'g', 'p', "rasters", self.plate.frame_index)
         create_mpeg(self.name, 'p', self.frames, "rasters", framerate=self.framerate, warnings=warnings)
         if cleanup:
             clean_up('vectors', 'rasters')
-
     def show(self):
         Video(self.name)

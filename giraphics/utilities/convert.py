@@ -98,6 +98,27 @@ def create_raster_batch(dir, filename, savename, savedir, num):
         command = ("rsvg-convert {}/{}/{}{}.svg -o {}/{}/{}{}.png").format(os.getcwd(), dir, filename, namer(i), os.getcwd(), savedir, savename, namer(i))
         os.system(command)
 
+def crb_wrap(dir, filename, savename, savedir):
+    cwd = os.getcwd()
+    def inner(i):
+        command = ("rsvg-convert {}/{}/{}{}.svg -o {}/{}/{}{}.png").format(cwd, dir, filename, f'{i:04}',
+                                                                           cwd, savedir, savename, f'{i:04}')
+        print(command)
+        os.system(command)
+    return inner
+
+
+def create_raster_parallel(dir, filename, savename, savedir, num, pools=2):
+    if pools == 'all':
+        pools = multiprocessing.cpu_count()
+    f = crb_wrap(dir,filename,savename, savedir)
+    print(f)
+    p = multiprocessing.Pool(pools)
+    p.map(f, range(num))
+    p.close()
+    p.join()
+
+
 # create_raster_batch("ftp", 'g', 'p', 'ftprast', 1)
 def create_mpeg(filename, batchname, num, dir, framerate='60', warnings=True, overwrite=True):
     if warnings:

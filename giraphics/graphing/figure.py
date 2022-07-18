@@ -1,5 +1,5 @@
 from giraphics.graphing.graph import Graph
-
+from math import pi
 
 class Figure(Graph):
     def __init__(self, width, height, xlim, ylim, name, origin=[0.0, 0.0], theme="dark",
@@ -75,20 +75,35 @@ class Figure(Graph):
 
     # Features
 
-    def xlabel(self, label="x", fontsize=13):
-        x = self.origin[0]
-        y = -self.ylim*self.bw - (1-self.bw)*self.ylim/2
-        self.text(x, y, text=label, colour="black", fontsize=fontsize)
+    def xlabel(self, label="x", fontsize=13, use_latex=False):
+        if use_latex:
+            x = self.origin[0]
+            y = -self.ylim * self.bw - (1 - self.bw) * self.ylim / 2
+            self.add_latex(label, x, y, scale=1.6)
+        else:
+            x = self.origin[0]
+            y = -self.ylim*self.bw - (1-self.bw)*self.ylim/2
+            self.text(x, y, text=label, colour="black", fontsize=fontsize)
 
-    def ylabel(self, label="y", fontsize=13):
-        y = self.origin[1]
-        x = -self.xlim*self.bw - (1-self.bw)*self.xlim/2
-        self.text(x, y, text=label, colour="black", fontsize=fontsize, rotation="-90")
+    def ylabel(self, label="f(x)", fontsize=13, use_latex=False):
+        if use_latex:
+            y = self.origin[1]
+            x = -self.xlim * self.bw - (1 - self.bw) * self.xlim/2
+            self.add_latex(label, x, y, scale=1.6, rotation=pi/2)
+        else:
+            y = self.origin[1]
+            x = -self.xlim*self.bw - (1-self.bw)*self.xlim/2
+            self.text(x, y, text=label, colour="black", fontsize=fontsize, rotation="-90")
 
-    def title(self, title_label, fontsize = 26):
-        x = self.origin[0]
-        y = self.ylim*self.bw + (1-self.bw)*self.ylim/3
-        self.text(x, y, title_label, colour="black", fontsize=fontsize)
+    def title(self, title_label, fontsize = 26, use_latex=False):
+        if use_latex:
+            x = self.origin[0]
+            y = self.ylim * self.bw + (1 - self.bw) * self.ylim / 3
+            self.add_latex(title_label,x,y)
+        else:
+            x = self.origin[0]
+            y = self.ylim*self.bw + (1-self.bw)*self.ylim/3
+            self.text(x, y, title_label, colour="black", fontsize=fontsize)
 
     def save(self):
         self.svg.canvas += self.inner_graph.svg.canvas + "\n </svg>\n </g>\n"
@@ -96,16 +111,21 @@ class Figure(Graph):
                        strokewidth=1.2)
         Graph.save(self)
 
-# def func(x):
-#     return 0.04 * x ** 2 * math.sin(6 * x) - 5
-#
-# f = Figure(600, 450, 15, 10, "fig.svg", origin=[-5,-5])
-# f.plot(func, colour="red")
-# f.grid()
-# # f.grid2(colour="blue")
-# # f.ticks(markers=True)
-# f.xlabel(label="f(x)")
-# f.ylabel()
-# f.title("Title")
-# f.save()
-# f.display()
+
+import math
+def func(x):
+    return 0.04 * x ** 2 * math.sin(6 * x) - 5
+
+
+f = Figure(600, 450, 15, 10, "fig.svg", origin=[0,0])
+f.plot(func, colour="red")
+f.grid()
+# f.grid2(colour="blue")
+# f.ticks(markers=True)
+# f.xlabel(label="$f(x)$", use_latex=True)
+# f.ylabel(use_latex=True)
+f.inner_graph.axes(colour='black')
+f.add_latex('$f(x)$', 0, 0, scale=3, rotation=0)
+# f.title("Title", use_latex=True)
+f.save()
+f.display()

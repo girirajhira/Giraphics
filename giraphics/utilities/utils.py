@@ -89,6 +89,13 @@ def norm(x):
     return t ** (0.5)
 
 
+def parity(x):
+    if x >= 0:
+        return 1
+    else:
+        return -1
+
+
 # Rotations 3D
 def Rx(theta, r=1):
     return np.array([[cos(theta), -sin(theta), 0], [sin(theta), cos(theta), 0], [0, 0, 1]])
