@@ -2,6 +2,14 @@
 ![Banner](https://github.com/tghira16/GiraFix/blob/master/res/banner.svg?raw=true=250x)
 
 Giraphics is graphing and animation library designed to fast and simple to use. The library is inspired by [3b1b]'s [manim] library, but built independently.
+
+## Features
+Giraphics offers a wide range of features to make your graphing and animation experience as smooth and easy as possible. Here are some of the highlights:
+
+- Easy-to-use syntax: Giraphics was designed with simplicity in mind, so you can focus on your ideas, not the code.
+- Customizability: With Giraphics, you can customize every aspect of your graphs and animations, from colors and shapes to animation speeds and styles.
+- LaTeX support: You can render LaTeX expressions with Giraphics, making it easy to add complex mathematical formulas to your visualizations.
+
 ## Installation
 The core package can be installed with `pip`.
 
