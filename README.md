@@ -1,6 +1,7 @@
 # Giraphics
-![Banner](https://github.com/tghira16/GiraFix/blob/master/res/banner.svg?raw=true=250x)
-
+<p align="center">
+  <img src="https://github.com/tghira16/GiraFix/blob/master/res/banner.svg?raw=true=250x" width="405" title="Giraphics">
+</p>
 Giraphics is graphing and animation library designed to fast and simple to use. The library is inspired by [3b1b]'s [manim] library, but built independently.
 
 ## Features
@@ -26,14 +27,46 @@ Individual packages can be installed for specific functionality, but installatio
 ## Examples
 Here are some example with what can be made with the `Giraphics`
 
-### Animation 
-* Here is an example of the Sine series, every second we add a new term the Taylor expansion of Sine.
-![Sine Series](https://github.com/tghira16/Giraphics/blob/2ee931665e40ac08abc7c3d5c1e786850b206071/Examples/TaylorSeriesSine.gif)
+### Animations
 
+<table>
+ <tr> 
+ <td>
+  <p align="center">
+  <img src="https://github.com/tghira16/Giraphics/blob/2ee931665e40ac08abc7c3d5c1e786850b206071/Examples/TaylorSeriesSine.gif" width="405" title="Giraphics">
+</p>
+ </td>
+  <td>
+   <p align="center">
+  <img src="https://github.com/tghira16/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/SquareTransform.gif" width="405" title="Giraphics">
+</p>
+  </td>
+ </tr>
+  <tr> 
+ <td>
+     <p align="center">
+  <img src="https://github.com/tghira16/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/LinTrans02.gif" width="405" title="Giraphics">
+</p>
+ </td>
+  <td>
+  <p align="center">
+  <img src="https://github.com/tghira16/Giraphics/blob/master/res/DoublePendulum.gif" width="405" title="Giraphics">
+</p>
+  </td>
+ </tr>
+ </table>
+ 
+<!-- 
+
+* Here is an example of the Sine series, every second we add a new term the Taylor expansion of Sine.
+<p align="center">
+  <img src="https://github.com/tghira16/Giraphics/blob/2ee931665e40ac08abc7c3d5c1e786850b206071/Examples/TaylorSeriesSine.gif" width="405" title="Giraphics">
+</p>
 * Here is a stationary phase approximation to a Quantum Anharmonic Oscillator. This particular approximation relies on evolving under classical evolution. 
 The red curve represents numerical solution of Schroedingers equation, while the blue curve represents the approximation. Lines below the plot show where the grid gets evolved to. The approximation manages to get the expectation of the postion and the phase reasonably well.
 ![qho](https://github.com/tghira16/Giraphics/blob/9fadce9292134ad908eae19e52d6eb01a59e254d/Examples/QHO_kick_eigen22%20copy.gif)
  * This is the conformal map that takes `z -> z^2`.
+ * 
  ![Conformal Map](https://github.com/tghira16/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/SquareTransform.gif)
  * This is a linear transformation that visualised as a transformation of the grid.
  ![Linear Transformation](https://github.com/tghira16/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/LinTrans02.gif)
@@ -44,7 +77,7 @@ The red curve represents numerical solution of Schroedingers equation, while the
  ![QCO](https://github.com/tghira16/Giraphics/blob/master/res/QuarticOscillator.gif?raw=true)
  * Lorentz attractor
 
- ![QCO](https://github.com/tghira16/Giraphics/blob/master/res/lorentz.gif?raw=true)
+ ![QCO](https://github.com/tghira16/Giraphics/blob/master/res/lorentz.gif?raw=true) -->
 
 ## Tutorial 
 You can find the tutorial [here]
