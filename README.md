@@ -1,6 +1,6 @@
 # Giraphics
 <p align="center">
-  <img src="https://github.com/tghira16/GiraFix/blob/master/res/banner.svg?raw=true=250x" width="405" title="Giraphics">
+  <img src="https://github.com/tghira16/GiraFix/blob/master/res/banner.svg?raw=true=250x" width="600" title="Giraphics">
 </p>
 Giraphics is graphing and animation library designed to fast and simple to use. The library is inspired by [3b1b]'s [manim] library, but built independently.
 
@@ -29,7 +29,7 @@ Here are some example with what can be made with the `Giraphics`
 
 ### Animations
 
-<table>
+<table padding="0" border="0">
  <tr> 
  <td>
   <p align="center">
