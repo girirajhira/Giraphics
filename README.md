@@ -1,7 +1,12 @@
 # Giraphics
 <p align="center">
   <img src="https://github.com/tghira16/GiraFix/blob/master/res/banner.svg?raw=true=250x" width="600" title="Giraphics">
+  <br></br>
+  <a href="https://pypi.org/project/giraphics/"><img src="https://img.shields.io/pypi/v/giraphics.svg?style=flat&logo=pypi" alt="PyPI Latest Release"></a>
+      <a href="http://choosealicense.com/licenses/mit/"><img src="https://img.shields.io/badge/license-MIT-red.svg?style=flat" alt="MIT License"></a>
+
 </p>
+
 Giraphics is graphing and animation library designed to fast and simple to use. The library is inspired by [3b1b]'s [manim] library, but built independently.
 
 ## Features
