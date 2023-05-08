@@ -1,4 +1,4 @@
-from giraphics.graphing.fancygraphs import *
+from giraphics.graphing.fancygraph import *
 from giraphics.utilities.convert import convert_image
 # Optional
 from scipy.integrate import odeint
@@ -16,7 +16,7 @@ ylim = 1.25
 name = 'VectorField.svg'
 
 # Creates the Graph Object
-G = FancyGraphs(width, height, xlim, ylim, name, origin=[-0,0])
+G = FancyGraph(width, height, xlim, ylim, name, origin=[-0, 0])
 
 # Vector Function
 def V(x,y):

@@ -1,4 +1,4 @@
-from giraphics.graphing.fancygraphs import *
+from giraphics.graphing.fancygraph import *
 
 '''
 Takes a cartesian grid and transforms it according to the given function.
@@ -13,7 +13,7 @@ ylim = 10
 name = 'VectorField.svg'
 origin = [0, 0]
 # Creating Graph Object
-G = FancyGraphs(width, height, xlim, ylim, name, origin=origin)
+G = FancyGraph(width, height, xlim, ylim, name, origin=origin)
 
 
 # Complex Function

@@ -120,7 +120,7 @@ def create_raster_parallel(dir, filename, savename, savedir, num, pools=2):
 
 
 # create_raster_batch("ftp", 'g', 'p', 'ftprast', 1)
-def create_mpeg(filename, batchname, num, dir, framerate='60', warnings=True, overwrite=True):
+def create_mpeg(filename, batchname, dir, framerate='60', warnings=True, overwrite=True):
     if warnings:
         w = '-loglevel warning'
     else:

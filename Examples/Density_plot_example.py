@@ -1,4 +1,4 @@
-from giraphics.graphing.fancygraphs import *
+from giraphics.graphing.fancygraph import *
 from giraphics.utilities.convert import convert_image
 import math
 
@@ -14,7 +14,7 @@ height = 1000
 xlim = 10
 ylim = 10
 name = 'VectorField.svg'
-G = FancyGraphs(width, height, xlim, ylim, name)
+G = FancyGraph(width, height, xlim, ylim, name)
 
 # Vector Function
 def V(x,y):

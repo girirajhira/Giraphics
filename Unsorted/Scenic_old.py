@@ -1,8 +1,8 @@
-from giraphics.graphing.fancygraphs import *
+from giraphics.graphing.fancygraph import *
 import numpy as np
 
 
-class Widget(FancyGraphs):
+class Widget(FancyGraph):
     def __init__(self, win_width, win_height, xlim, ylim, x, y, origin=[0.0, 0.0], border = True):
         self.svg = SVG('None', win_width, win_height, fullsvg=False)
         self.eps = xlim / 2000

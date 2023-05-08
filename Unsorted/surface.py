@@ -1,5 +1,5 @@
 from giraphics.utilities.convert import *
-from giraphics.graphing.fancygraphs import *
+from giraphics.graphing.fancygraph import *
 import numpy as np
 from math import cos, sin
 

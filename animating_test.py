@@ -1,25 +1,36 @@
 from giraphics.animate.animation import Animation
 from math import cos, sin, pi
+import numpy as np
 
-frames = 60
+frames = 400
 xlim = 5
 ylim = 5
 res_x = 1000
 res_y = 1000
-video_name = 'combinatio.mp4'
-A = Animation(video_name, frames, res_x, res_y, xlim, ylim)
+video_name = 'combination.mp4'
+A = Animation(video_name, res_x, res_y, xlim, ylim)
+
 
 def f(t):
-    return ((1.5)/(0.3*t+0.7))*(cos(2.7*t))**2
-def r(t):
-    return 3/(t+1)
+    return (1.5 / (0.3 * t + 0.7)) * (np.cos(2.7 * t)) ** 2
 
+
+def r(t):
+    return 3 / (t + 1)
+
+
+t = np.linspace(0, 10, frames)
+x1 = r(t) * np.cos(t)
+y1 = r(t) * np.sin(t)
+
+x2 = r(t) * np.cos(t + pi)
+y2 = r(t) * np.sin(t + pi)
 
 for i in range(0, frames):
-    t = 12 * i / frames
     A.plate.bg(colour="black")
-    A.plate.draw_circle(r(t)*cos(t), r(t)*sin(t), 0.3, fill="red")
-    A.plate.draw_circle(r(t)*cos(t+pi), r(t)*sin(t+pi), 0.3, fill="red")
+    A.plate.plot_points(x1[:i], y1[:i], colour='pink', style='5,5')
+    A.plate.plot_points(x2[:i], y2[:i], colour='pink', style='5,5')
+    A.plate.draw_circle(x1[i], y1[i], 0.3, fill="red")
+    A.plate.draw_circle(x2[i], y2[i], 0.3, fill="red")
     A.plate.press()
 A.develop(cleanup=True)
-

@@ -1,7 +1,7 @@
 from distutils.core import setup
 setup(
   name = 'giraphics',
-  version = '0.0.5',
+  version = '0.0.6',
   license='MIT',
   packages=['giraphics', 'giraphics.graphing', 'giraphics.animate', 'giraphics.svg', 'giraphics.graphing3d',
             'giraphics.utilities'],

@@ -1,7 +1,7 @@
-from giraphics.graphing.fancygraphs import *
+from giraphics.graphing.fancygraph import *
 
 
-class Widget(FancyGraphs):
+class Widget(FancyGraph):
     def __init__(self, xlim, ylim, Scene, scale=[0.25,0.25], pos=[0, 0], origin=[0.0, 0.0], border=True,
                 bcol="white", bstroke=2.5):
         #Translations
@@ -15,7 +15,7 @@ class Widget(FancyGraphs):
         self.svg.save(write_out=False)
 
 
-class Scene(FancyGraphs):
+class Scene(FancyGraph):
     def commitWidget(self, widget):
         widget.save()
         self.svg.canvas += widget.svg.canvas

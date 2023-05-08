@@ -1,8 +1,8 @@
-from giraphics.graphing.fancygraphs import *
+from giraphics.graphing.fancygraph import *
 from math import sin, cos
 from random import gauss
 
-g = FancyGraphs(1440, 1440, 10, 10, "ss.svg")
+g = FancyGraph(1440, 1440, 10, 10, "ss.svg")
 g.bg(colour="black")
 colours = ['']
 def path(t, mu=1):

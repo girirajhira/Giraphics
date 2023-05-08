@@ -1,3 +1,4 @@
+from giraphics.utilities.latex2 import latex_expression
 
 
 
@@ -15,7 +16,7 @@ def typing_text(expr):
     len_expr = len(expr)
     def inner(t):
         if t < len_expr:
-            return modes[math_mode] + expr[:t] + '|' +modes[math_mode]
+            return modes[math_mode] + expr[:t] + '|' + modes[math_mode]
         else:
             return modes[math_mode] + expr[:t] + modes[math_mode]
     return inner

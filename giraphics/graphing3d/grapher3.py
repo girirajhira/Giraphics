@@ -1,4 +1,4 @@
-from giraphics.graphing.fancygraphs import *
+from giraphics.graphing.fancygraph import *
 from giraphics.animate import *
 import numpy as np
 

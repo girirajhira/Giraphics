@@ -3,7 +3,7 @@ import os
 from giraphics.utilities.utils import listlike
 from giraphics.utilities import convert
 import sys
-from giraphics.graphing.fancygraphs import FancyGraphs
+from giraphics.graphing.fancygraph import FancyGraph
 from giraphics.utilities.timer import Timer
 
 '''
@@ -44,7 +44,7 @@ class Animator:
                      strokewidths=[2], colours=["yellow"], bg="black", grid_colour="yellow", grindint=10, scale=0.8,
                      grids=[10, 10], s=1, opac=1, display=False):
         if self.type == "complex":
-            G = FancyGraphs(self.height, self.width, self.xlim, self.ylim, name)
+            G = FancyGraph(self.height, self.width, self.xlim, self.ylim, name)
             G.bg(bg)
             if axes:
                 G.axes(colour=axescolour, strokewidth=axestroke)
@@ -56,7 +56,7 @@ class Animator:
             if display:
                 G.display()
         elif self.type == "cart":
-            G = FancyGraphs(self.height, self.width, self.xlim, self.ylim, name)
+            G = FancyGraph(self.height, self.width, self.xlim, self.ylim, name)
             G.bg(bg)
             if axes:
                 G.axes(colour=axescolour, strokewidth=axestroke)
@@ -70,7 +70,7 @@ class Animator:
             if display:
                 G.display()
         elif self.type == "lineartrans":
-            G = FancyGraphs(self.height, self.width, self.xlim, self.ylim, name)
+            G = FancyGraph(self.height, self.width, self.xlim, self.ylim, name)
             G.bg(bg)
             if axes:
                 G.axes(colour=axescolour, strokewidth=axestroke)
@@ -82,7 +82,7 @@ class Animator:
             if display:
                 G.display()
         elif self.type == "scatter":
-            G = FancyGraphs(self.height, self.width, self.xlim, self.ylim, name)
+            G = FancyGraph(self.height, self.width, self.xlim, self.ylim, name)
             G.bg(bg)
             if axes:
                 G.axes(colour=axescolour, strokewidth=axestroke)
@@ -94,7 +94,7 @@ class Animator:
             if display:
                 G.display()
         elif self.type == "vectorfield":
-            G = FancyGraphs(self.height, self.width, self.xlim, self.ylim, name)
+            G = FancyGraph(self.height, self.width, self.xlim, self.ylim, name)
             G.bg(bg)
             if axes:
                 G.axes(colour=axescolour, strokewidth=axestroke)
@@ -106,7 +106,7 @@ class Animator:
             if display:
                 G.display()
         elif self.type == "complexscatter":
-            G = FancyGraphs(self.height, self.width, self.xlim, self.ylim, name)
+            G = FancyGraph(self.height, self.width, self.xlim, self.ylim, name)
             G.bg(bg)
             if axes:
                 G.axes(colour=axescolour, strokewidth=axestroke)

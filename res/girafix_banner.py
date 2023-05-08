@@ -1,6 +1,6 @@
-from giraphics.graphing.fancygraphs import FancyGraphs
+from giraphics.graphing.fancygraph import FancyGraph
 from math import  sin, cos
-g = FancyGraphs(1200, 600, 6, 3, "banner.svg")
+g = FancyGraph(1200, 600, 6, 3, "banner.svg")
 
 g.bg(colour="black")
 g.grid(opac=0.3, grid_int=[12,6])
@@ -16,9 +16,9 @@ g.save()
 g.display()
 
 
-# from fancygraphs import FancyGraphs
+# from fancygraphs import FancyGraph
 # from math import  sin, cos
-# g = FancyGraphs(1500, 600, 8, 3, "banner.svg")
+# g = FancyGraph(1500, 600, 8, 3, "banner.svg")
 #
 # g.bg(colour="black")
 # g.grid(opac=0.3, grid_int=[25,10])

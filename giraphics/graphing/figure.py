@@ -1,3 +1,5 @@
+import numpy as np
+
 from giraphics.graphing.graph import Graph
 from math import pi
 
@@ -75,21 +77,21 @@ class Figure(Graph):
 
     # Features
 
-    def xlabel(self, label="x", fontsize=13, use_latex=False):
+    def xlabel(self, label="x", fontsize=13, use_latex=False, scale=2):
         if use_latex:
             x = self.origin[0]
             y = -self.ylim * self.bw - (1 - self.bw) * self.ylim / 2
-            self.add_latex(label, x, y, scale=1.6)
+            self.add_latex(label, x, y, scale=scale)
         else:
             x = self.origin[0]
             y = -self.ylim*self.bw - (1-self.bw)*self.ylim/2
             self.text(x, y, text=label, colour="black", fontsize=fontsize)
 
-    def ylabel(self, label="f(x)", fontsize=13, use_latex=False):
+    def ylabel(self, label="f(x)", fontsize=13, use_latex=False,scale=2):
         if use_latex:
             y = self.origin[1]
             x = -self.xlim * self.bw - (1 - self.bw) * self.xlim/2
-            self.add_latex(label, x, y, scale=1.6, rotation=pi/2)
+            self.add_latex(label, x, y, scale=2, rotation=pi/2)
         else:
             y = self.origin[1]
             x = -self.xlim*self.bw - (1-self.bw)*self.xlim/2
@@ -105,8 +107,13 @@ class Figure(Graph):
             y = self.ylim*self.bw + (1-self.bw)*self.ylim/3
             self.text(x, y, title_label, colour="black", fontsize=fontsize)
 
+
+    def legend(self, data, loc = 'upper right'):
+        for i in range(0,1)
+
+
     def save(self):
-        self.svg.canvas += self.inner_graph.svg.canvas + "\n </svg>\n </g>\n"
+        self.svg.canvas += self.inner_graph.svg.canvas + "\n </svg>\n </g>\n </g>\n"
         self.draw_rect(0, 0, 2 * self.xlim * self.bw, 2 * self.ylim * self.bw, fill="none", colour="black",
                        strokewidth=1.2)
         Graph.save(self)
@@ -117,14 +124,17 @@ def func(x):
     return 0.04 * x ** 2 * math.sin(6 * x) - 5
 
 
-f = Figure(600, 450, 15, 10, "fig.svg", origin=[0,0])
+f = Figure(600, 450, 15, 10, "fig2.svg", origin=[0,0])
 f.plot(func, colour="red")
+f.plot_points(np.linspace(-15,15, 100),np.linspace(-15,15, 100)**2, colour='blue')
 f.grid()
 # f.grid2(colour="blue")
 # f.ticks(markers=True)
 # f.xlabel(label="$f(x)$", use_latex=True)
 # f.ylabel(use_latex=True)
 f.inner_graph.axes(colour='black')
+f.xlabel(label ='$x$', use_latex=True)
+f.ylabel(label ='$y$', use_latex=True)
 f.add_latex('$f(x)$', 0, 0, scale=3, rotation=0)
 # f.title("Title", use_latex=True)
 f.save()

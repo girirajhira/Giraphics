@@ -1,5 +1,5 @@
 from giraphics.utilities.convert import *
-from giraphics.graphing.fancygraphs import *
+from giraphics.graphing.fancygraph import *
 import numpy as np
 from math import pi
 from numpy import sin, cos
@@ -48,7 +48,7 @@ create_mpeg('LiveLorent3.mp4', 'p', frames, dir=os.getcwd() + "/plotsrast")
 
 '''
 
-class Graph3d(FancyGraphs):
+class Graph3d(FancyGraph):
     def surface(self, func, rotator, yn = 60, xn = 60):
         mesh = np.mgrid[-5:5.1:0.5, -5:5.1:0.5]
         X = np.linspace(-self.xlim, self.xlim, xn)
@@ -83,7 +83,7 @@ class Graph3d(FancyGraphs):
                 P = np.matmul(rotator, np.column_stack((X, Y, Z)).T)
                 self.plot_points(P[0], P[1], colour=colour)
 
-    def axes_3d(self, rotator):
+    def axes3d(self, rotator):
         vecspos = np.array([[1,0,0], [0,1,0], [0,0,1]])*self.xlim
         vecsneg = -np.array([[1,0,0], [0,1,0], [0,0,1]])*self.xlim
         V1 = np.matmul(rotator, vecspos)
@@ -101,22 +101,23 @@ class Graph3d(FancyGraphs):
     def Ry(self,theta, r=1):
         return np.array([[cos(theta), 0, sin(theta)], [0, 1, 0], [-sin(theta), 0, cos(theta)]])
 
-frames = 200
-create_directory("Plotsr")
-create_directory("plotsrast")
-
-def rtr(t, w = 0.02):
-    return np.matmul(Rz(0.33), Ry(w*t))
-def funx(x,y):
-    return -0.3*(x**2 + sin(y))
-
-for i in range(frames):
-    A = Graph3d(1000, 1000, 30, 30, "Plotsr/g" + namer(i) + ".svg")
-    A.bg("black")
-    A.surface(funx, rtr(i))
-    A.axes_3d(rtr(i))
-   # A.mesh_sphere(6, 0, 0, 0, rotator=rtr(i))
-    A.save()
-
-create_raster_batch("Plotsr", 'g', 'p', 'plotsrast', frames)
-create_mpeg('../../sample_projects/Videos/surf1.mp4', 'p', frames, dir=os.getcwd() + "/plotsrast")
+# frames = 200
+# create_directory("Plotsr")
+# create_directory("plotsrast")
+#
+# def rtr(t, w = 0.02):
+#     return np.matmul(Rz(0.33), Ry(w*t))
+# def funx(x,y):
+#     return -0.3*(x**2 + sin(y))
+#
+# for i in range(frames):
+#     A = Graph3d(1000, 1000, 30, 30, "Plotsr/g" + namer(i) + ".svg")
+#     A.bg("black")
+#     A.surface(funx, rtr(i))
+#     A.axes_3d(rtr(i))
+#    # A.mesh_sphere(6, 0, 0, 0, rotator=rtr(i))
+#     A.save()
+#
+# create_raster_batch("Plotsr", 'g', 'p', 'plotsrast', frames)
+# create_mpeg('../../sample_projects/Videos/surf1.mp4', 'p', frames, dir=os.getcwd() + "/plotsrast")
+class Animation

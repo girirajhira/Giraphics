@@ -4,7 +4,7 @@ from scipy.linalg import expm
 from scipy.special import eval_hermite
 
 # Parameters
-from giraphics.graphing.fancygraphs import FancyGraphs
+from giraphics.graphing.fancygraph import FancyGraph
 from giraphics.utilities.convert import *
 
 N = 30
@@ -93,7 +93,7 @@ create_directory("ftprast")
 
 for i in range(frames):
     t = i
-    g = FancyGraphs(1000, 1000, 5, 1, "ftp/g" + namer(i) + ".svg", origin=[0, -0.5])
+    g = FancyGraph(1000, 1000, 5, 1, "ftp/g" + namer(i) + ".svg", origin=[0, -0.5])
     g.bg("black")
     # g.axes("yellow")
 
