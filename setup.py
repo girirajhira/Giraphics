@@ -1,7 +1,7 @@
 from distutils.core import setup
 setup(
   name = 'giraphics',
-  version = '0.0.6',
+  version = '0.0.7',
   license='MIT',
   packages=['giraphics', 'giraphics.graphing', 'giraphics.animate', 'giraphics.svg', 'giraphics.graphing3d',
             'giraphics.utilities'],
@@ -13,6 +13,7 @@ setup(
   install_requires=[
           'numpy',
           'IPython',
+          'svg'
       ],
 
   classifiers=[
@@ -23,6 +24,10 @@ setup(
     "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+
     "Topic :: Scientific/Engineering :: Astronomy",
     "Topic :: Scientific/Engineering :: Physics"]
 )

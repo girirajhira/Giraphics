@@ -2,8 +2,6 @@ import giraphics.graphing.graph
 from giraphics.graphing.figure import *
 import numpy as np
 
-
-
 ### Default Settings
 
 DEFAULTS = {
@@ -48,18 +46,15 @@ DEFAULTS = {
     }
 }
 t1 = {
-        'X': [1],
-        'Y': [2],
-        'colour': 'black',
-        'opacity': 1,
-        'style': 'line',
-        'label': '',
-    }
+    'X': [1],
+    'Y': [2],
+    'colour': 'black',
+    'opacity': 1,
+    'style': 'line',
+    'label': '',
+}
 
-# DEFAULTS['Plots'].append(t1)
-#
-# for i in DEFAULTS['Plots']:
-#     print(i)
+
 class Chart:
     def __init__(self, name, width=400, height=300, xlim=None, ylim=None, type='Figure'):
         self.name = name
@@ -76,25 +71,27 @@ class Chart:
         self.commands['Background']['opacity'] = opacity
 
     def plot(self, X=[], Y=[], colour='black', opacity=1, style='line', label='', marker=None, markerSize=1):
-        update = {'X': X, 'Y': Y, 'colour': colour, 'opacity': opacity, 'style': style, 'label': label, 'marker': marker, 'markerSize': markerSize}
+        update = {'X': X, 'Y': Y, 'colour': colour, 'opacity': opacity, 'style': style, 'label': label,
+                  'marker': marker, 'markerSize': markerSize}
         self.commands['Plots'].append(update)
 
     def xlabel(self, text, size=None):
         self.commands['xlabel']['presence'] = True
         self.commands['xlabel']['text'] = text
-        self.commands['xlabel']['size'] = size if size is not None else .05*self.width
+        self.commands['xlabel']['size'] = size if size is not None else .05 * self.width
 
     def ylabel(self, text, size=None):
         self.commands['ylabel']['presence'] = True
         self.commands['ylabel']['text'] = text
-        self.commands['ylabel']['size'] = size if size is not None else .05*self.width
+        self.commands['ylabel']['size'] = size if size is not None else .05 * self.width
 
     def title(self, text, size=None):
         self.commands['Title']['presence'] = True
         self.commands['Title']['text'] = text
-        self.commands['Title']['size'] = size if size is not None else .1*self.width
+        self.commands['Title']['size'] = size if size is not None else .1 * self.width
 
         # print(self.commands['Plots'])
+
     def grid(self, colour='grey', y_grid=None, x_grid=None, opacity=0.5):
         self.commands['Grid']['presence'] = True
         self.commands['Grid']['x-grid'] = x_grid
@@ -104,7 +101,7 @@ class Chart:
 
     def complete(self):
         # Settings the limits
-        if self.xlim == None and self.ylim==None:
+        if self.xlim == None and self.ylim == None:
             xmin_vals, xmax_vals = [], []
             ymin_vals, ymax_vals = [], []
             for data in self.commands['Plots']:
@@ -140,7 +137,7 @@ class Chart:
 
         # Creating the figure
         f = Figure(self.width, self.height, xlim, ylim, "f.svg", origin=[-(xlim + xmin), -(ylim + ymin)])
-        # f.ticks(markers=True)
+        f.ticks(markers=True)
         # Background
         f.bg(colour=self.commands['Background']['colour'])
         # Do grids
@@ -149,9 +146,10 @@ class Chart:
         for data in self.commands['Plots']:
             f.plot_points(data['X'], data['Y'], colour=data['colour'])
             if data['marker'] != None:
-                f.scatter(data['X'], data['Y'], colour=data['colour'], opac=data['opacity'],s=6*data['markerSize']/xlim)
+                f.scatter(data['X'], data['Y'], colour=data['colour'], opac=data['opacity'],
+                          s=6 * data['markerSize'] / xlim)
 
-        # Tile and Label
+        # Tile and labels
         if self.commands['Title']['presence']:
             f.title(self.commands['Title']['text'], self.commands['Title']['size'], )
         if self.commands['xlabel']['presence']:
@@ -170,5 +168,5 @@ ch.plot(x, y, colour='red', marker='x')
 ch.xlabel('x')
 ch.ylabel('y')
 ch.title('y = x^2')
-ch.plot(x, y*x, colour='blue')
+ch.plot(x, y * x, colour='blue')
 ch.complete()

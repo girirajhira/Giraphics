@@ -109,7 +109,8 @@ class Figure(Graph):
 
 
     def legend(self, data, loc = 'upper right'):
-        for i in range(0,1)
+        for i in range(0,1):
+            pass
 
 
     def save(self):
@@ -124,18 +125,18 @@ def func(x):
     return 0.04 * x ** 2 * math.sin(6 * x) - 5
 
 
-f = Figure(600, 450, 15, 10, "fig2.svg", origin=[0,0])
-f.plot(func, colour="red")
-f.plot_points(np.linspace(-15,15, 100),np.linspace(-15,15, 100)**2, colour='blue')
-f.grid()
-# f.grid2(colour="blue")
-# f.ticks(markers=True)
-# f.xlabel(label="$f(x)$", use_latex=True)
-# f.ylabel(use_latex=True)
-f.inner_graph.axes(colour='black')
-f.xlabel(label ='$x$', use_latex=True)
-f.ylabel(label ='$y$', use_latex=True)
-f.add_latex('$f(x)$', 0, 0, scale=3, rotation=0)
-# f.title("Title", use_latex=True)
-f.save()
-f.display()
+# f = Figure(600, 450, 15, 10, "fig2.svg", origin=[0,0])
+# f.plot(func, colour="red")
+# f.plot_points(np.linspace(-15,15, 100),np.linspace(-15,15, 100)**2, colour='blue')
+# f.grid()
+# # f.grid2(colour="blue")
+# # f.ticks(markers=True)
+# # f.xlabel(label="$f(x)$", use_latex=True)
+# # f.ylabel(use_latex=True)
+# f.inner_graph.axes(colour='black')
+# f.xlabel(label ='$x$', use_latex=True)
+# f.ylabel(label ='$y$', use_latex=True)
+# f.add_latex('$f(x)$', 0, 0, scale=3, rotation=0)
+# # f.title("Title", use_latex=True)
+# f.save()
+# f.display()
