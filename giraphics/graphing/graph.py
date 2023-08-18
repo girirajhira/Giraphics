@@ -1,7 +1,7 @@
 from giraphics.svg.svgkit import *
 # from giraphics.utilities.latext import *
 # from giraphics.utilities.mathtext import *
-from giraphics.svg.morph2 import *
+# from giraphics.svg.morph2 import *
 from giraphics.utilities.latex2 import latex_expression
 from giraphics.utilities.convert import *
 from giraphics.utilities.latex_svg_decoder import *
