@@ -5,10 +5,10 @@ import numpy as np
 from math import floor
 import re
 # from svgpath2mpl import parse_path
-# from svg.path import parse_path, Line, Arc, CubicBezier, QuadraticBezier, Move, Path
+from svg.path import parse_path, Line, Arc, CubicBezier, QuadraticBezier, Move, Path
 from giraphics.utilities.colour import colorObj
 
-test_code = '''  <path d="M 10 315
+test_code = ''' <path d="M 10 315
            L 110 215
            A 36 60 0 0 1 150.71 170.29
            L 172.55 152.45
@@ -280,10 +280,10 @@ class SVGPathObject:
 # print(Path2svg(ppt))
 # print(ppt.vertices)
 #
-#
-#
-#
+# #
+# #
+# #
 # print(len(ppt.codes), len(ppt.vertices))
-#
-#
+# #
+# #
 # print(path2svg(ppt.vertices, ppt.codes))

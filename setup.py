@@ -13,7 +13,8 @@ setup(
   install_requires=[
           'numpy',
           'IPython',
-          'svg'
+          'svgpath2mpl',
+          'svg.path'
       ],
 
   classifiers=[

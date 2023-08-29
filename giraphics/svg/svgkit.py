@@ -26,7 +26,6 @@ class SVG:
         self.canvas += f'<svg version="1.1" \n baseProfile="full" \n width="{width}" \n height="{height}" xmlns="http://www.w3.org/2000/svg">\n'
         self.preamble = self.canvas
 
-
     def draw_rect(self, x, y, width, height, fill, stroke="black", strokewidth=0, opacity=1, fill_opacity=1):
         """"
             Draws a rectangle
@@ -108,7 +107,7 @@ class SVG:
         p30 = np.array([4, -9]).T
         p40 = np.array([0, -7]).T
         p1, p2, p3, p4 = (R @ p10).T * scale + o, (R @ p20).T * scale + o, (R @ p30).T * scale + o, (
-                    R @ p40).T * scale + o
+                R @ p40).T * scale + o
         self.canvas += '<polygon points="%s %s, %s %s, %s %s, %s %s" fill="%s"/>' % (
             p1[0], p1[1], p2[0], p2[1], p3[0], p3[1], p4[0], p4[1], colour)
 
@@ -122,7 +121,7 @@ class SVG:
         p30 = np.array([3, -6]).T
         p40 = np.array([0, -6]).T
         p1, p2, p3, p4 = (R @ p10).T * scale + o, (R @ p20).T * scale + o, (R @ p30).T * scale + o, (
-                    R @ p40).T * scale + o
+                R @ p40).T * scale + o
         self.canvas += '<polygon points="%s %s, %s %s, %s %s, %s %s" fill="%s"/>' % (
             p1[0], p1[1], p2[0], p2[1], p3[0], p3[1], p4[0], p4[1], colour)
 
@@ -131,7 +130,8 @@ class SVG:
         l0 = .96 * 7 * scale
         length = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
         if length != 0:
-            self.draw_line(x1, y1, (x2 - x1) * (1 - l0 / length) + x1, (y2 - y1) * (1 - l0 / length) + y1, stroke, strokewidth)
+            self.draw_line(x1, y1, (x2 - x1) * (1 - l0 / length) + x1, (y2 - y1) * (1 - l0 / length) + y1, stroke,
+                           strokewidth)
             self.draw_arrowhead(x2, y2, scale, ang, stroke)
 
     def draw_arrow2(self, x1, y1, x2, y2, scale=1, stroke="black", strokewidth="1"):
@@ -139,7 +139,8 @@ class SVG:
         l0 = .96 * 3 * scale
         length = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
         if length != 0:
-            self.draw_line(x1, y1, (x2 - x1) * (1 - l0 / length) + x1, (y2 - y1) * (1 - l0 / length) + y1, stroke, strokewidth)
+            self.draw_line(x1, y1, (x2 - x1) * (1 - l0 / length) + x1, (y2 - y1) * (1 - l0 / length) + y1, stroke,
+                           strokewidth)
             self.draw_arrowhead2(x2, y2, scale, ang, stroke)
 
     def draw_polygon(self, X, Y, fill='none', stroke='black', strokewidth=1, opacity=1):
@@ -151,7 +152,7 @@ class SVG:
                 points += f'{X[i]},{Y[i]} '
         self.canvas += f'<polygon points="{points}" style="fill:{fill};stroke:{stroke};stroke-width:{strokewidth};fill-opacity:{opacity}"/>\n'
 
-    def draw_polyline(self, X, Y, colour="red", strokewidth="2", opac=1, fill="none", style='none', fill_opacity = 1):
+    def draw_polyline(self, X, Y, colour="red", strokewidth="2", opac=1, fill="none", style='none', fill_opacity=1):
         self.canvas += '<polyline points="'
         start = True
         for i in range(len(X)):
@@ -167,10 +168,8 @@ class SVG:
             self.canvas += '-1,1'
         self.canvas += f'" fill="{fill}" stroke="{colour}" stroke-width="{strokewidth}" stroke-linejoin="round" stroke-opacity="{opac}"  stroke-dasharray="{style}" fill-opacity="{fill_opacity}"/>\n'
 
-    def draw_path(self, path, colour="red", strokewidth="2", opac=1, fill="none", fill_opacity = 0):
+    def draw_path(self, path, colour="red", strokewidth="2", opac=1, fill="none", fill_opacity=0):
         self.canvas += f'<path d="{path}" stroke="{colour}" stroke-width="{strokewidth}" fill="{fill}" opacity="{opac}" fill-opacity="{fill_opacity}"/>\n'
-
-
 
     # def text(self, expr,x, y,  fontsize = 14, colour = 'white', rotation=0, opacity = 0, fontfamily = 'sans-serif', centre_align = False):
     #     scale = 1

@@ -1,7 +1,7 @@
 from giraphics.svg.svgkit import *
 # from giraphics.utilities.latext import *
 # from giraphics.utilities.mathtext import *
-# from giraphics.svg.morph2 import *
+from giraphics.svg.morph2 import *
 from giraphics.utilities.latex2 import latex_expression
 from giraphics.utilities.convert import *
 from giraphics.utilities.latex_svg_decoder import *
@@ -343,7 +343,7 @@ class Graph:
         Y = [self.trany(func(i * eps - self.origin[0])) for i in range(-n, n + 1)]
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
-    def plot_points(self, X, Y, colour="red", strokewidth=1, opac=1, style='none', fill='none', fill_opacity = 1):
+    def plot_points(self, X, Y, colour="red", strokewidth=1, opac=1, style='none', fill='none', fill_opacity=1):
         """
         Graphs the inputted points
         :param X:
@@ -356,7 +356,8 @@ class Graph:
         strokewidth = strokewidth * self.nscale
         X1 = [self.tranx(x) for x in X]
         Y1 = [self.trany(y) for y in Y]
-        self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill, fill_opacity=fill_opacity)
+        self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill,
+                               fill_opacity=fill_opacity)
 
     def scatter(self, X, Y, s=1, colour="white", opac=1):
         """
@@ -480,7 +481,6 @@ class Graph:
 
         self.svg.draw_path(pathstr[:-1], colour=colour, strokewidth=strokewidth, opac=opacity, fill=fill)
 
-
     def quadratic_bezier(self, path, colour="red", strokewidth=2, opacity=1, fill="none"):
         pathstr = f'M {self.tranx(path[0, 0])} {self.trany(path[0, 1])} Q '
         strokewidth = strokewidth * self.nscale
@@ -489,14 +489,15 @@ class Graph:
 
         self.svg.draw_path(pathstr[:-1], colour=colour, strokewidth=strokewidth, opac=opacity, fill=fill)
 
-    def draw_path(self, path, colour="red", strokewidth=2, opacity=1, fill="none", fill_opacity = 0):
+    def draw_path(self, path, colour="red", strokewidth=2, opacity=1, fill="none", fill_opacity=0):
         strokewidth = strokewidth * self.nscale
         pobj = parse_path(path)
-        print('rr', (pobj))
+        print('rr', pobj)
         translated_pobj = convert_points2giraphics2(pobj, self.tranx, self.trany)
         print('ll', len(translated_pobj))
         cc = path2svg(translated_pobj)
-        self.svg.draw_path(cc, colour=colour, strokewidth=strokewidth, opac=opacity, fill=fill, fill_opacity = fill_opacity)
+        self.svg.draw_path(cc, colour=colour, strokewidth=strokewidth, opac=opacity, fill=fill,
+                           fill_opacity=fill_opacity)
 
     def draw_line(self, x1, y1, x2, y2, marker="*", colour="black", strokewidth=1, opacity=1, cap="butt",
                   segments=20, style=None):
@@ -564,6 +565,7 @@ class Graph:
         else:
             print("OS error, your os is ", platform.system())
 
+
 # def f(x):
 #     return x
 #
@@ -572,19 +574,22 @@ class Graph:
 #     return x * x
 # # #
 # # #
-# A = Graph(400, 400, 5, 5, 'svg2.svg', origin=[0, 0])
-# A.bg(colour='black')
-# A.axes()
-# x, y = 3, 3
-# A.draw_arrow2(1, 0, 3, 3, scale=2, colour='white')
-# # A.point(x, y, s = .4, colour='red')
-# A.ticks()
-# A.draw_polygon([0,2,1], [0,0,1], colour='white', fill='white',fill_opacity=.2)
-# A.grid([5,5])
-# A.ticks(markers=True)
-# # A.svg.draw_arrowhead2(200, 200, 10, 2,colour='white')
-# A.save()
-# A.display()
+A = Graph(400, 400, 5, 5, 'svg2.svg', origin=[0, 0])
+A.bg(colour='black')
+A.axes()
+x, y = 3, 3
+A.draw_arrow2(1, 0, 3, 3, scale=2, colour='white')
+# A.point(x, y, s = .4, colour='red')
+A.ticks()
+A.draw_polygon([0, 2, 1], [0, 0, 1], colour='white', fill='white', fill_opacity=.2)
+A.grid([5, 5])
+A.ticks(markers=True)
+pp = 'M128.491,140C128.491,140 152.217,105.125 173.377,125.792C181.998,134.212 198.871,152.834 215.841,171.948C240.525,199.751 265.415,228.594 265.415,228.594C265.415,228.594 310.397,262.127 314.556,240C318.714,217.873 300,231.161 300,231.161C300,231.161 263.348,201.286 231.714,171.612C209.637,150.903 190.003,130.291 186.978,120C179.618,94.964 154.942,88.134 140,110.946C125.058,133.759 118.009,143 128.491,140Z'
+pp2 = 'M 100 100 a 50 50 0 1 0 0.00000001 0'
+A.draw_path(pp, colour='red')
+# A.svg.draw_arrowhead2(200, 200, 10, 2,colour='white')
+A.save()
+A.display()
 
 # # #
 # from giraphics.utilities.utils import getAngle
