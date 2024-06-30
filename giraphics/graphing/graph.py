@@ -574,22 +574,22 @@ class Graph:
 #     return x * x
 # # #
 # # #
-A = Graph(400, 400, 5, 5, 'svg2.svg', origin=[0, 0])
-A.bg(colour='black')
-A.axes()
-x, y = 3, 3
-A.draw_arrow2(1, 0, 3, 3, scale=2, colour='white')
-# A.point(x, y, s = .4, colour='red')
-A.ticks()
-A.draw_polygon([0, 2, 1], [0, 0, 1], colour='white', fill='white', fill_opacity=.2)
-A.grid([5, 5])
-A.ticks(markers=True)
-pp = 'M128.491,140C128.491,140 152.217,105.125 173.377,125.792C181.998,134.212 198.871,152.834 215.841,171.948C240.525,199.751 265.415,228.594 265.415,228.594C265.415,228.594 310.397,262.127 314.556,240C318.714,217.873 300,231.161 300,231.161C300,231.161 263.348,201.286 231.714,171.612C209.637,150.903 190.003,130.291 186.978,120C179.618,94.964 154.942,88.134 140,110.946C125.058,133.759 118.009,143 128.491,140Z'
-pp2 = 'M 100 100 a 50 50 0 1 0 0.00000001 0'
-A.draw_path(pp, colour='red')
-# A.svg.draw_arrowhead2(200, 200, 10, 2,colour='white')
-A.save()
-A.display()
+# A = Graph(400, 400, 5, 5, 'svg2.svg', origin=[0, 0])
+# A.bg(colour='black')
+# A.axes()
+# x, y = 3, 3
+# A.draw_arrow2(1, 0, 3, 3, scale=2, colour='white')
+# # A.point(x, y, s = .4, colour='red')
+# A.ticks()
+# A.draw_polygon([0, 2, 1], [0, 0, 1], colour='white', fill='white', fill_opacity=.2)
+# A.grid([5, 5])
+# A.ticks(markers=True)
+# pp = 'M128.491,140C128.491,140 152.217,105.125 173.377,125.792C181.998,134.212 198.871,152.834 215.841,171.948C240.525,199.751 265.415,228.594 265.415,228.594C265.415,228.594 310.397,262.127 314.556,240C318.714,217.873 300,231.161 300,231.161C300,231.161 263.348,201.286 231.714,171.612C209.637,150.903 190.003,130.291 186.978,120C179.618,94.964 154.942,88.134 140,110.946C125.058,133.759 118.009,143 128.491,140Z'
+# pp2 = 'M 100 100 a 50 50 0 1 0 0.00000001 0'
+# A.draw_path(pp, colour='red')
+# # A.svg.draw_arrowhead2(200, 200, 10, 2,colour='white')
+# A.save()
+# A.display()
 
 # # #
 # from giraphics.utilities.utils import getAngle
