@@ -158,7 +158,7 @@ class Chart:
             f.ylabel(self.commands['ylabel']['text'], self.commands['ylabel']['size'])
 
         f.save()
-        f.display()
+        # f.display()
 
 
 x = np.linspace(-5, 5, 100)
