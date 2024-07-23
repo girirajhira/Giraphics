@@ -1,6 +1,7 @@
 import multiprocessing
 import os
 import shutil
+from multiprocessing import Process
 
 dirName = "Plotspng2"
 
@@ -93,10 +94,21 @@ def create_raster_batch1(dir, filename, savename, savedir, num):
         jobs.append(p)
         p.start()
 
+#This one is in use
 def create_raster_batch(dir, filename, savename, savedir, num):
     for i in range(num):
         command = ("rsvg-convert {}/{}/{}{}.svg -o {}/{}/{}{}.png").format(os.getcwd(), dir, filename, namer(i), os.getcwd(), savedir, savename, namer(i))
         os.system(command)
+
+
+# def create_raster_batch(dir, filename, savename, savedir, num):
+#     cmds = []
+#     for i in range(num):
+#         command = ("rsvg-convert {}/{}/{}{}.svg -o {}/{}/{}{}.png").format(os.getcwd(), dir, filename, namer(i), os.getcwd(), savedir, savename, namer(i))
+#         cmds.append(command)
+#     with multiprocessing.Pool(processes=4) as pool:
+#         pool.map(os.system, cmds)
+
 
 def crb_wrap(dir, filename, savename, savedir):
     cwd = os.getcwd()

@@ -1,7 +1,9 @@
 import os
 import shutil
 import re
+import subprocess
 import numpy as np
+from functools import lru_cache, cache
 
 default_latex_template = r"""
 \documentclass{standalone}
@@ -13,13 +15,12 @@ default_latex_template = r"""
 
 """
 
-
 def generate_pdf_from_tex(expression, outfile, tempfolder = False, usepackages=None, preamble=None, colour = None):
     '''
     :param expression: Latex expression to be rendered (string)
     :param outfile: location of output file (string)
     :param tempfolder: whether a temperorary folder should be made (bool)
-    :param usepackages:
+    :param usepackages
     :param preamble:
     :param colour:
     :return:
@@ -49,8 +50,8 @@ def generate_pdf_from_tex(expression, outfile, tempfolder = False, usepackages=N
         command = f"pdflatex -output-format=pdf -interaction=batchmode -output-directory=tempfolder {outfile}"
     else:
         command = f"latex {outfile}"
-    os.system(command)
-
+    result = subprocess.run(command.split(), capture_output=True, text=True)
+    return None
 
 def dvi_to_svg(infile, outfile):
     command = f'pdf2svg {infile} {outfile}'

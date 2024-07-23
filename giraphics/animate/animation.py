@@ -41,7 +41,7 @@ class Animation:
 
     def develop(self, cleanup=True, warnings=True, workers=2):
         # Creating
-        create_raster_batch("vectors", 'g', 'p', "rasters", self.plate.frame_index)
+        create_raster_batch('vectors', 'g', 'p', 'rasters', self.plate.frame_index)
         create_mpeg(self.name, 'p', "rasters", framerate=self.framerate, warnings=warnings)
         if cleanup:
             clean_up('vectors', 'rasters')

@@ -26,11 +26,17 @@ y1 = r(t) * np.sin(t)
 x2 = r(t) * np.cos(t + pi)
 y2 = r(t) * np.sin(t + pi)
 
+from giraphics.utilities.utils import Timer
+
+T = Timer()
+T.start()
 for i in range(0, frames):
     A.plate.bg(colour="black")
+    A.plate.add_latex(r'\int f(x)dx', 0,0, colour='white')
     A.plate.plot_points(x1[:i], y1[:i], colour='pink', style='5,5')
     A.plate.plot_points(x2[:i], y2[:i], colour='pink', style='5,5')
     A.plate.draw_circle(x1[i], y1[i], 0.3, fill="red")
     A.plate.draw_circle(x2[i], y2[i], 0.3, fill="red")
     A.plate.press()
 A.develop(cleanup=True)
+T.stop()

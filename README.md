@@ -90,9 +90,8 @@ You can find the tutorial [here]
 ## Contribution
 You can make pull requests.
 
-## Issues 
+[//]: # (## Issues )
 
-* The cleanup option does not work in `Animation.develop()`
 ## License
 Mit License
 

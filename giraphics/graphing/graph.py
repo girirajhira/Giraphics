@@ -46,7 +46,7 @@ class Graph:
         self.origin = np.array(origin)
         self.xscale = width / (2 * xlim)
         self.yscale = height / (2 * ylim)
-        self.nscale = sqrt(self.xscale ** 2 + self.yscale ** 2) / sqrt(2) / 30
+        self.nscale = 0.01*self.width # sqrt(self.xscale ** 2 + self.yscale ** 2) / sqrt(2) / 30
         self.insets = []
         self.latex_history = {}
         if theme == "dark":
@@ -129,6 +129,7 @@ class Graph:
             self.svg.draw_arrowhead2(self.tranx(-self.xlim - ox) + 3 * scale, self.trany(0), scale, - math.pi / 2,
                                      colour=colour)  # W
 
+# Need to fix grid. It doesnt move if you change the origin.
     def grid(self, grid_int=None, colour="#A7A7A7", grid_multiplier=1, strokewidth=0.7, opac=0.5):
         """
         Creates a grid
@@ -142,6 +143,7 @@ class Graph:
             sets the opacity of the grid
         :return: None
         """
+
         strokewidth = strokewidth * self.nscale
         if grid_int is None:
             grid_int = []
@@ -170,7 +172,58 @@ class Graph:
     #     self.svg.canvas += '<text x="%s" y="%s"  style=" font-family:Arial" fill="%s" font-size="%s" opacity="%s"  transform="rotate(%s)"> %s </text>' % (
     #     self.tranx(x), self.trany(y), colour, fontsize, opac, rotation, text)
 
-    def text(self, x, y, text, fontsize=12, colour="white", rotation=0, opac=1, fontfamily='sans-serif'):
+    def grid2(self, colour="yellow", strokewidth=1, minor=True, fontsize=4):
+        """
+        Adds grids to x and y axes
+        :param colour: string
+        :param strokewidth: float
+        :param tick: int
+            the number of ticks
+        :param markers: bool
+        :param fontsize: float
+        :return: None
+        """
+        tickx, ticky = round(2 * self.xlim), round(2 * self.ylim)
+        dx = self.width / tickx
+        dy = self.height / ticky
+        ox = self.xlim * 2 / tickx
+        oy = self.ylim * 2 / ticky
+        # Need a bigger shift from the axis if the (width/height) is larger
+        # in comparison to the fontsize
+        tickx_length = 1 * self.width  # 2% of the total width
+        ticky_length = 1 * self.height  # 2% of the total height
+
+        # x axis
+        for i in range(1, tickx):
+            self.svg.draw_line(dx * i, - ticky_length + self.trany(0),
+                               dx * i, ticky_length + self.trany(0),
+                               stroke=colour, strokewidth=strokewidth)
+            if minor:
+                self.svg.draw_line(dx * (i-0.5), - ticky_length + self.trany(0),
+                                   dx * (i-0.5), ticky_length + self.trany(0),
+                                   stroke=colour, strokewidth=strokewidth/4)
+            if minor and i + 1 == tickx:
+                self.svg.draw_line(dx * (i+0.5), - ticky_length + self.trany(0),
+                                   dx * (i+0.5), ticky_length + self.trany(0),
+                                   stroke=colour, strokewidth=strokewidth/4)
+
+        # y axis
+        for i in range(1, ticky):
+            self.svg.draw_line(- tickx_length + self.tranx(0), dy * i,
+                               tickx_length + self.tranx(0), dy * i,
+                               stroke=colour, strokewidth=strokewidth)
+            if minor:
+                self.svg.draw_line(- tickx_length + self.tranx(0), dy * (i + .5),
+                                   tickx_length + self.tranx(0), dy * (i + .5),
+                                   stroke=colour, strokewidth=strokewidth/4)
+
+            if minor and i+1 == 2:
+                self.svg.draw_line(- tickx_length + self.tranx(0), dy * (i - .5),
+                                   tickx_length + self.tranx(0), dy * (i - .5),
+                                   stroke=colour, strokewidth=strokewidth/4)
+
+
+    def text(self, x, y, text, fontsize=5, colour="white", rotation=0, opac=1, fontfamily='sans-serif', abs_pos=False):
         """
         Draws specified text at the given coordinates (in standard units)
         :param x: float
@@ -184,14 +237,17 @@ class Graph:
         :param colour:
             colour of the text
         :param rotation: float
-            specifies the how the text should be rotated
+            specifies  how the text should be rotated
         :param font: string
             specifies the font to be used
         :param opac: float (0-1)
         :return: None
         """
-        fontsize *= self.nscale
-        self.svg.canvas += f'<text x="{self.tranx(x)}" y="{self.trany(y)}"  font-family="{fontfamily}" fill="{colour}" font-size="{fontsize}" alignment-baseline="middle" text-anchor="middle" color="{colour}" opacity="{opac}"  transform="rotate({rotation},{self.tranx(x)},{self.trany(y)})"> {text} </text>\n'
+        fontsize *= self.nscale * .1
+        if abs_pos: # Absolute positioning
+            self.svg.canvas += f'<text x="{(x)}" y="{(y)}"  font-family="{fontfamily}" fill="{colour}" font-size="{fontsize}" alignment-baseline="middle" text-anchor="middle" color="{colour}" opacity="{opac}"  transform="rotate({rotation},{(x)},{(y)})"> {text} </text>\n'
+        else: # Relative position in the natural units
+            self.svg.canvas += f'<text x="{self.tranx(x)}" y="{self.trany(y)}"  font-family="{fontfamily}" fill="{colour}" font-size="{fontsize}" alignment-baseline="middle" text-anchor="middle" color="{colour}" opacity="{opac}"  transform="rotate({rotation},{self.tranx(x)},{self.trany(y)})"> {text} </text>\n'
 
     # def math_text(self, expression, x, y, colour="White", scale=4):
     #     math_to_svg(expression, os.getcwd() + "/temp.txt")
@@ -233,7 +289,7 @@ class Graph:
                                stroke=colour, strokewidth=strokewidth)
             if markers:
                 if i - self.xlim != self.origin[0]:
-                    self.text((i - self.xlim - self.origin[0]) * ox, fontsize / dy,
+                    self.text((i - self.xlim - self.origin[0]) * ox , fontsize / dy,
                               str((round((i - self.xlim - self.origin[0]) * ox, 2))),
                               fontsize=fontsize, colour=colour, opac=0.6)
 
@@ -244,9 +300,56 @@ class Graph:
                                strokewidth=strokewidth)
             if markers:
                 if i - self.ylim != self.origin[1]:
-                    self.text(fontsize / dx, (i - self.ylim - self.origin[1]) * oy,
+                    self.text(fontsize / dx , (i - self.ylim - self.origin[1]) * oy ,
                               str((round((i - self.ylim - self.origin[1]) * oy, 2))),
                               fontsize=fontsize, colour=colour, opac=0.6)
+
+    def ticks2(self, colour="yellow", strokewidth=1, markers=False, fontsize=4):
+        """
+        Adds ticks to x and y axes
+        :param colour: string
+        :param strokewidth: float
+        :param tick: int
+            the number of ticks
+        :param markers: bool
+        :param fontsize: float
+        :return: None
+        """
+        strokewidth = strokewidth * self.nscale
+        fontsize = fontsize * self.nscale
+        tickx, ticky = round(2 * self.xlim), round(2 * self.ylim)
+        dx = self.width / tickx
+        dy = self.height / ticky
+        ox = self.xlim * 2 / tickx
+        oy = self.ylim * 2 / ticky
+        # Need a bigger shift from the axis if the (width/height) is larger
+        # in comparison to the fontsize
+        fontshiftx = 0.1*self.width/fontsize
+        fontshifty = 0.1*self.height/fontsize
+        tickx_length = 0.015*self.width  # 2% of the total width
+        ticky_length = 0.015*self.height # 2% of the total height
+
+        # x axis
+        for i in range(1, tickx):
+            self.svg.draw_line(dx * i, - ticky_length + self.trany(0),
+                               dx * i,   ticky_length +  self.trany(0),
+                               stroke=colour, strokewidth=strokewidth)
+            if markers:
+                if i - self.xlim != self.origin[0]: #Nothing at [0,0]
+                    self.text(dx * i, -ticky_length*2.5 - fontshifty + self.trany(0),
+                              str((round((i - self.xlim - self.origin[0]) * ox, 2))),
+                              fontsize=fontsize, colour=colour, opac=0.6, abs_pos=True)
+
+        # y axis
+        for i in range(1, ticky):
+            self.svg.draw_line( - tickx_length + self.tranx(0), dy * i,
+                                  tickx_length + self.tranx(0), dy * i,
+                               stroke=colour, strokewidth=strokewidth)
+            if markers:
+                if i - self.ylim != - self.origin[1]:
+                    self.text(2.5*tickx_length + fontshiftx + self.tranx(0), dy * i,
+                              str((round((i - self.ylim + self.origin[1]) * oy, 2))),
+                              fontsize=fontsize, colour=colour, opac=0.6, abs_pos=True)
 
     def arrow(self, x1, y1, x2, y2, scale=1, colour='white', strokewidth=2):
         """
@@ -313,7 +416,7 @@ class Graph:
         Y = [self.trany(func(i * eps - self.origin[0])) for i in range(-n, n + 1)]
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
-    def area(self, func, limits, colour="red", area_colour="orange", strokewidth=0, opac=1, n=500):
+    def area_func(self, func, limits, colour="red", area_colour="orange", strokewidth=0, opac=1, n=500):
         strokewidth = self.nscale * strokewidth
         eps = (limits[1] - limits[0]) / n
         X = [self.tranx(i * eps + limits[0]) for i in range(n + 1)]
@@ -321,6 +424,12 @@ class Graph:
         Y = [self.trany(func(i * eps + limits[0])) for i in range(n + 1)]
         Y.append(self.trany(func(limits[0])))  # Ensure uniform area
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac, fill=area_colour)
+    def area(self, X, Y, colour="red", fill_colour="orange", strokewidth=0, opac=1, fill_opacity=.5):
+        strokewidth = self.nscale * strokewidth
+        X1 = [self.tranx(x) for x in X]
+        Y1 = [self.trany(y) for y in Y]
+        self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth,
+                               opac=opac, fill=fill_colour, fill_opacity=fill_opacity)
 
     def dotted_plot(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
         """
