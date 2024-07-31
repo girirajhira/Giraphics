@@ -1,4 +1,5 @@
 from giraphics.svg.svgkit import *
+from giraphics.svg.css_util import *
 # from giraphics.utilities.latext import *
 # from giraphics.utilities.mathtext import *
 from giraphics.svg.morph2 import *
@@ -7,6 +8,7 @@ from giraphics.utilities.convert import *
 from giraphics.utilities.latex_svg_decoder import *
 from IPython.display import SVG as IPSVG
 from IPython.display import Image
+from latex2mathml.converter import convert
 import numpy as np
 from math import sqrt
 import webbrowser
@@ -49,6 +51,7 @@ class Graph:
         self.nscale = 0.01*self.width # sqrt(self.xscale ** 2 + self.yscale ** 2) / sqrt(2) / 30
         self.insets = []
         self.latex_history = {}
+        self.num_style_tags = 0
         if theme == "dark":
             self.theme = {
                 'background': 'black',
@@ -395,6 +398,16 @@ class Graph:
         Y = [self.trany(func(i * eps - self.origin[0])) for i in range(-n, n + 1)]
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
+
+    def arc_length(self,X, Y):
+        X = np.array(X)
+        Y = np.array(Y)
+        return np.trapz(np.sqrt(
+            np.gradient(X)**2 + np.gradient(Y)**2
+        ))
+
+
+
     def graph_polar(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
         """
         Graphs the given function
@@ -468,6 +481,36 @@ class Graph:
         self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill,
                                fill_opacity=fill_opacity)
 
+    def plot_decorated(self, X, Y, colour="red", strokewidth=1,amplitude=1, opac=1,period=6, style='none', fill='none', fill_opacity=1):
+        """
+        Graphs the inputted points
+        :param X:
+        :param Y:
+        :param colour:
+        :param strokewidth:
+        :param opac:
+        :return:
+        """
+        strokewidth = strokewidth * self.nscale
+        X = np.array(X)
+        Y = np.array(Y)
+        TX = X[1:] - X[:-1]
+        TY = Y[1:] - Y[:-1]
+        N = 1/np.sqrt(TX**2 + TY**2)
+        theta = np.pi/2
+        cum_arc_length = np.cumsum(np.sqrt(TX**2 + TY**2))
+        phi = 2*np.pi*cum_arc_length/cum_arc_length[-1]
+        dec = np.sin(period*phi)
+        Xd = X
+        Yd = Y
+        Xd[1:] += N*amplitude*dec*(TX*np.cos(theta) - TY*np.sin(theta))
+        Yd[1:] += N*amplitude*dec*(TX*np.sin(theta) + TY*np.cos(theta))
+
+        X1 = [self.tranx(x) for x in Xd]
+        Y1 = [self.trany(y) for y in Yd]
+        self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill,
+                               fill_opacity=fill_opacity)
+
     def scatter(self, X, Y, s=1, colour="white", opac=1):
         """
         Scatter plots the points X,Y
@@ -485,9 +528,31 @@ class Graph:
             self.svg.draw_circ(self.tranx(-X[i]), self.trany(Y[i]), s, fill=colour, stroke=colour,
                                strokewidth=0, opac=opac)
 
-    def add_latex(self, expr, x0, y0, scale=1, rotation=0, centre_align=True, colour=None, preamble=None,
+    def add_latex2(self, expr, x0, y0, scale=1, rotation=0, centre_align=True, colour=None, preamble=None,
                   usepackages=None, cleanup=True, opacity=1, background=False, bg_colour='black', bg_opacity=.4,
                   box=False, boxcolour='white', boxwidth=2, boxmult=1.6):
+        '''
+        Old
+        :param expr:
+        :param x0:
+        :param y0:
+        :param scale:
+        :param rotation:
+        :param centre_align:
+        :param colour:
+        :param preamble:
+        :param usepackages:
+        :param cleanup:
+        :param opacity:
+        :param background:
+        :param bg_colour:
+        :param bg_opacity:
+        :param box:
+        :param boxcolour:
+        :param boxwidth:
+        :param boxmult:
+        :return:
+        '''
         scale = scale * self.nscale
         if expr in self.latex_history:
             tex_info = self.latex_history[expr]
@@ -537,6 +602,83 @@ class Graph:
         self.svg.canvas += expr_code
         self.svg.canvas += '</g>\n'
 
+    def add_latex(self, expr, x0, y0, scale=1, rotation=0, centre_align=True, colour=None, preamble=None,
+                  usepackages=None, cleanup=True, opacity=1, background=False, bg_colour='black', bg_opacity=.4,
+                  box=False, boxcolour='white', boxwidth=2, boxmult=1.6):
+        scale = scale * self.nscale
+        if expr in self.latex_history:
+            tex_info = self.latex_history[expr]
+            expr_code, w_expr, h_expr = tex_info[0].replace('fill-opacity:1', f'fill-opacity:{round(opacity, 3)}'), \
+                tex_info[1], tex_info[2]
+        else:
+            expr_code, w_expr, h_expr = latex_expression(expr, colour=colour, preamble=preamble,
+                                                         usepackages=usepackages,
+                                                         cleanup=cleanup)
+            # Data processing
+            index = len(self.latex_history)
+            # symbols = get_svg_symbol_ids(expr_code)
+            clips = get_svg_clip_ids(expr_code)
+            g_id = get_g_elements_ids(expr_code)
+            # for symb in symbols:
+                # expr_code = expr_code.replace(symb, symb + f'-{index}')
+            for clip in clips:
+                expr_code = expr_code.replace(clip, clip + f'-{index}')
+            for gd in g_id:
+                expr_code = expr_code.replace(gd, gd + f'-{index}')
+
+
+            self.latex_history[expr] = [expr_code, w_expr, h_expr, colour]
+            expr_code = expr_code.replace('fill-opacity:1', f'fill-opacity:{round(opacity, 3)}')
+
+        mata = scale * np.cos(rotation)
+        matc = scale * np.sin(rotation)
+        matb = -scale * np.sin(rotation)
+        matd = scale * np.cos(rotation)
+        if centre_align:
+            mate = self.width / 2 + x0 * self.xscale - scale * (
+                    np.cos(rotation) * w_expr + np.sin(rotation) * h_expr) / 2
+            matf = self.height / 2 - y0 * self.yscale - scale * (
+                    -np.sin(rotation) * w_expr + np.cos(rotation) * h_expr) / 2
+        else:
+            mate = self.width / 2 + x0 * self.xscale
+            matf = self.height / 2 - y0 * self.yscale
+
+        if background:
+            self.svg.draw_rect(mate + scale * w_expr / 2, matf + scale * h_expr / 2, w_expr * scale, h_expr * scale,
+                               fill=bg_colour, opacity=bg_opacity,
+                               strokewidth=0)
+
+        if box:
+            self.svg.draw_rect(mate + scale * w_expr / 2, matf + scale * h_expr / 2, w_expr * scale * boxmult,
+                               h_expr * scale * boxmult, 'None', strokewidth=boxwidth,
+                               stroke=boxcolour)
+
+        self.svg.canvas += f'<g transform="matrix({mata}, {matb},{matc}, {matd}, {mate}, {matf})">\n'
+        self.svg.canvas += expr_code
+        self.svg.canvas += '</g>\n'
+
+    def add_mathml(self,expr, x, y, fontsize=10, colour='blue', rotate=0, borderwidth=0):
+        mathml = convert(expr)
+        '''
+        Need to recentre etc,
+        '''
+        style_dict ={
+            'color': colour,
+            'font-size': f'{fontsize}px',
+            # 'background-color': 'brown',
+            'border': f'solid black {borderwidth}px',
+            'transform-origin': 'center',
+            # 'transform': f'rotate({rotate}rad)',
+
+        }
+
+        self.svg.canvas += css_style(f'mathml{self.num_style_tags}', style_dict)
+
+        self.svg.canvas += f'\n<foreignObject  width="100%" height="100%" transform="translate({self.tranx(x)} {self.trany(y)})" class="mathml{self.num_style_tags}">\n'
+        self.svg.canvas += mathml + '\n'
+        self.svg.canvas += '</foreignObject> \n'
+        self.num_style_tags+=1
+
     # Constructions
 
     def draw_arrow(self, x1, y1, x2, y2, scale=1, colour="black", strokewidth=1):
@@ -550,6 +692,21 @@ class Graph:
         scale = scale * self.nscale
         self.svg.draw_arrow2(self.tranx(x1), self.trany(y1), self.tranx(x2), self.trany(y2), scale, stroke=colour,
                              strokewidth=strokewidth)
+    def draw_arrowhead(self, x, y, ang=0,scale=1, colour="black", strokewidth=1):
+        '''
+        Draws an arrowhead that points to (x,y)
+        :param x:
+        :param y:
+        :param ang:
+        :param scale:
+        :param colour:
+        :param strokewidth:
+        :return:
+        '''
+        strokewidth = strokewidth * self.nscale
+        scale = scale * self.nscale
+        self.svg.draw_arrowhead2(self.tranx(x), self.trany(y), scale, (-ang+np.pi/2), colour)
+
 
     def draw_double_arrow(self, x1, y1, x2, y2, scale=1, colour="black", strokewidth=1):
         strokewidth = strokewidth * self.nscale

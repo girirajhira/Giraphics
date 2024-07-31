@@ -156,7 +156,7 @@ class SVG:
         self.canvas += '<polyline points="'
         start = True
         for i in range(len(X)):
-            if Y[i] != None and X[i] != None:
+            if Y[i] is not None and X[i] is not None:
                 start = True
                 self.canvas += f'{X[i]}, {Y[i]} '
             else:
