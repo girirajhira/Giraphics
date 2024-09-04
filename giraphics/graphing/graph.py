@@ -75,10 +75,25 @@ class Graph:
         """
         if x is not None:
             return + round((self.width / (2 * self.xlim)) * (x + self.origin[0]) + self.width / 2, 2)
+            # return - round((self.height / (2 * self.ylim)) * (y + self.origin[1]) + self.height / 2, 2)
+
+        else:
+            return None
+    def inv_tranx(self, x):
+        """
+        converts the x coordinate to svg coordinate
+        :param x: float
+            x coordinate in standard units
+        :returns: float
+            return the x coordinate in y
+        """
+        if x is not None:
+            return + round((self.width / (2 * self.xlim)) * (x + self.origin[0]) + self.width / 2, 2)
             return - round((self.height / (2 * self.ylim)) * (y + self.origin[1]) + self.height / 2, 2)
 
         else:
             return None
+
 
     def trany(self, y):
         """
@@ -226,7 +241,7 @@ class Graph:
                                    stroke=colour, strokewidth=strokewidth/4)
 
 
-    def text(self, x, y, text, fontsize=5, colour="white", rotation=0, opac=1, fontfamily='sans-serif', abs_pos=False):
+    def text(self, x, y, text, fontsize=5, colour="white", rotation=0, opac=1, fontfamily='CMU Serif', abs_pos=False):
         """
         Draws specified text at the given coordinates (in standard units)
         :param x: float
@@ -247,9 +262,9 @@ class Graph:
         :return: None
         """
         fontsize *= self.nscale * .1
-        if abs_pos: # Absolute positioning
-            self.svg.canvas += f'<text x="{(x)}" y="{(y)}"  font-family="{fontfamily}" fill="{colour}" font-size="{fontsize}" alignment-baseline="middle" text-anchor="middle" color="{colour}" opacity="{opac}"  transform="rotate({rotation},{(x)},{(y)})"> {text} </text>\n'
-        else: # Relative position in the natural units
+        if abs_pos:  # Absolute positioning
+            self.svg.canvas += f'<text x="{x}" y="{y}"  font-family="{fontfamily}" fill="{colour}" font-size="{fontsize}" alignment-baseline="middle" text-anchor="middle" color="{colour}" opacity="{opac}"  transform="rotate({rotation},{(x)},{(y)})"> {text} </text>\n'
+        else:  # Relative position in the natural units
             self.svg.canvas += f'<text x="{self.tranx(x)}" y="{self.trany(y)}"  font-family="{fontfamily}" fill="{colour}" font-size="{fontsize}" alignment-baseline="middle" text-anchor="middle" color="{colour}" opacity="{opac}"  transform="rotate({rotation},{self.tranx(x)},{self.trany(y)})"> {text} </text>\n'
 
     # def math_text(self, expression, x, y, colour="White", scale=4):
@@ -481,6 +496,33 @@ class Graph:
         self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill,
                                fill_opacity=fill_opacity)
 
+    def plot_points_trail(self, X, Y, trail = 50, r=6, colour="red", strokewidth=0, opac=1, style='none', fill='none', fill_opacity=1):
+        """
+        Graphs the inputted points
+        :param X:
+        :param Y:
+        :param colour:
+        :param strokewidth:
+        :param opac:
+        :return:
+        """
+        strokewidth = strokewidth * self.nscale
+        X1 = [self.tranx(x) for x in X]
+        Y1 = [self.trany(y) for y in Y]
+
+        l = len(X1)
+
+        if l - trail < 0:
+            for i in range(l):
+                self.svg.draw_circ(X1[i], Y1[i], r=r * (i+1)/l, fill_opacity=opac*(i+1)/l, fill=colour, strokewidth=strokewidth)
+                # self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill,
+                #                fill_opacity=fill_opacity)
+        else:
+            for i in range(trail):
+                self.svg.draw_circ(X1[l-trail + i], Y1[l-trail + i], r=r * (i + 1) /trail, fill_opacity=opac*(i + 1) / trail,
+                                   fill=colour, strokewidth=strokewidth)
+
+
     def plot_decorated(self, X, Y, colour="red", strokewidth=1,amplitude=1, opac=1,period=6, style='none', fill='none', fill_opacity=1):
         """
         Graphs the inputted points
@@ -505,6 +547,34 @@ class Graph:
         Yd = Y
         Xd[1:] += N*amplitude*dec*(TX*np.cos(theta) - TY*np.sin(theta))
         Yd[1:] += N*amplitude*dec*(TX*np.sin(theta) + TY*np.cos(theta))
+
+        X1 = [self.tranx(x) for x in Xd]
+        Y1 = [self.trany(y) for y in Yd]
+        self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill,
+                               fill_opacity=fill_opacity)
+
+    def plot_coil(self, X, Y, colour="red", strokewidth=1,amplitude=1, opac=1,
+                  period=6, style='none', fill='none', fill_opacity=1):
+        """
+        Graphs the inputted points
+        :param X:
+        :param Y:
+        :param colour:
+        :param strokewidth:
+        :param opac:
+        :return:
+        """
+        strokewidth = strokewidth * self.nscale
+        X = np.array(X)
+        Y = np.array(Y)
+        TX = X[1:] - X[:-1]
+        TY = Y[1:] - Y[:-1]
+        N = 1/np.sqrt(TX**2 + TY**2)
+        cum_arc_length = np.cumsum(np.sqrt(TX**2 + TY**2))
+        phi = 2*np.pi*cum_arc_length/cum_arc_length[-1]
+        tt = np.linspace(0, 2*np.pi, len(X)-1)
+        Xd = amplitude*(np.cos(phi*period) - np.sin(phi*period)) + X[1:]
+        Yd = amplitude*(np.sin(phi*period) + np.cos(phi*period)) + Y[1:]
 
         X1 = [self.tranx(x) for x in Xd]
         Y1 = [self.trany(y) for y in Yd]
@@ -611,9 +681,10 @@ class Graph:
             expr_code, w_expr, h_expr = tex_info[0].replace('fill-opacity:1', f'fill-opacity:{round(opacity, 3)}'), \
                 tex_info[1], tex_info[2]
         else:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
             expr_code, w_expr, h_expr = latex_expression(expr, colour=colour, preamble=preamble,
                                                          usepackages=usepackages,
-                                                         cleanup=cleanup)
+                                                         cleanup=cleanup, current_dir=current_dir)
             # Data processing
             index = len(self.latex_history)
             # symbols = get_svg_symbol_ids(expr_code)
@@ -722,16 +793,31 @@ class Graph:
         Y1 = [self.trany(y) for y in Y]
         self.svg.draw_polygon(X1, Y1, fill=fill, stroke=colour, strokewidth=strokewidth, opacity=fill_opacity)
 
-    def draw_circle(self, x, y, r, fill="none", colour="black", strokewidth=1, fill_opacity=1):
+    def draw_circle(self, x, y, r, fill="none", colour="black", strokewidth=1, fill_opacity=1,style=None):
         strokewidth = strokewidth * self.nscale
         self.svg.draw_circ(self.tranx(x), self.trany(y), self.xscale * r, fill=fill, stroke=colour,
-                           strokewidth=strokewidth, fill_opacity=fill_opacity)
+                           strokewidth=strokewidth, fill_opacity=fill_opacity, style=style)
 
     def draw_rect(self, x, y, width, height, fill, colour="black", strokewidth=1, opac=1, fill_opacity=1):
         strokewidth = strokewidth * self.nscale
         self.svg.draw_rect(self.tranx(x), self.trany(y), abs(self.xscale * (width)),
                            self.yscale * height, fill, stroke=colour, strokewidth=strokewidth, opacity=opac,
                            fill_opacity=fill_opacity)
+    def draw_inout_curve(x1,y1, x2, y2, in_angle=None, out_angle=None, fill="none", colour="black", strokewidth=1, fill_opacity=1):
+
+
+        def draw_path(self, path, translate=True, colour="red", strokewidth=2, opacity=1, fill="none", fill_opacity=0):
+            strokewidth = strokewidth * self.nscale
+
+            if translate:
+                pobj = parse_path(path)
+                translated_pobj = convert_points2giraphics2(pobj, self.tranx, self.trany)
+                cc = (translated_pobj).d()
+                self.svg.draw_path(cc, colour=colour, strokewidth=strokewidth, opac=opacity, fill=fill,
+                                   fill_opacity=fill_opacity)
+            else:
+                self.svg.draw_path(path, colour=colour, strokewidth=strokewidth, opac=opacity, fill=fill,
+                                   fill_opacity=fill_opacity)
 
     def draw_ellipse(self, x, y, rx, ry, fill="none", fill_opacity=1, colour="black", strokewidth=1):
         strokewidth = strokewidth * self.nscale
@@ -755,15 +841,19 @@ class Graph:
 
         self.svg.draw_path(pathstr[:-1], colour=colour, strokewidth=strokewidth, opac=opacity, fill=fill)
 
-    def draw_path(self, path, colour="red", strokewidth=2, opacity=1, fill="none", fill_opacity=0):
+    def draw_path(self, path, translate=True, colour="red", strokewidth=2, opacity=1, fill="none", fill_opacity=0):
         strokewidth = strokewidth * self.nscale
-        pobj = parse_path(path)
-        print('rr', pobj)
-        translated_pobj = convert_points2giraphics2(pobj, self.tranx, self.trany)
-        print('ll', len(translated_pobj))
-        cc = path2svg(translated_pobj)
-        self.svg.draw_path(cc, colour=colour, strokewidth=strokewidth, opac=opacity, fill=fill,
-                           fill_opacity=fill_opacity)
+
+        if translate:
+            pobj = parse_path(path)
+            translated_pobj = convert_points2giraphics2(pobj, self.tranx, self.trany)
+            cc = (translated_pobj).d()
+            self.svg.draw_path(cc, colour=colour, strokewidth=strokewidth, opac=opacity, fill=fill,
+                               fill_opacity=fill_opacity)
+        else:
+            self.svg.draw_path(path, colour=colour, strokewidth=strokewidth, opac=opacity, fill=fill,
+                               fill_opacity=fill_opacity)
+
 
     def draw_line(self, x1, y1, x2, y2, marker="*", colour="black", strokewidth=1, opacity=1, cap="butt",
                   segments=20, style=None):
@@ -794,11 +884,14 @@ class Graph:
         self.__init__(self.width, self.height, self.xlim, self.ylim, self.name, origin=self.origin,
                       transform=self.transform)
 
-    def save(self, clear=False):
+    def save(self, clear=False, export=None):
         self.svg.save()
 
         if clear:
             self.svg.canvas = ""
+        if export is not None:
+            name, extension = os.path.splitext(self.name)
+            convert_image(self.name, f'{name}.{export}', modifier='-d 300')
 
     # def save(self, clear=False):
     #     if len(self.TexLoader) != 0:
