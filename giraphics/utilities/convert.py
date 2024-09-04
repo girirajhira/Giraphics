@@ -26,8 +26,8 @@ def convert_mpeg(outputfile):
     print("MPEG Exported!")
 
 # converts image formats
-def convert_image(inputfile, outputfile):
-    command = ("rsvg-convert %s -o %s ") % (inputfile, outputfile)
+def convert_image(inputfile, outputfile, modifier=''):
+    command = f"rsvg-convert {modifier} {inputfile} -o {outputfile} "
     os.system(command)
 
 def convert_serial_svg_old(n, dirName, inputFolder, filetype='png'):
@@ -95,10 +95,17 @@ def create_raster_batch1(dir, filename, savename, savedir, num):
         p.start()
 
 #This one is in use
-def create_raster_batch(dir, filename, savename, savedir, num):
-    for i in range(num):
-        command = ("rsvg-convert {}/{}/{}{}.svg -o {}/{}/{}{}.png").format(os.getcwd(), dir, filename, namer(i), os.getcwd(), savedir, savename, namer(i))
-        os.system(command)
+def create_raster_batch(dir, filename, savename, savedir, num, parallel=False):
+    if not parallel:
+        for i in range(num):
+            command = ("rsvg-convert {}/{}/{}{}.svg -o {}/{}/{}{}.png").format(os.getcwd(), dir, filename, namer(i), os.getcwd(), savedir, savename, namer(i))
+            os.system(command)
+    else:
+        svgloc = os.getcwd()+dir
+        command = """
+        find . -name '*.svg' -print0 | parallel -0 -j 50% -I{} sh -c 'mkdir -p $(dirname {.}); rsvg-convert "{}" -o "{.}.png"'
+        """
+
 
 
 # def create_raster_batch(dir, filename, savename, savedir, num):

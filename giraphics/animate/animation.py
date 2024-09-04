@@ -1,6 +1,7 @@
 from giraphics.utilities.convert import *
 from giraphics.graphing.fancygraph import *
 from IPython.display import Image, SVG, Video
+from giraphics.utilities.utils import Timer
 
 
 class FrameGraphic(FancyGraph):
@@ -39,12 +40,35 @@ class Animation:
                 self.plate.svg.canvas = self.plate.last_frame
                 self.plate.press()
 
-    def develop(self, cleanup=True, warnings=True, workers=2):
+    def develop(self, cleanup=True, warnings=True, workers=2, timeit=False):
         # Creating
+        if timeit:
+            T = Timer()
+            T.start()
         create_raster_batch('vectors', 'g', 'p', 'rasters', self.plate.frame_index)
-        create_mpeg(self.name, 'p', "rasters", framerate=self.framerate, warnings=warnings)
+        filename = os.path.splitext(self.name)[0]
+        if self.name.lower().endswith(('.gif')):
+            os.system(f'convert -delay 20 -loop 0 rasters/*.png {filename}.gif')
+        else:
+            create_mpeg(self.name, 'p', "rasters", framerate=self.framerate, warnings=warnings)
         if cleanup:
             clean_up('vectors', 'rasters')
 
+        if timeit:
+            T.stop()
+
     def show(self):
         Video(self.name)
+
+    def preview(self):
+        # preview
+        pass
+
+    def every(self, n):
+        # take every nth frame
+        pass
+
+
+    def skip_every(self, n):
+        # skip every n frames
+        pass

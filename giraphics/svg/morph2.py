@@ -84,34 +84,31 @@ def path2svg(path):
 
 
 def convert_points2giraphics(coords, xt, yt):
-    return np.array([[xt(coords[i, 0]), yt(coords[i,1])] for i in range(len(coords))])
+    return np.array([[xt(coords[i, 0]), yt(coords[i, 1])] for i in range(len(coords))])
 
 
 def convert_points2giraphics2(path, xt, yt):
     'converts the path object into a 2d array of points to be morphed'
     for i, p in enumerate(path):
         if isinstance(p, Move):
-            path[i].start = xt(p.start.real) + yt(p.start.imag)*1j
+            path[i].start = xt(p.start.real) + yt(p.start.imag) * 1j
         elif isinstance(p, Line):
-            path[i].start = xt(p.start.real) + yt(p.start.imag)*1j
-            path[i].end = xt(p.end.real) + yt(p.end.imag)*1j
+            path[i].start = xt(p.start.real) + yt(p.start.imag) * 1j
+            path[i].end = xt(p.end.real) + yt(p.end.imag) * 1j
         elif isinstance(p, QuadraticBezier):
-            path[i].start = xt(p.start.real) + yt(p.start.imag)*1j
-            path[i].control = xt(p.control.real) + yt(p.control.imag)*1j
-            path[i].end = xt(p.end.real) + yt(p.end.imag)*1j
+            path[i].start = xt(p.start.real) + yt(p.start.imag) * 1j
+            path[i].control = xt(p.control.real) + yt(p.control.imag) * 1j
+            path[i].end = xt(p.end.real) + yt(p.end.imag) * 1j
         elif isinstance(p, CubicBezier):
-            path[i].start = xt(p.start.real) + yt(p.start.imag)*1j
-            path[i].control1 = xt(p.control1.real) + yt(p.control1.imag)*1j
-            path[i].control2 = xt(p.control2.real) + yt(p.control2.imag)*1j
-            path[i].end = xt(p.end.real) + yt(p.end.imag)*1j
+            path[i].start = xt(p.start.real) + yt(p.start.imag) * 1j
+            path[i].control1 = xt(p.control1.real) + yt(p.control1.imag) * 1j
+            path[i].control2 = xt(p.control2.real) + yt(p.control2.imag) * 1j
+            path[i].end = xt(p.end.real) + yt(p.end.imag) * 1j
         elif isinstance(p, Arc):
-            path[i].start = xt(p.start.real) + yt(p.start.imag)*1j
-            path[i].radius = xt(p.radius.real) + yt(p.radius.imag)*1j
-            path[i].end = xt(p.end.real) + yt(p.end.imag)*1j
+            path[i].start = xt(p.start.real) + yt(p.start.imag) * 1j
+            path[i].radius = xt(p.radius.real) + yt(p.radius.imag) * 1j
+            path[i].end = xt(p.end.real) + yt(p.end.imag) * 1j
     return path
-
-
-
 
 
 def path2points(path):
@@ -166,7 +163,7 @@ def points2path(path, points):
             path[k].end = points[i + 1, 0] + points[i + 1, 1] * 1j
             i += 2
 
-    print('lld',path)
+    print('lld', path)
     return path
 
 
@@ -174,7 +171,6 @@ def points2path(path, points):
 #
 # print((ppt))
 # print(points2path(ppt, path2points(ppt)))
-
 
 
 def morph(coords1, coords2, style='linear'):
@@ -189,6 +185,7 @@ def morph(coords1, coords2, style='linear'):
     l1 = len(coords1)
     l2 = len(coords2)
     print(coords1.shape)
+
     def parametrise(t0):
         t = t0 * tsign + offset
         output = np.zeros((l2, 2))
@@ -199,6 +196,13 @@ def morph(coords1, coords2, style='linear'):
 
 
 def transform_control_points(coords1, coords2, t):
+    '''
+    Matches a set of points to another set of points.
+    :param coords1:
+    :param coords2:
+    :param t:
+    :return:
+    '''
     if len(coords1) > len(coords2):
         coords1, coords2 = coords2, coords1
         tsign = - 1
@@ -225,13 +229,14 @@ def transform_control_points(coords1, coords2, t):
     return coords
 
 
-
-
 # def ConstructPath(*args):
 #     for a in args:
 
 
 class SVGPathObject:
+    '''
+    What does this do?
+    '''
     def __init__(self, path, fill=None, stroke=None, strokewidth=1, fill_opacity=1, stroke_opacity=1):
         if isinstance(path, Path):
             self.pathObj = path
@@ -254,13 +259,10 @@ class SVGPathObject:
             offset = 0
             tsign = 1
 
-
-
         initStrokeWidth = self.strokewidth
         endStrokeWidth = other.strokewidth
 
         # coordsFunction = morph(self.coords, other.coords)
-
 
         def parametrisation(t):
             # coords = self.coords + (other.coords - self.coords)*t
@@ -274,7 +276,9 @@ class SVGPathObject:
         return parametrisation
 
     def draw(self, writerObj):
-        writerObj.plate.draw_path(self.path, colour=self.stroke, strokewidth=self.strokewidth, opacity=self.stroke_opacity,
+        print(self.path)
+        writerObj.plate.draw_path(self.path, colour=self.stroke, strokewidth=self.strokewidth,
+                                  opacity=self.stroke_opacity,
                                   fill=self.fill, fill_opacity=self.fill_opacity)
 
 # print(Path2svg(ppt))

@@ -22,8 +22,8 @@ class SVG:
         if transform != 'none':
             grouped = True
             self.canvas += f'<g transform="{transform}"> \n'
-
-        self.canvas += f'<svg version="1.1" \n baseProfile="full" \n width="{width}" \n height="{height}" xmlns="http://www.w3.org/2000/svg">\n'
+        # self.canvas += f'<svg version="1.1" \n baseProfile="full" \n width="{width}" \n height="{height}" xmlns="http://www.w3.org/2000/svg">\n'
+        self.canvas += f'<svg version="1.1" \n baseProfile="full" \n viewBox ="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg">\n'
         self.preamble = self.canvas
 
     def draw_rect(self, x, y, width, height, fill, stroke="black", strokewidth=0, opacity=1, fill_opacity=1):
@@ -42,7 +42,7 @@ class SVG:
         """
         self.canvas += f'<rect x="{x - width / 2}" y="{y - height / 2}" width="{width}" height="{height}" fill="{fill}" stroke="{stroke}" stroke-width="{strokewidth}" opacity="{opacity}" fill-opacity="{fill_opacity}"/>\n'
 
-    def draw_circ(self, x, y, r, fill="none", stroke="black", strokewidth=1, fill_opacity=1, opac=1):
+    def draw_circ(self, x, y, r, fill="none", stroke="black", strokewidth=1, fill_opacity=1, opac=1,style="none"):
         """
         Draws a circle of radius r at (x,y)
         :param fill_opacity:
@@ -54,7 +54,7 @@ class SVG:
         :param strokewidth: stroke_width
         :param opac: opacity
         """
-        self.canvas += f'<circle cx="{x}" cy="{y}" r="{r}" fill="{fill}" stroke="{stroke}" stroke-width="{strokewidth}" fill-opacity="{fill_opacity}" opacity="{opac}"/>\n'
+        self.canvas += f'<circle cx="{x}" cy="{y}" r="{r}" fill="{fill}" stroke="{stroke}" stroke-width="{strokewidth}" fill-opacity="{fill_opacity}" opacity="{opac}" style="{style}"/>\n'
 
     def draw_ellipse(self, x, y, rx, ry, fill, stroke="black", strokewidth=1, fill_opacity=1, ):
         """

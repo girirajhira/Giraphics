@@ -1,21 +1,26 @@
-def linear_gradient(id, start_color=[255,255,0], start_opacity = 1,stop_color=[255,255,0], stop_opacity = 1, ):
+import numpy as np
+
+def linear_gradient(id, start_color="red", start_opacity = 1,stop_color="yellow", stop_opacity = 1,
+                    dir=np.array([[0,0],[100,0]]), start_offset=0, stop_offset = 100):
+    dir = np.array(dir)
     txt = f'''
     <defs>
-    <linearGradient id = "{id}", x1 = "0%", y1 = "0%", x2 = "100%" y2 = "0%">
-    <stop offset = "0%" style = "stop-color:rgb({start_color[0],start_color[1],start_color[2]}); stop-opacity:{start_opacity}"/>
-    <stop offset = "100%" style = "stop-color:rgb({stop_color[0], stop_color[1], stop_color[2]});stop-opacity:{stop_opacity}"/>
-    </linearGradient >
+        <linearGradient id="{id}" x1="{dir[0,0]}%" y1="{dir[0,1]}%" x2="{dir[1,0]}%" y2="{dir[1,1]}%">
+          <stop offset="{start_offset}%" stop-color="{start_color}" stop-opacity="{start_opacity}" />
+          <stop offset="{stop_offset}%" stop-color="{stop_color}" stop-opacity="{stop_opacity}" />
+        </linearGradient >
     </defs>
     '''
     return txt
 
-def radial_gradient(id, start_color=[255,255,0], start_opacity = 1,stop_color=[255,255,0], stop_opacity = 1, ):
+def radial_gradient(id, start_color="red", start_opacity = 1,stop_color="purple", stop_opacity = 1,
+                    cx=0, cy=0, r = 2, fx = 100, fy=100, start_offset=0, stop_offset = 100):
     txt = f'''
     <defs>
-    <linearGradient id = "{id}", x1 = "0%", y1 = "0%", x2 = "100%" y2 = "0%">
-    <stop offset = "0%" style = "stop-color:rgb({start_color[0],start_color[1],start_color[2]}); stop-opacity:{start_opacity}"/>
-    <stop offset = "100%" style = "stop-color:rgb({stop_color[0], stop_color[1], stop_color[2]});stop-opacity:{stop_opacity}"/>
-    </linearGradient >
+        <radialGradient id="{id}" cx="{cx}%" cy="{cy}%" r="{r}%" fx="{fx}%" fy="{fy}%">
+          <stop offset="{start_offset}%" stop-color="{start_color}" stop-opacity="{start_opacity}" />
+          <stop offset="{stop_offset}%" stop-color="{stop_color}" stop-opacity="{stop_opacity}" />
+        </radialGradient>
     </defs>
     '''
     return txt
