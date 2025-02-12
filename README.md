@@ -43,7 +43,7 @@ Here are some example with what can be made with the `Giraphics`
  </td>
   <td>
    <p align="center">
-  <img src="https://github.com/girirajhira/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/SquareTransform.gif" width="405" title="Giraphics">
+  <img src="https://github.com/girirajhira/Giraphics/blob/ae4ce8cb13c48df37c02765e4b191105df212e8e/res/SpringPS2.gif" width="405" title="Giraphics">
 </p>
   </td>
  </tr>
