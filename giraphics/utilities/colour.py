@@ -64,13 +64,18 @@ class Colours:
 
 class colorObj:
     def __init__(self, colour):
+        self.opacity = 1
         if isinstance(colour, str):  # if hexadecimal code
             if colour[0] == '#':
                 self.colour = hex_to_vec(colour)
             else:
                 pass
         elif isinstance(colour, list) or isinstance(colour, np.ndarray):
-            self.colour = np.array(colour)
+            if len(colour) == 3:
+                self.colour = np.array(colour)
+            else:
+                self.colour = np.array(colour[0:4])
+                self.opacity = colour[-1]
 
     def __add__(self, other):
         if isinstance(other, colorObj):

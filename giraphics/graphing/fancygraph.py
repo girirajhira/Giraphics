@@ -145,6 +145,43 @@ class FancyGraph(Graph):
                         self.svg.draw_arrow(self.tranx(x), self.trany(y), x2, y2, stroke=cl((norm(f)) / M),
                                             strokewidth=strokewidth, scale=arrow_scale)
 
+    def vectorfield(self, X, Y, VX, VY, fixed_colour=False, fixed_length=True, scale=.1, colour='red'):
+        X = np.array(X).flatten()
+        Y = np.array(Y).flatten()
+        VX = np.array(VX).flatten()
+        VY = np.array(VY).flatten()
+
+        if fixed_colour:
+            c = [colour] * len(X)
+        else:
+            r = VX ** 2 + VY ** 2
+
+        cr = (r - np.min(r)) / np.max(r)
+
+        for i in range(len(X)):
+            for j in range(len(Y)):
+                x = X[i]
+                y = Y[j]
+                vx, vy = VX[i], VY[j]
+                if fixed_length:
+                    theta = np.atan(vy, vx)
+                    xf = x + np.cos(theta) * scale
+                    yf = y + np.sin(theta) * scale
+                    if fixed_colour:
+                        self.svg.draw_arrow(self.tranx(x), self.trany(y),
+                                            self.tranx(xf), self.trany(yf),
+                                            strokewidth=2, stroke=c[i])
+
+                    else:
+                        self.svg.draw_arrow(self.tranx(x), self.trany(y),
+                                            self.tranx(xf), self.trany(yf),
+                                            strokewidth=2, stroke=c[i])
+                else:
+                    xf = x + vx * scale
+                    yf = y + vy * scale
+                    self.svg.draw_arrow(self.tranx(x), self.trany(y),
+                                        self.tranx(xf), self.trany(yf), )
+
     def hj(self, x, xlim):
         return 0.1 + 0.9 * x * x / xlim
 
@@ -164,7 +201,7 @@ class FancyGraph(Graph):
                               self.hj(y, self.ylim) * y * self.ylim / grids[0]).real)
                 I.append(func(self.hj(x, self.xlim) * x * self.xlim / grids[0],
                               self.hj(y, self.ylim) * y * self.ylim / grids[0]).imag)
-        self.scatter(R, I, s, colour=colour, opac=opac)
+        self.scatter(R, I, s, colour=colour, opacity=opac)
 
     def ComplexPlot(self, func, strokewidth=1, colour="red", N=100, epsfuncorder=1):
         eps = self.xlim / N
@@ -247,7 +284,7 @@ class FancyGraph(Graph):
     def histogram(self, datax, datay, colour="yellow", width=1, opacity=1):
         if len(datax) != len(datay):
             raise ValueError('Data must be of the same length.')
-        width = 19*width*self.nscale*(datax[-1]-datax[0])/len(datax)
+        width = 19 * width * self.nscale * (datax[-1] - datax[0]) / len(datax)
         for i in range(len(datax)):
             self.draw_line(datax[i], 0, datax[i], datay[i], colour=colour, strokewidth=width, opacity=opacity)
 
@@ -261,8 +298,8 @@ class FancyGraph(Graph):
 
     def add_inset(self, width, height, xlim, ylim, position=[0, 0], origin=[0.0, 0.0],
                   border=True, bcol="white", bstroke=1.5, bopacity=1, magnifier=False, magnifier_pos=[0, 0],
-                  magnifier_dims=[1, 1], magnifier_fill=None, magnifier_opacity = 1):
-        bstroke = bstroke*self.nscale
+                  magnifier_dims=[1, 1], magnifier_fill=None, magnifier_opacity=1):
+        bstroke = bstroke * self.nscale
         width1 = width * self.xscale
         height1 = height * self.yscale
 
@@ -271,10 +308,11 @@ class FancyGraph(Graph):
 
         # if border:
         #     self.draw_rect(position[0], position[1], width, height, fill='None', colour=bcol, strokewidth=bstroke * 2,
-        #                    opac=bopacity)
+        #                    stroke_opacity=bopacity)
 
         if magnifier:
-            self.draw_rect(magnifier_pos[0], magnifier_pos[1], magnifier_dims[0], magnifier_dims[1], fill=magnifier_fill,
+            self.draw_rect(magnifier_pos[0], magnifier_pos[1], magnifier_dims[0], magnifier_dims[1],
+                           fill=magnifier_fill,
                            fill_opacity=magnifier_opacity, opac=bopacity, strokewidth=bstroke, colour=bcol)
             px = parity(position[0] - magnifier_pos[0])
             py = parity(position[1] - magnifier_pos[1])
@@ -292,56 +330,60 @@ class FancyGraph(Graph):
         self.insets.append(
             FancyGraph(width1, height1, xlim, ylim, '', origin=origin, transform=f'translate({absx} {absy})'))
         if border:
-            self.insets[-1].draw_rect(origin[0], origin[1], xlim, ylim, fill='none', colour=bcol, strokewidth=bstroke, opac=bopacity)
+            self.insets[-1].draw_rect(origin[0], origin[1], xlim, ylim, fill='none', colour=bcol, strokewidth=bstroke,
+                                      opac=bopacity)
 
-    def surface(self, func, rotator, yn = 60, xn = 60):
+    def surface(self, func, rotator, yn=60, xn=60):
         mesh = np.mgrid[-5:5.1:0.5, -5:5.1:0.5]
         X = np.linspace(-self.xlim, self.xlim, xn)
         Y = np.linspace(-self.ylim, self.ylim, yn)
         Z = func(X, Y)
-        P = np.matmul(rotator, np.column_stack((X,Y,Z)).T)
+        P = np.matmul(rotator, np.column_stack((X, Y, Z)).T)
         for i in range(yn):
             # x lines
-            self.plot_points(P[0], np.full(X.shape, P[1][i], dtype=float))
+            self.plot(P[0], np.full(X.shape, P[1][i], dtype=float))
         for j in range(xn):
             # y lines
-            self.plot_points(np.full(X.shape, P[0][j], dtype=float), P[1])
+            self.plot(np.full(X.shape, P[0][j], dtype=float), P[1])
 
-    def mesh_sphere(self, r, cx, cy, cz, rotator=Rz(1), density=12, dphi=0.05, dtheta=0.05, latitudes=True, longitudes=True, colour="white"):
+    def mesh_sphere(self, r, cx, cy, cz, rotator=Rz(1), density=12, dphi=0.05, dtheta=0.05, latitudes=True,
+                    longitudes=True, colour="white"):
         # centre = np.array([cx, cy, cz])
         if latitudes:
             theta = np.radians(np.linspace(0, 180, density))
             phi = np.arange(0, 2 * pi + dphi, dphi)
             for i in range(density):
-                X = r*sin(theta[i])*cos(phi) + cx
-                Y = r*sin(theta[i])*sin(phi) + cy
-                Z = r*cos(theta[i])*np.full(phi.shape, 1, dtype=float) + cz
-                P = np.matmul(rotator, np.column_stack((X,Y,Z)).T)
-                self.plot_points(P[0], P[1], colour=colour)
+                X = r * sin(theta[i]) * cos(phi) + cx
+                Y = r * sin(theta[i]) * sin(phi) + cy
+                Z = r * cos(theta[i]) * np.full(phi.shape, 1, dtype=float) + cz
+                P = np.matmul(rotator, np.column_stack((X, Y, Z)).T)
+                self.plot(P[0], P[1], colour=colour)
         if longitudes:
-            theta = np.arange(0, pi+dtheta, dtheta)
+            theta = np.arange(0, pi + dtheta, dtheta)
             phi = np.linspace(0, 2 * pi, density)
             for i in range(density):
                 X = r * sin(theta) * cos(phi[i]) + cx
                 Y = r * sin(theta) * sin(phi[i]) + cy
                 Z = r * cos(theta) + cz
                 P = np.matmul(rotator, np.column_stack((X, Y, Z)).T)
-                self.plot_points(P[0], P[1], colour=colour)
+                self.plot(P[0], P[1], colour=colour)
 
     def axes3d(self, rotator, colour='white'):
         # (3 x 3) @ (3, n)
-        vecspos = np.array([[1,0,0], [0,1,0], [0,0,1]])*self.xlim
-        vecsneg = -np.array([[1,0,0], [0,1,0], [0,0,1]])*self.xlim
+        vecspos = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]) * self.xlim
+        vecsneg = -np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]) * self.xlim
 
         V1 = np.matmul(rotator, vecspos.T)
         V2 = np.matmul(rotator, vecsneg.T)
-        self.svg.draw_arrow(self.tranx(V2[0][0]),self.trany(V2[0][1]), self.tranx(V1[0][0]), self.trany(V1[0][1]),stroke=colour)
-        self.text( (V1[0][0]), (V1[0][1]), 'x', colour='black')
-        self.svg.draw_arrow(self.tranx(V2[1][0]),self.trany(V2[1][1]), self.tranx(V1[1][0]), self.trany(V1[1][1]),stroke=colour)
-        self.text( (V1[1][0]), (V1[1][1]), 'y', colour='black')
-        self.svg.draw_arrow(self.tranx(V2[2][0]),self.trany(V2[2][1]), self.tranx(V1[2][0]), self.trany(V1[2][1]),stroke=colour)
-        self.text( (V1[2][0]), (V1[2][1]), 'z', colour='black')
-
+        self.svg.draw_arrow(self.tranx(V2[0][0]), self.trany(V2[0][1]), self.tranx(V1[0][0]), self.trany(V1[0][1]),
+                            stroke=colour)
+        self.text((V1[0][0]), (V1[0][1]), 'x', colour='black')
+        self.svg.draw_arrow(self.tranx(V2[1][0]), self.trany(V2[1][1]), self.tranx(V1[1][0]), self.trany(V1[1][1]),
+                            stroke=colour)
+        self.text((V1[1][0]), (V1[1][1]), 'y', colour='black')
+        self.svg.draw_arrow(self.tranx(V2[2][0]), self.trany(V2[2][1]), self.tranx(V1[2][0]), self.trany(V1[2][1]),
+                            stroke=colour)
+        self.text((V1[2][0]), (V1[2][1]), 'z', colour='black')
 
     def save(self, clear=False):
         if len(self.insets) != 0:
@@ -409,7 +451,6 @@ class FancyGraph(Graph):
 #
 
 
-
 # def vecfield(x,y):
 #     return [-x*y, x]
 #
@@ -453,5 +494,3 @@ class FancyGraph(Graph):
 # A.DenistyPlot(z)
 # A.save()
 # A.display()
-
-

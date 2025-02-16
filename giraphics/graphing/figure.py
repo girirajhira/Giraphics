@@ -22,11 +22,11 @@ class Figure(Graph):
         self.inner_graph.plot(func, colour="red", strokewidth=1.5, opac=1, n=1200)
         # Draw margins
 
-    def plot_points(self, X, Y, colour="red", strokewidth=1, opac=1):
-        self.inner_graph.plot_points(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
+    def plot(self, X, Y, colour="red", strokewidth=1, opac=1):
+        self.inner_graph.plot(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
-    def scatter(self, X, Y, s=1, colour="white", opac=1):
-        self.inner_graph.scatter(X,Y,s=s, colour=colour, opac=opac)
+    def scatter(self, X, Y, s=1, colour="white", opacity=1):
+        self.inner_graph.scatter(X, Y, s=s, colour=colour, opacity=opacity)
 
     def include_model(self, S):
         self.inner_graph.include_model(S)
@@ -68,7 +68,7 @@ class Figure(Graph):
     #                 self.text((i - self.xlim - self.origin[0] - self.border_width * self.xlim) * ox * self.bw,
     #                           -2 * fontsize / dy - self.ylim * self.bw,
     #                           str((round((i - self.xlim - self.origin[0]) * ox, 2))),
-    #                           fontsize=fontsize, colour=stroke, opac=0.6)
+    #                           fontsize=fontsize, colour=stroke, stroke_opacity=0.6)
     #
     #     # y axis
     #     for i in range(1, ticky):
@@ -80,7 +80,7 @@ class Figure(Graph):
     #             if i - self.ylim != -self.ylim:
     #                 self.text(-2 * fontsize / dx - self.xlim * self.bw, (i - self.ylim - self.origin[1]) * oy * self.bw,
     #                           str((round((i - self.ylim - self.origin[1]) * oy, 2))),
-    #                           fontsize=fontsize, colour=stroke, opac=0.6)
+    #                           fontsize=fontsize, colour=stroke, stroke_opacity=0.6)
 
     def ticks(self, colour="black", strokewidth=None, markers=False, fontsize=4):
         """

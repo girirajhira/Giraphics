@@ -26,7 +26,7 @@ class SVG:
         self.canvas += f'<svg version="1.1" \n baseProfile="full" \n viewBox ="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg">\n'
         self.preamble = self.canvas
 
-    def draw_rect(self, x, y, width, height, fill, stroke="black", strokewidth=0, opacity=1, fill_opacity=1):
+    def draw_rect(self, x, y, width, height, fill="none", stroke="black", strokewidth=0, stroke_opacity=1, fill_opacity=1):
         """"
             Draws a rectangle
             Arguments
@@ -38,9 +38,9 @@ class SVG:
             Optional Arguments
                 stroke (String:colour): Colour of the stroke
                 stroke_width (Float): Stroke width
-                opacity (Float:[0,1]): opacity of rectangle
+                stroke_opacity (Float:[0,1]): stroke_opacity of rectangle
         """
-        self.canvas += f'<rect x="{x - width / 2}" y="{y - height / 2}" width="{width}" height="{height}" fill="{fill}" stroke="{stroke}" stroke-width="{strokewidth}" opacity="{opacity}" fill-opacity="{fill_opacity}"/>\n'
+        self.canvas += f'<rect x="{x - width / 2}" y="{y - height / 2}" width="{width}" height="{height}" fill="{fill}" stroke="{stroke}" stroke-width="{strokewidth}" stroke_opacity="{stroke_opacity}" fill-stroke_opacity="{fill_opacity}"/>\n'
 
     def draw_circ(self, x, y, r, fill="none", stroke="black", strokewidth=1, fill_opacity=1, opac=1,style="none"):
         """
@@ -52,9 +52,19 @@ class SVG:
         :param fill: fill colour
         :param stroke: stroke colour
         :param strokewidth: stroke_width
-        :param opac: opacity
+        :param opac: stroke_opacity
         """
         self.canvas += f'<circle cx="{x}" cy="{y}" r="{r}" fill="{fill}" stroke="{stroke}" stroke-width="{strokewidth}" fill-opacity="{fill_opacity}" opacity="{opac}" style="{style}"/>\n'
+    def draw_triangle(self, x, y, r, fill='none', stroke='black', strokewidth=1, opacity=1, angle=0, style="none"):
+        angles = np.linspace(0, 2 * np.pi, 4)[:3] + np.pi / 6 + angle
+        X = x + 1.5*r*np.cos(angles)
+        Y = y + 1.5*r*np.sin(angles)
+        points = ''
+        for i in range(len(X)):
+            points += f'{X[i]},{Y[i]} '
+        self.canvas += f'<polygon points="{points}" style="fill:{fill};stroke:{stroke};stroke-width:{strokewidth};fill-stroke_opacity:{opacity}" />\n'
+
+
 
     def draw_ellipse(self, x, y, rx, ry, fill, stroke="black", strokewidth=1, fill_opacity=1, ):
         """
@@ -67,7 +77,7 @@ class SVG:
         :param stroke: stroke colour
         :param strokewidth: stroke width
         """
-        self.canvas += f'<ellipse cx="{x}" cy="{y}" rx="{rx}" ry="{ry}" fill="{fill}" stroke="{stroke}" stroke-width="{strokewidth} fill-opacity="{fill_opacity}"/>\n'
+        self.canvas += f'<ellipse cx="{x}" cy="{y}" rx="{rx}" ry="{ry}" fill="{fill}" stroke="{stroke}" stroke-width="{strokewidth} fill-stroke_opacity="{fill_opacity}"/>\n'
 
     def draw_line(self, x1, y1, x2, y2, stroke="black", strokewidth="1", opacity="1", cap="butt", style=None):
         """
@@ -75,12 +85,12 @@ class SVG:
     """
         style_dict = {'dotted': '5,5', 'dashed': '10,10'}
         if style is None:
-            self.canvas += f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{stroke}" stroke-width="{strokewidth}" opacity="{opacity}" />\n'
+            self.canvas += f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{stroke}" stroke-width="{strokewidth}" stroke_opacity="{opacity}" />\n'
         else:
             if style in style_dict.keys():
-                self.canvas += f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{stroke}" stroke-width="{strokewidth}" opacity="{opacity}" stroke-linecap="{cap}"  stroke-dasharray="{style_dict[style]}"/>\n'
+                self.canvas += f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{stroke}" stroke-width="{strokewidth}" stroke_opacity="{opacity}" stroke-linecap="{cap}"  stroke-dasharray="{style_dict[style]}"/>\n'
             else:
-                self.canvas += f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{stroke}" stroke-width="{strokewidth}" opacity="{opacity}" stroke-linecap="{cap}"  stroke-dasharray="{style}"/>\n'
+                self.canvas += f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{stroke}" stroke-width="{strokewidth}" stroke_opacity="{opacity}" stroke-linecap="{cap}"  stroke-dasharray="{style}"/>\n'
 
     def draw_dotted_line(self, x1, y1, x2, y2, marker="-", stroke="black", strokewidth="1", opacity="1", cap="butt",
                          segments=20):
@@ -89,10 +99,10 @@ class SVG:
         for s in range(segments * 2):
             if s % 2 == 0:
                 if marker == "-":
-                    self.canvas += '<line x1="%s" y1="%s" x2="%s" y2="%s" stroke="%s" stroke-width="%s" opacity="%s" stroke-linecap="%s"/>\n' % (
+                    self.canvas += '<line x1="%s" y1="%s" x2="%s" y2="%s" stroke="%s" stroke-width="%s" stroke_opacity="%s" stroke-linecap="%s"/>\n' % (
                         sx1, sy1, sx1 + dx, sy1 + dy, stroke, strokewidth, opacity, cap)
                 elif marker == ".":
-                    self.canvas += '<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="%s" fill-opacity="%s"/>\n' % (
+                    self.canvas += '<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="%s" fill-stroke_opacity="%s"/>\n' % (
                         sx1, sy1, dx / 7, stroke, stroke, strokewidth, opacity)
 
             sx1 += dx
@@ -150,7 +160,7 @@ class SVG:
         for i in range(len(X)):
             for j in range(len(Y)):
                 points += f'{X[i]},{Y[i]} '
-        self.canvas += f'<polygon points="{points}" style="fill:{fill};stroke:{stroke};stroke-width:{strokewidth};fill-opacity:{opacity}"/>\n'
+        self.canvas += f'<polygon points="{points}" style="fill:{fill};stroke:{stroke};stroke-width:{strokewidth};fill-stroke_opacity:{opacity}"/>\n'
 
     def draw_polyline(self, X, Y, colour="red", strokewidth="2", opac=1, fill="none", style='none', fill_opacity=1):
         self.canvas += '<polyline points="'
@@ -161,17 +171,17 @@ class SVG:
                 self.canvas += f'{X[i]}, {Y[i]} '
             else:
                 if start:
-                    self.canvas += f'" stroke="{colour}" stroke-width="{strokewidth}" stroke-linejoin="round" stroke-opacity="{opac}" fill="{fill}" stroke-dasharray="{style}" fill-opacity="{fill_opacity}"/>\n'
+                    self.canvas += f'" stroke="{colour}" stroke-width="{strokewidth}" stroke-linejoin="round" stroke-stroke_opacity="{opac}" fill="{fill}" stroke-dasharray="{style}" fill-stroke_opacity="{fill_opacity}"/>\n'
                     self.canvas += '<polyline points="'
                 start = False
         if not start:
             self.canvas += '-1,1'
-        self.canvas += f'" fill="{fill}" stroke="{colour}" stroke-width="{strokewidth}" stroke-linejoin="round" stroke-opacity="{opac}"  stroke-dasharray="{style}" fill-opacity="{fill_opacity}"/>\n'
+        self.canvas += f'" fill="{fill}" stroke="{colour}" stroke-width="{strokewidth}" stroke-linejoin="round" stroke-stroke_opacity="{opac}"  stroke-dasharray="{style}" fill-stroke_opacity="{fill_opacity}"/>\n'
 
     def draw_path(self, path, colour="red", strokewidth="2", opac=1, fill="none", fill_opacity=0):
-        self.canvas += f'<path d="{path}" stroke="{colour}" stroke-width="{strokewidth}" fill="{fill}" opacity="{opac}" fill-opacity="{fill_opacity}"/>\n'
+        self.canvas += f'<path d="{path}" stroke="{colour}" stroke-width="{strokewidth}" fill="{fill}" stroke_opacity="{opac}" fill-stroke_opacity="{fill_opacity}"/>\n'
 
-    # def text(self, expr,x, y,  fontsize = 14, colour = 'white', rotation=0, opacity = 0, fontfamily = 'sans-serif', centre_align = False):
+    # def text(self, expr,x, y,  fontsize = 14, colour = 'white', rotation=0, stroke_opacity = 0, fontfamily = 'sans-serif', centre_align = False):
     #     scale = 1
     #     mata = scale * np.cos(rotation)
     #     matc = scale * np.sin(rotation)
@@ -204,7 +214,7 @@ class SVG:
         else:
             sweep = 1
         path = f'M {round(xstart, 2)} {round(ystart, 2)} A {r} {r} 0 {laflag} {sweep}  {round(xstop, 2)} {round(ystop, 2)}'
-        self.canvas += f'<path d="{path}" stroke="{colour}" stroke-width="{strokewidth}" fill="{fill}" opacity="{opac}"/>\n'
+        self.canvas += f'<path d="{path}" stroke="{colour}" stroke-width="{strokewidth}" fill="{fill}" stroke_opacity="{opac}"/>\n'
 
     def draw_path_line(self, x_list, y_list, colour="red", strokewidth="2"):
         self.canvas += '<path d="'

@@ -57,22 +57,22 @@ class DObject:
 
     # Constructions
     def line(self, x1, y1, x2, y2, strokewidth=1, colour = 'white', opacity=1):
-        properties = {'type': 'line', 'x0': np.array([x1,y1]), 'x1': np.array([x2,y2]), 'colour':colour, 'opacity': opacity,
+        properties = {'type': 'line', 'x0': np.array([x1,y1]), 'x1': np.array([x2,y2]), 'colour':colour, 'stroke_opacity': opacity,
                       'strokewidth': strokewidth}
         self.subobjects.append(properties)
 
     def circle(self, x, y, r, strokewidth=1, colour = 'white', opacity=1):
-        properties = {'type': 'circle', 'center': np.array([x,y]), 'r': r, 'colour':colour, 'opacity': opacity}
+        properties = {'type': 'circle', 'center': np.array([x,y]), 'r': r, 'colour':colour, 'stroke_opacity': opacity}
         self.subobjects.append(properties)
 
     def plot_points(self, X, Y, colour =  'white', opacity= 1):
-        properties = {'type': 'plot_points', 'X': np.array(X), 'Y': np.array(Y), 'colour': colour, 'opacity': opacity}
+        properties = {'type': 'plot_points', 'X': np.array(X), 'Y': np.array(Y), 'colour': colour, 'stroke_opacity': opacity}
         self.subobjects.append(properties)
 
     # Setting properties
     def set_opacity(self, opacity):
         for i in range(len(self.subobjects)):
-            self.subobjects[i]['opacity'] = opacity
+            self.subobjects[i]['stroke_opacity'] = opacity
 
     def scale(self, scale_factor):
         for i in range(len(self.subobjects)):

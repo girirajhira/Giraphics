@@ -90,4 +90,4 @@ for i, m in enumerate(markers):
 #
 # self.latex_history[expr] = [expr_code, w_expr, h_expr, colour]
 #
-# expr_code = expr_code.replace('fill-opacity:1', f'fill-opacity:{round(opacity, 3)}')
+# expr_code = expr_code.replace('fill-stroke_opacity:1', f'fill-stroke_opacity:{round(stroke_opacity, 3)}')

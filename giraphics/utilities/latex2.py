@@ -6,7 +6,7 @@ import numpy as np
 from functools import lru_cache, cache
 
 default_latex_template = r"""
-\documentclass{standalone}
+\documentclass[preview,border=10pt]{standalone}
 \usepackage[utf8]{inputenc}
 \usepackage{physics}
 \usepackage{amssymb}
@@ -15,7 +15,7 @@ default_latex_template = r"""
 
 """
 
-def generate_pdf_from_tex(expression, outfile, tempfolder = False, usepackages=None, preamble=None, colour = None):
+def generate_pdf_from_tex(expression, outfile, tempfolder = False, usepackages=None, preamble=None, colour = None, cur_dir=None):
     '''
     :param expression: Latex expression to be rendered (string)
     :param outfile: location of output file (string)
@@ -60,13 +60,27 @@ def dvi_to_svg(infile, outfile):
 
 
 
-def latex_expression(expression, usepackages=None, preamble=None, cleanup = True, colour=None):
+def latex_expression(expression, usepackages=None, preamble=None, cleanup = True, colour=None, current_dir= None):
     '''returns an svg string of the LaTeX expression'''
     if os.path.exists('tempfolder'):
         shutil.rmtree('tempfolder')
         os.system('mkdir tempfolder')
     else:
         os.system('mkdir tempfolder')
+    # if current_dir is None:
+    #     current_dir = os.path.dirname(os.path.abspath(__file__))
+    # folder_name = "tempfolder"
+    #
+    # # Create the full path for the folder
+    # folder_path = os.path.join(current_dir, folder_name)
+    #
+    # # Check if the folder exists
+    # if os.path.exists(folder_path):
+    #     shutil.rmtree(folder_path)  # Remove the folder and its contents
+    #     os.makedirs(folder_path)  # Recreate the folder
+    # else:
+    #     os.makedirs(folder_path)  # Create the folder if it doesn't exist
+
     generate_pdf_from_tex(expression, r'tempfolder/outfile.tex', tempfolder=True, usepackages=usepackages, preamble=preamble, colour=colour)
     dvi_to_svg(r'tempfolder/outfile.pdf', r'tempfolder/outfile.svg')
     with open(r'tempfolder/outfile.svg', 'r') as svgfile:

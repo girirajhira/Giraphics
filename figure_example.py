@@ -4,8 +4,8 @@ import numpy as np
 f = Figure(600, 450, 5, 5, "fg_example.svg", origin=[-5,0])
 f.bg(colour="white")
 x = np.linspace(0, 10, 300)
-f.plot_points(x,x**2, colour='blue',strokewidth=.5)
-f.plot_points(x,np.sin(x), colour='red',strokewidth=.5)
+f.plot(x, x ** 2, colour='blue', strokewidth=.5)
+f.plot(x, np.sin(x), colour='red', strokewidth=.5)
 
 # f.grid()
 # f.grid2(colour="blue")

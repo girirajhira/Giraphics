@@ -48,7 +48,7 @@ class Graph:
         self.origin = np.array(origin)
         self.xscale = width / (2 * xlim)
         self.yscale = height / (2 * ylim)
-        self.nscale = 0.01*self.width # sqrt(self.xscale ** 2 + self.yscale ** 2) / sqrt(2) / 30
+        self.nscale = 0.01 * self.width  # sqrt(self.xscale ** 2 + self.yscale ** 2) / sqrt(2) / 30
         self.insets = []
         self.latex_history = {}
         self.num_style_tags = 0
@@ -79,6 +79,7 @@ class Graph:
 
         else:
             return None
+
     def inv_tranx(self, x):
         """
         converts the x coordinate to svg coordinate
@@ -93,7 +94,6 @@ class Graph:
 
         else:
             return None
-
 
     def trany(self, y):
         """
@@ -147,7 +147,7 @@ class Graph:
             self.svg.draw_arrowhead2(self.tranx(-self.xlim - ox) + 3 * scale, self.trany(0), scale, - math.pi / 2,
                                      colour=colour)  # W
 
-# Need to fix grid. It doesnt move if you change the origin.
+    # Need to fix grid. It doesnt move if you change the origin.
     def grid(self, grid_int=None, colour="#A7A7A7", grid_multiplier=1, strokewidth=0.7, opac=0.5):
         """
         Creates a grid
@@ -158,7 +158,7 @@ class Graph:
         :param strokewidth: float
             sets the thickness of the grid
         :param opac: float (0-1)
-            sets the opacity of the grid
+            sets the stroke_opacity of the grid
         :return: None
         """
 
@@ -186,9 +186,9 @@ class Graph:
                                stroke=colour, strokewidth=strokewidth, opacity=opac)
 
     # def text(self, x, y, text, fontsize=20, colour="white", rotation=0,
-    #          font="14", opac=1):
-    #     self.svg.canvas += '<text x="%s" y="%s"  style=" font-family:Arial" fill="%s" font-size="%s" opacity="%s"  transform="rotate(%s)"> %s </text>' % (
-    #     self.tranx(x), self.trany(y), colour, fontsize, opac, rotation, text)
+    #          font="14", stroke_opacity=1):
+    #     self.svg.canvas += '<text x="%s" y="%s"  style=" font-family:Arial" fill="%s" font-size="%s" stroke_opacity="%s"  transform="rotate(%s)"> %s </text>' % (
+    #     self.tranx(x), self.trany(y), colour, fontsize, stroke_opacity, rotation, text)
 
     def grid2(self, colour="yellow", strokewidth=1, minor=True, fontsize=4):
         """
@@ -217,13 +217,13 @@ class Graph:
                                dx * i, ticky_length + self.trany(0),
                                stroke=colour, strokewidth=strokewidth)
             if minor:
-                self.svg.draw_line(dx * (i-0.5), - ticky_length + self.trany(0),
-                                   dx * (i-0.5), ticky_length + self.trany(0),
-                                   stroke=colour, strokewidth=strokewidth/4)
+                self.svg.draw_line(dx * (i - 0.5), - ticky_length + self.trany(0),
+                                   dx * (i - 0.5), ticky_length + self.trany(0),
+                                   stroke=colour, strokewidth=strokewidth / 4)
             if minor and i + 1 == tickx:
-                self.svg.draw_line(dx * (i+0.5), - ticky_length + self.trany(0),
-                                   dx * (i+0.5), ticky_length + self.trany(0),
-                                   stroke=colour, strokewidth=strokewidth/4)
+                self.svg.draw_line(dx * (i + 0.5), - ticky_length + self.trany(0),
+                                   dx * (i + 0.5), ticky_length + self.trany(0),
+                                   stroke=colour, strokewidth=strokewidth / 4)
 
         # y axis
         for i in range(1, ticky):
@@ -233,13 +233,12 @@ class Graph:
             if minor:
                 self.svg.draw_line(- tickx_length + self.tranx(0), dy * (i + .5),
                                    tickx_length + self.tranx(0), dy * (i + .5),
-                                   stroke=colour, strokewidth=strokewidth/4)
+                                   stroke=colour, strokewidth=strokewidth / 4)
 
-            if minor and i+1 == 2:
+            if minor and i + 1 == 2:
                 self.svg.draw_line(- tickx_length + self.tranx(0), dy * (i - .5),
                                    tickx_length + self.tranx(0), dy * (i - .5),
-                                   stroke=colour, strokewidth=strokewidth/4)
-
+                                   stroke=colour, strokewidth=strokewidth / 4)
 
     def text(self, x, y, text, fontsize=5, colour="white", rotation=0, opac=1, fontfamily='CMU Serif', abs_pos=False):
         """
@@ -263,9 +262,9 @@ class Graph:
         """
         fontsize *= self.nscale * .1
         if abs_pos:  # Absolute positioning
-            self.svg.canvas += f'<text x="{x}" y="{y}"  font-family="{fontfamily}" fill="{colour}" font-size="{fontsize}" alignment-baseline="middle" text-anchor="middle" color="{colour}" opacity="{opac}"  transform="rotate({rotation},{(x)},{(y)})"> {text} </text>\n'
+            self.svg.canvas += f'<text x="{x}" y="{y}"  font-family="{fontfamily}" fill="{colour}" font-size="{fontsize}" alignment-baseline="middle" text-anchor="middle" color="{colour}" stroke_opacity="{opac}"  transform="rotate({rotation},{(x)},{(y)})"> {text} </text>\n'
         else:  # Relative position in the natural units
-            self.svg.canvas += f'<text x="{self.tranx(x)}" y="{self.trany(y)}"  font-family="{fontfamily}" fill="{colour}" font-size="{fontsize}" alignment-baseline="middle" text-anchor="middle" color="{colour}" opacity="{opac}"  transform="rotate({rotation},{self.tranx(x)},{self.trany(y)})"> {text} </text>\n'
+            self.svg.canvas += f'<text x="{self.tranx(x)}" y="{self.trany(y)}"  font-family="{fontfamily}" fill="{colour}" font-size="{fontsize}" alignment-baseline="middle" text-anchor="middle" color="{colour}" stroke_opacity="{opac}"  transform="rotate({rotation},{self.tranx(x)},{self.trany(y)})"> {text} </text>\n'
 
     # def math_text(self, expression, x, y, colour="White", scale=4):
     #     math_to_svg(expression, os.getcwd() + "/temp.txt")
@@ -307,7 +306,7 @@ class Graph:
                                stroke=colour, strokewidth=strokewidth)
             if markers:
                 if i - self.xlim != self.origin[0]:
-                    self.text((i - self.xlim - self.origin[0]) * ox , fontsize / dy,
+                    self.text((i - self.xlim - self.origin[0]) * ox, fontsize / dy,
                               str((round((i - self.xlim - self.origin[0]) * ox, 2))),
                               fontsize=fontsize, colour=colour, opac=0.6)
 
@@ -318,7 +317,7 @@ class Graph:
                                strokewidth=strokewidth)
             if markers:
                 if i - self.ylim != self.origin[1]:
-                    self.text(fontsize / dx , (i - self.ylim - self.origin[1]) * oy ,
+                    self.text(fontsize / dx, (i - self.ylim - self.origin[1]) * oy,
                               str((round((i - self.ylim - self.origin[1]) * oy, 2))),
                               fontsize=fontsize, colour=colour, opac=0.6)
 
@@ -342,30 +341,30 @@ class Graph:
         oy = self.ylim * 2 / ticky
         # Need a bigger shift from the axis if the (width/height) is larger
         # in comparison to the fontsize
-        fontshiftx = 0.1*self.width/fontsize
-        fontshifty = 0.1*self.height/fontsize
-        tickx_length = 0.015*self.width  # 2% of the total width
-        ticky_length = 0.015*self.height # 2% of the total height
+        fontshiftx = 0.1 * self.width / fontsize
+        fontshifty = 0.1 * self.height / fontsize
+        tickx_length = 0.015 * self.width  # 2% of the total width
+        ticky_length = 0.015 * self.height  # 2% of the total height
 
         # x axis
         for i in range(1, tickx):
             self.svg.draw_line(dx * i, - ticky_length + self.trany(0),
-                               dx * i,   ticky_length +  self.trany(0),
+                               dx * i, ticky_length + self.trany(0),
                                stroke=colour, strokewidth=strokewidth)
             if markers:
-                if i - self.xlim != self.origin[0]: #Nothing at [0,0]
-                    self.text(dx * i, -ticky_length*2.5 - fontshifty + self.trany(0),
+                if i - self.xlim != self.origin[0]:  #Nothing at [0,0]
+                    self.text(dx * i, -ticky_length * 2.5 - fontshifty + self.trany(0),
                               str((round((i - self.xlim - self.origin[0]) * ox, 2))),
                               fontsize=fontsize, colour=colour, opac=0.6, abs_pos=True)
 
         # y axis
         for i in range(1, ticky):
-            self.svg.draw_line( - tickx_length + self.tranx(0), dy * i,
-                                  tickx_length + self.tranx(0), dy * i,
+            self.svg.draw_line(- tickx_length + self.tranx(0), dy * i,
+                               tickx_length + self.tranx(0), dy * i,
                                stroke=colour, strokewidth=strokewidth)
             if markers:
                 if i - self.ylim != - self.origin[1]:
-                    self.text(2.5*tickx_length + fontshiftx + self.tranx(0), dy * i,
+                    self.text(2.5 * tickx_length + fontshiftx + self.tranx(0), dy * i,
                               str((round((i - self.ylim + self.origin[1]) * oy, 2))),
                               fontsize=fontsize, colour=colour, opac=0.6, abs_pos=True)
 
@@ -402,7 +401,7 @@ class Graph:
         :param strokewidth: float
             width of curve
         :param opac: string
-            opacity of the curve
+            stroke_opacity of the curve
         :param n: int
             Number of points used in the curve
         :return: None
@@ -413,15 +412,12 @@ class Graph:
         Y = [self.trany(func(i * eps - self.origin[0])) for i in range(-n, n + 1)]
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
-
-    def arc_length(self,X, Y):
+    def arc_length(self, X, Y):
         X = np.array(X)
         Y = np.array(Y)
         return np.trapz(np.sqrt(
-            np.gradient(X)**2 + np.gradient(Y)**2
+            np.gradient(X) ** 2 + np.gradient(Y) ** 2
         ))
-
-
 
     def graph_polar(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
         """
@@ -433,7 +429,7 @@ class Graph:
         :param strokewidth: float
             width of curve
         :param opac: string
-            opacity of the curve
+            stroke_opacity of the curve
         :param n: int
             Number of points used in the curve
         :return: None
@@ -452,6 +448,7 @@ class Graph:
         Y = [self.trany(func(i * eps + limits[0])) for i in range(n + 1)]
         Y.append(self.trany(func(limits[0])))  # Ensure uniform area
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac, fill=area_colour)
+
     def area(self, X, Y, colour="red", fill_colour="orange", strokewidth=0, opac=1, fill_opacity=.5):
         strokewidth = self.nscale * strokewidth
         X1 = [self.tranx(x) for x in X]
@@ -469,7 +466,7 @@ class Graph:
            :param strokewidth: float
                width of curve
            :param opac: string
-               opacity of the curve
+               stroke_opacity of the curve
            :param n: int
                Number of points used in the curve
            :return: None
@@ -496,7 +493,8 @@ class Graph:
         self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill,
                                fill_opacity=fill_opacity)
 
-    def plot_points_trail(self, X, Y, trail = 50, r=6, colour="red", strokewidth=0, opac=1, style='none', fill='none', fill_opacity=1):
+    def plot_trail(self, X, Y, trail=50, r=6, colour="red", strokewidth=0, opac=1, style='none', fill='none',
+                   fill_opacity=1):
         """
         Graphs the inputted points
         :param X:
@@ -514,16 +512,18 @@ class Graph:
 
         if l - trail < 0:
             for i in range(l):
-                self.svg.draw_circ(X1[i], Y1[i], r=r * (i+1)/l, fill_opacity=opac*(i+1)/l, fill=colour, strokewidth=strokewidth)
-                # self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill,
+                self.svg.draw_circ(X1[i], Y1[i], r=r * (i + 1) / l, fill_opacity=opac * (i + 1) / l, fill=colour,
+                                   strokewidth=strokewidth)
+                # self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, stroke_opacity=stroke_opacity, fill=fill,
                 #                fill_opacity=fill_opacity)
         else:
             for i in range(trail):
-                self.svg.draw_circ(X1[l-trail + i], Y1[l-trail + i], r=r * (i + 1) /trail, fill_opacity=opac*(i + 1) / trail,
+                self.svg.draw_circ(X1[l - trail + i], Y1[l - trail + i], r=r * (i + 1) / trail,
+                                   fill_opacity=opac * (i + 1) / trail,
                                    fill=colour, strokewidth=strokewidth)
 
-
-    def plot_decorated(self, X, Y, colour="red", strokewidth=1,amplitude=1, opac=1,period=6, style='none', fill='none', fill_opacity=1):
+    def plot_decorated(self, X, Y, colour="red", strokewidth=1, amplitude=1, opac=1, period=6, style='none',
+                       fill='none', fill_opacity=1):
         """
         Graphs the inputted points
         :param X:
@@ -538,22 +538,53 @@ class Graph:
         Y = np.array(Y)
         TX = X[1:] - X[:-1]
         TY = Y[1:] - Y[:-1]
-        N = 1/np.sqrt(TX**2 + TY**2)
-        theta = np.pi/2
-        cum_arc_length = np.cumsum(np.sqrt(TX**2 + TY**2))
-        phi = 2*np.pi*cum_arc_length/cum_arc_length[-1]
-        dec = np.sin(period*phi)
+        N = 1 / np.sqrt(TX ** 2 + TY ** 2)
+        theta = np.pi / 2
+        cum_arc_length = np.cumsum(np.sqrt(TX ** 2 + TY ** 2))
+        phi = 2 * np.pi * cum_arc_length / cum_arc_length[-1]
+        dec = np.sin(period * phi)
         Xd = X
         Yd = Y
-        Xd[1:] += N*amplitude*dec*(TX*np.cos(theta) - TY*np.sin(theta))
-        Yd[1:] += N*amplitude*dec*(TX*np.sin(theta) + TY*np.cos(theta))
+        Xd[1:] += N * amplitude * dec * (TX * np.cos(theta) - TY * np.sin(theta))
+        Yd[1:] += N * amplitude * dec * (TX * np.sin(theta) + TY * np.cos(theta))
 
         X1 = [self.tranx(x) for x in Xd]
         Y1 = [self.trany(y) for y in Yd]
         self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill,
                                fill_opacity=fill_opacity)
-
-    def plot_coil(self, X, Y, colour="red", strokewidth=1,amplitude=1, opac=1,
+    def plot_coil2(self, X, Y, colour="red", strokewidth=1, theta=np.pi/2, amplitude=1, opac=1, period=6, style='none',
+                       fill='none', fill_opacity=1):
+        """
+        Graphs the inputted points
+        :param X:
+        :param Y:
+        :param colour:
+        :param strokewidth:
+        :param opac:
+        :return:
+        """
+        strokewidth = strokewidth * self.nscale
+        X = np.array(X)
+        Y = np.array(Y)
+        Z = np.zeros_like(Y)
+        TX = X[1:] - X[:-1]
+        TY = Y[1:] - Y[:-1]
+        N = 1 / np.sqrt(TX ** 2 + TY ** 2)
+        # theta = np.pi / 3
+        cum_arc_length = np.cumsum(np.sqrt(TX ** 2 + TY ** 2))
+        phi = 2 * np.pi * cum_arc_length / cum_arc_length[-1]
+        dec = np.sin(period * phi)
+        Xd = X
+        Yd = Y
+        Zd = Z
+        Xd[1:] += N * amplitude * dec * (TX * np.cos(theta) - TY * np.sin(theta))
+        Yd[1:] += N * amplitude * dec * (TX * np.sin(theta) + TY * np.cos(theta))
+        Zd[1:] += N * amplitude * dec
+        X1 = [self.tranx(x) for x in Xd]
+        Y1 = [self.trany(y) for y in Yd]
+        self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill,
+                               fill_opacity=fill_opacity)
+    def plot_coil(self, X, Y, colour="red", strokewidth=1, amplitude=1, opac=1,
                   period=6, style='none', fill='none', fill_opacity=1):
         """
         Graphs the inputted points
@@ -569,40 +600,138 @@ class Graph:
         Y = np.array(Y)
         TX = X[1:] - X[:-1]
         TY = Y[1:] - Y[:-1]
-        N = 1/np.sqrt(TX**2 + TY**2)
-        cum_arc_length = np.cumsum(np.sqrt(TX**2 + TY**2))
-        phi = 2*np.pi*cum_arc_length/cum_arc_length[-1]
-        tt = np.linspace(0, 2*np.pi, len(X)-1)
-        Xd = amplitude*(np.cos(phi*period) - np.sin(phi*period)) + X[1:]
-        Yd = amplitude*(np.sin(phi*period) + np.cos(phi*period)) + Y[1:]
+        N = 1 / np.sqrt(TX ** 2 + TY ** 2)
+        cum_arc_length = np.cumsum(np.sqrt(TX ** 2 + TY ** 2))
+        phi = 2 * np.pi * cum_arc_length / cum_arc_length[-1]
+        tt = np.linspace(0, 2 * np.pi, len(X) - 1)
+        Xd = amplitude * (np.cos(phi * period) - np.sin(phi * period)) + X[1:]
+        Yd = amplitude * (np.sin(phi * period) + np.cos(phi * period)) + Y[1:]
 
         X1 = [self.tranx(x) for x in Xd]
         Y1 = [self.trany(y) for y in Yd]
         self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill,
                                fill_opacity=fill_opacity)
 
-    def scatter(self, X, Y, s=1, colour="white", opac=1):
+    def plot_coil(self, X, Y, colour="red", strokewidth=1, amplitude=1, opac=1,
+                  period=6, style='none', fill='none', fill_opacity=1):
         """
-        Scatter plots the points X,Y
-        :param X: list
-        :param Y: list
-        :param s: float
-        :param colour: string
-        :param opac: float (0-1)
+        Graphs the inputted points
+        :param X:
+        :param Y:
+        :param colour:
+        :param strokewidth:
+        :param opac:
+        :return:
+        """
+        strokewidth = strokewidth * self.nscale
+        X = np.array(X)
+        Y = np.array(Y)
+        TX = X[1:] - X[:-1]
+        TY = Y[1:] - Y[:-1]
+        N = 1 / np.sqrt(TX ** 2 + TY ** 2)
+        cum_arc_length = np.cumsum(np.sqrt(TX ** 2 + TY ** 2))
+        phi = 2 * np.pi * cum_arc_length / cum_arc_length[-1]
+        tt = np.linspace(0, 2 * np.pi, len(X) - 1)
+        Xd = amplitude * (np.cos(phi * period) - np.sin(phi * period)) + X[1:]
+        Yd = amplitude * (np.sin(phi * period) + np.cos(phi * period)) + Y[1:]
+
+        X1 = [self.tranx(x) for x in Xd]
+        Y1 = [self.trany(y) for y in Yd]
+        self.svg.draw_polyline(X1, Y1, colour=colour, strokewidth=strokewidth, opac=opac, fill=fill,
+                               fill_opacity=fill_opacity)
+
+
+    # def scatter(self, X, Y, s=1, colour="white", stroke_opacity=1, markerfacecolour=None, markerfacealpha=1,
+    #             markeredgewidth=None,  markeredgecolor=None, style='none'):
+    #     """
+    #     Scatter plots the points X,Y
+    #     :param X: list
+    #     :param Y: list
+    #     :param s: float
+    #     :param colour: string
+    #     :param stroke_opacity: float (0-1)
+    #     :return: None
+    #     """
+    #     s = s * self.nscale
+    #     if len(X) != len(Y):
+    #         print("Data sets are misaligned!")
+    #     if s is list | colour is list | markerfacealpha is list | markeredgecolor is list | style is list: :
+    #     for i in range(len(X)):
+    #         self.svg.draw_circ(self.tranx(-X[i]), self.trany(Y[i]), s, fill=colour, stroke=colour,
+    #                            strokewidth=0, opac=stroke_opacity)
+    def scatter(self, X, Y, s=8, colour="white", marker="o", opacity=1,
+                markeredgewidth=4, markeredgecolour="teal", style='none'):
+        """
+        Scatter plots the points X,Y with individual properties if provided as lists.
+        :param X: list of x-coordinates
+        :param Y: list of y-coordinates
+        :param s: float or list of floats (marker sizes)
+        :param colour: string or list of strings (outline colours)
+        :param opacity: float or list of floats (0-1) (opacities)
+        :param markerfacecolour: string or list of strings (fill colours)
+        :param markerfacealpha: float or list of floats (0-1) (fill opacities)
+        :param markeredgewidth: float or list of floats (border widths)
+        :param markeredgecolor: string or list of strings (border colours)
+        :param style: string (marker style)
         :return: None
         """
-        s = s * self.nscale
+
+        # Check if X and Y have the same length
         if len(X) != len(Y):
-            print("Data sets are misaligned!")
+            raise ValueError("X and Y must have the same length!")
+
+        # Ensure s, colour, stroke_opacity, etc., are lists of the same length as X and Y
+        def validate_length(param, name):
+            if isinstance(param, list) and len(param) != len(X):
+                raise ValueError(f"{name} must be of the same length as X and Y!")
+            return [param] * len(X) if not isinstance(param, list) else param
+
+        # Validate lengths for each parameter
+        s = validate_length(s, 's')
+        colour = validate_length(colour, 'colour')
+        opacity = validate_length(opacity, 'stroke_opacity')
+        markeredgewidth = validate_length(markeredgewidth, 'markeredgewidth')
+        markeredgecolor = validate_length(markeredgecolour, 'markeredgecolor')
+
+        # Iterate through the points
         for i in range(len(X)):
-            self.svg.draw_circ(self.tranx(-X[i]), self.trany(Y[i]), s, fill=colour, stroke=colour,
-                               strokewidth=0, opac=opac)
+
+            # Draw each point with the specified properties
+            if marker == "o":
+                self.svg.draw_circ(
+                    self.tranx(X[i]), self.trany(Y[i]), s[i],
+                    fill=colour[i],
+                    stroke=markeredgecolour,
+                    strokewidth=markeredgewidth[i],
+                    opac=opacity[i],
+                    fill_opacity=opacity[i]
+                )
+            elif marker == "^":
+                self.svg.draw_triangle(
+                    self.tranx(X[i]), self.trany(Y[i]), s[i],
+                    fill=colour[i],
+                    stroke=markeredgecolour,
+                    strokewidth=markeredgewidth[i],
+                    opacity=opacity[i]
+                )
+            elif marker == "s":
+                self.svg.draw_rect(
+                    self.tranx(X[i]), self.trany(Y[i]), 2 * s[i], 2 * s[i],
+                    fill=colour[i],
+                    stroke=markeredgecolour,
+                    strokewidth=markeredgewidth[i],
+                    fill_opacity=opacity[i],
+                    stroke_opacity=opacity[i]
+
+                )
+            else:
+                raise ValueError("markerface must be either 'o' or '^'")
 
     def add_latex2(self, expr, x0, y0, scale=1, rotation=0, centre_align=True, colour=None, preamble=None,
-                  usepackages=None, cleanup=True, opacity=1, background=False, bg_colour='black', bg_opacity=.4,
-                  box=False, boxcolour='white', boxwidth=2, boxmult=1.6):
+                   usepackages=None, cleanup=True, opacity=1, background=False, bg_colour='black', bg_opacity=.4,
+                   box=False, boxcolour='white', boxwidth=2, boxmult=1.6):
         '''
-        Old
+        !!!!!!Old!!!!!!
         :param expr:
         :param x0:
         :param y0:
@@ -626,8 +755,9 @@ class Graph:
         scale = scale * self.nscale
         if expr in self.latex_history:
             tex_info = self.latex_history[expr]
-            expr_code, w_expr, h_expr = tex_info[0].replace('fill-opacity:1', f'fill-opacity:{round(opacity, 3)}'), \
-                                        tex_info[1], tex_info[2]
+            expr_code, w_expr, h_expr = tex_info[0].replace('fill-stroke_opacity:1',
+                                                            f'fill-stroke_opacity:{round(opacity, 3)}'), \
+                tex_info[1], tex_info[2]
         else:
             expr_code, w_expr, h_expr = latex_expression(expr, colour=colour, preamble=preamble,
                                                          usepackages=usepackages,
@@ -643,7 +773,7 @@ class Graph:
 
             self.latex_history[expr] = [expr_code, w_expr, h_expr, colour]
 
-            expr_code = expr_code.replace('fill-opacity:1', f'fill-opacity:{round(opacity, 3)}')
+            expr_code = expr_code.replace('fill-stroke_opacity:1', f'fill-stroke_opacity:{round(opacity, 3)}')
 
         mata = scale * np.cos(rotation)
         matc = scale * np.sin(rotation)
@@ -660,7 +790,7 @@ class Graph:
 
         if background:
             self.svg.draw_rect(mate + scale * w_expr / 2, matf + scale * h_expr / 2, w_expr * scale, h_expr * scale,
-                               fill=bg_colour, opacity=bg_opacity,
+                               fill=bg_colour, stroke_opacity=bg_opacity,
                                strokewidth=0)
 
         if box:
@@ -676,9 +806,11 @@ class Graph:
                   usepackages=None, cleanup=True, opacity=1, background=False, bg_colour='black', bg_opacity=.4,
                   box=False, boxcolour='white', boxwidth=2, boxmult=1.6):
         scale = scale * self.nscale
+
         if expr in self.latex_history:
             tex_info = self.latex_history[expr]
-            expr_code, w_expr, h_expr = tex_info[0].replace('fill-opacity:1', f'fill-opacity:{round(opacity, 3)}'), \
+            expr_code, w_expr, h_expr = tex_info[0].replace('fill-stroke_opacity:1',
+                                                            f'fill-stroke_opacity:{round(opacity, 3)}'), \
                 tex_info[1], tex_info[2]
         else:
             current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -691,15 +823,14 @@ class Graph:
             clips = get_svg_clip_ids(expr_code)
             g_id = get_g_elements_ids(expr_code)
             # for symb in symbols:
-                # expr_code = expr_code.replace(symb, symb + f'-{index}')
+            # expr_code = expr_code.replace(symb, symb + f'-{index}')
             for clip in clips:
                 expr_code = expr_code.replace(clip, clip + f'-{index}')
             for gd in g_id:
                 expr_code = expr_code.replace(gd, gd + f'-{index}')
 
-
             self.latex_history[expr] = [expr_code, w_expr, h_expr, colour]
-            expr_code = expr_code.replace('fill-opacity:1', f'fill-opacity:{round(opacity, 3)}')
+            expr_code = expr_code.replace('fill-stroke_opacity:1', f'fill-stroke_opacity:{round(opacity, 3)}')
 
         mata = scale * np.cos(rotation)
         matc = scale * np.sin(rotation)
@@ -716,7 +847,7 @@ class Graph:
 
         if background:
             self.svg.draw_rect(mate + scale * w_expr / 2, matf + scale * h_expr / 2, w_expr * scale, h_expr * scale,
-                               fill=bg_colour, opacity=bg_opacity,
+                               fill=bg_colour, stroke_opacity=bg_opacity,
                                strokewidth=0)
 
         if box:
@@ -728,12 +859,12 @@ class Graph:
         self.svg.canvas += expr_code
         self.svg.canvas += '</g>\n'
 
-    def add_mathml(self,expr, x, y, fontsize=10, colour='blue', rotate=0, borderwidth=0):
+    def add_mathml(self, expr, x, y, fontsize=10, colour='blue', rotate=0, borderwidth=0):
         mathml = convert(expr)
         '''
         Need to recentre etc,
         '''
-        style_dict ={
+        style_dict = {
             'color': colour,
             'font-size': f'{fontsize}px',
             # 'background-color': 'brown',
@@ -748,7 +879,7 @@ class Graph:
         self.svg.canvas += f'\n<foreignObject  width="100%" height="100%" transform="translate({self.tranx(x)} {self.trany(y)})" class="mathml{self.num_style_tags}">\n'
         self.svg.canvas += mathml + '\n'
         self.svg.canvas += '</foreignObject> \n'
-        self.num_style_tags+=1
+        self.num_style_tags += 1
 
     # Constructions
 
@@ -763,7 +894,8 @@ class Graph:
         scale = scale * self.nscale
         self.svg.draw_arrow2(self.tranx(x1), self.trany(y1), self.tranx(x2), self.trany(y2), scale, stroke=colour,
                              strokewidth=strokewidth)
-    def draw_arrowhead(self, x, y, ang=0,scale=1, colour="black", strokewidth=1):
+
+    def draw_arrowhead(self, x, y, ang=0, scale=1, colour="black", strokewidth=1):
         '''
         Draws an arrowhead that points to (x,y)
         :param x:
@@ -776,8 +908,7 @@ class Graph:
         '''
         strokewidth = strokewidth * self.nscale
         scale = scale * self.nscale
-        self.svg.draw_arrowhead2(self.tranx(x), self.trany(y), scale, (-ang+np.pi/2), colour)
-
+        self.svg.draw_arrowhead2(self.tranx(x), self.trany(y), scale, (-ang + np.pi / 2), colour)
 
     def draw_double_arrow(self, x1, y1, x2, y2, scale=1, colour="black", strokewidth=1):
         strokewidth = strokewidth * self.nscale
@@ -793,7 +924,7 @@ class Graph:
         Y1 = [self.trany(y) for y in Y]
         self.svg.draw_polygon(X1, Y1, fill=fill, stroke=colour, strokewidth=strokewidth, opacity=fill_opacity)
 
-    def draw_circle(self, x, y, r, fill="none", colour="black", strokewidth=1, fill_opacity=1,style=None):
+    def draw_circle(self, x, y, r, fill="none", colour="black", strokewidth=1, fill_opacity=1, style=None):
         strokewidth = strokewidth * self.nscale
         self.svg.draw_circ(self.tranx(x), self.trany(y), self.xscale * r, fill=fill, stroke=colour,
                            strokewidth=strokewidth, fill_opacity=fill_opacity, style=style)
@@ -801,10 +932,11 @@ class Graph:
     def draw_rect(self, x, y, width, height, fill, colour="black", strokewidth=1, opac=1, fill_opacity=1):
         strokewidth = strokewidth * self.nscale
         self.svg.draw_rect(self.tranx(x), self.trany(y), abs(self.xscale * (width)),
-                           self.yscale * height, fill, stroke=colour, strokewidth=strokewidth, opacity=opac,
+                           self.yscale * height, fill, stroke=colour, strokewidth=strokewidth, stroke_opacity=opac,
                            fill_opacity=fill_opacity)
-    def draw_inout_curve(x1,y1, x2, y2, in_angle=None, out_angle=None, fill="none", colour="black", strokewidth=1, fill_opacity=1):
 
+    def draw_inout_curve(x1, y1, x2, y2, in_angle=None, out_angle=None, fill="none", colour="black", strokewidth=1,
+                         fill_opacity=1):
 
         def draw_path(self, path, translate=True, colour="red", strokewidth=2, opacity=1, fill="none", fill_opacity=0):
             strokewidth = strokewidth * self.nscale
@@ -854,7 +986,6 @@ class Graph:
             self.svg.draw_path(path, colour=colour, strokewidth=strokewidth, opac=opacity, fill=fill,
                                fill_opacity=fill_opacity)
 
-
     def draw_line(self, x1, y1, x2, y2, marker="*", colour="black", strokewidth=1, opacity=1, cap="butt",
                   segments=20, style=None):
         strokewidth = strokewidth * self.nscale
@@ -884,7 +1015,7 @@ class Graph:
         self.__init__(self.width, self.height, self.xlim, self.ylim, self.name, origin=self.origin,
                       transform=self.transform)
 
-    def save(self, clear=False, export=None):
+    def save(self, clear=False, export=None, trim = False):
         self.svg.save()
 
         if clear:
@@ -892,6 +1023,8 @@ class Graph:
         if export is not None:
             name, extension = os.path.splitext(self.name)
             convert_image(self.name, f'{name}.{export}', modifier='-d 300')
+        if trim:
+            os.system(f'inkscape {self.name} --export-area-drawing --export-filename={self.name}')
 
     # def save(self, clear=False):
     #     if len(self.TexLoader) != 0:
@@ -923,7 +1056,6 @@ class Graph:
             webbrowser.get('chrome').open('file://' + os.getcwd() + "/" + self.name)
         else:
             print("OS error, your os is ", platform.system())
-
 
 # def f(x):
 #     return x
@@ -960,7 +1092,7 @@ class Graph:
 # # A.plot(f)
 # # A.plot(g)
 # # A.add_latex('$x_1$', 0, 0, background=False, colour='white', scale=4, centre_align=False,
-# #             box=True,boxcolour='white', boxwidth=2, opacity=1)
+# #             box=True,boxcolour='white', boxwidth=2, stroke_opacity=1)
 # #
 # # A.add_latex2('a', 0, 0, scale=6, rotation=0*np.pi/2, colour=[0,0,0])
 # #

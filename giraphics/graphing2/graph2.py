@@ -7,7 +7,7 @@ import numpy as np
 DEFAULTS = {
     'Background': {
         'colour': 'white',
-        'opacity': 'opacity',
+        'stroke_opacity': 'stroke_opacity',
     },
     'Origin': [0, 0],
     'Plots': [
@@ -16,7 +16,7 @@ DEFAULTS = {
     'Grid': {
         'presence': False,
         'colour': 'grey',
-        'opacity': .5,
+        'stroke_opacity': .5,
         'x-grid': None,
         'y-grid': None,
     },
@@ -49,7 +49,7 @@ t1 = {
     'X': [1],
     'Y': [2],
     'colour': 'black',
-    'opacity': 1,
+    'stroke_opacity': 1,
     'style': 'line',
     'label': '',
 }
@@ -68,10 +68,10 @@ class Chart:
 
     def set_background(self, colour='white', opacity=1):
         self.commands['Background']['colour'] = colour
-        self.commands['Background']['opacity'] = opacity
+        self.commands['Background']['stroke_opacity'] = opacity
 
     def plot(self, X=[], Y=[], colour='black', opacity=1, style='line', label='', marker=None, markerSize=1):
-        update = {'X': X, 'Y': Y, 'colour': colour, 'opacity': opacity, 'style': style, 'label': label,
+        update = {'X': X, 'Y': Y, 'colour': colour, 'stroke_opacity': opacity, 'style': style, 'label': label,
                   'marker': marker, 'markerSize': markerSize}
         self.commands['Plots'].append(update)
 
@@ -97,7 +97,7 @@ class Chart:
         self.commands['Grid']['x-grid'] = x_grid
         self.commands['Grid']['y-grid'] = y_grid
         self.commands['Grid']['colour'] = colour
-        self.commands['Grid']['opacity'] = opacity
+        self.commands['Grid']['stroke_opacity'] = opacity
 
     def complete(self):
         # Settings the limits
@@ -144,9 +144,9 @@ class Chart:
 
         # Plots
         for data in self.commands['Plots']:
-            f.plot_points(data['X'], data['Y'], colour=data['colour'])
+            f.plot(data['X'], data['Y'], colour=data['colour'])
             if data['marker'] != None:
-                f.scatter(data['X'], data['Y'], colour=data['colour'], opac=data['opacity'],
+                f.scatter(data['X'], data['Y'], colour=data['colour'], opacity=data['stroke_opacity'],
                           s=6 * data['markerSize'] / xlim)
 
         # Tile and labels

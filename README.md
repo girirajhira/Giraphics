@@ -7,7 +7,7 @@
 
 </p>
 
-Giraphics is graphing and animation library designed to fast and simple to use. The library is inspired by [3b1b]'s [manim] library, but built independently.
+Giraphics is graphing and animation library designed to fast and simple to use. The library is inspired by [3b1b]'s [manim] library.
 
 ## Features
 Giraphics offers a wide range of features to make your graphing and animation experience as smooth and easy as possible. Here are some of the highlights:
@@ -28,11 +28,42 @@ Basic graphing and plotting can be done without any other software, however, the
 * [ffmpeg]: Used to convert images into a video 
 * [tex2svg]: Used to render LaTex
 
-Individual packages can be installed for specific functionality, but installation of all packages is reccomended.
+Individual packages can be installed for specific functionality, but installation of all packages is recommended.
 ## Examples
-Here are some example with what can be made with the `Giraphics`
+Here are some examplse with what can be made with `Giraphics`
+<table padding="0" border="0">
+ <tr> 
+ <td>
+  <p align="center">
+  <img src="https://github.com/girirajhira/Giraphics/blob/2ee931665e40ac08abc7c3d5c1e786850b206071/Examples/TaylorSeriesSine.gif" width="405" title="Giraphics">
+</p>
+ </td>
+  <td>
+   <p align="center">
+  <img src="https://github.com/girirajhira/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/SquareTransform.gif" width="405" title="Giraphics">
+</p>
+  </td>
+ </tr>
+  <tr> 
+ <td>
+     <p align="center">
+  <img src="https://github.com/girirajhira/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/LinTrans02.gif" width="405" title="Giraphics">
+</p>
+ </td>
+  <td>
+  <p align="center">
+  <img src="https://github.com/girirajhira/Giraphics/blob/master/res/DoublePendulum.gif" width="405" title="Giraphics">
+</p>
+  </td>
+ </tr>
+ </table>
+
+
 
 ### Animations
+
+
+
 
 <table padding="0" border="0">
  <tr> 
@@ -84,11 +115,15 @@ The red curve represents numerical solution of Schroedingers equation, while the
 
  ![QCO](https://github.com/girirajhira/Giraphics/blob/master/res/lorentz.gif?raw=true) -->
 
+
+
+
 ## Tutorial 
 You can find the tutorial [here]
 
-## Contribution
-You can make pull requests.
+[//]: # (## Contribution)
+
+[//]: # (You can make pull requests.)
 
 [//]: # (## Issues )
 
