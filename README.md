@@ -31,34 +31,6 @@ Basic graphing and plotting can be done without any other software, however, the
 Individual packages can be installed for specific functionality, but installation of all packages is recommended.
 ## Examples
 Here are some examplse with what can be made with `Giraphics`
-<table padding="0" border="0">
- <tr> 
- <td>
-  <p align="center">
-  <img src="https://github.com/girirajhira/Giraphics/blob/2ee931665e40ac08abc7c3d5c1e786850b206071/Examples/TaylorSeriesSine.gif" width="405" title="Giraphics">
-</p>
- </td>
-  <td>
-   <p align="center">
-  <img src="https://github.com/girirajhira/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/SquareTransform.gif" width="405" title="Giraphics">
-</p>
-  </td>
- </tr>
-  <tr> 
- <td>
-     <p align="center">
-  <img src="https://github.com/girirajhira/Giraphics/blob/3954109a0ce0ad0f6c1dd7b809207faeb3f10d79/Examples/LinTrans02.gif" width="405" title="Giraphics">
-</p>
- </td>
-  <td>
-  <p align="center">
-  <img src="https://github.com/girirajhira/Giraphics/blob/master/res/DoublePendulum.gif" width="405" title="Giraphics">
-</p>
-  </td>
- </tr>
- </table>
-
-
 
 ### Animations
 
