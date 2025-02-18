@@ -30,11 +30,37 @@ Basic graphing and plotting can be done without any other software, however, the
 
 Individual packages can be installed for specific functionality, but installation of all packages is recommended.
 ## Examples
-Here are some examplse with what can be made with `Giraphics`
+Here are some examples of `Giraphics` in action
+
+<table padding="0" border="0">
+ <tr> 
+ <td>
+  <p align="center">
+  <img src="https://raw.githubusercontent.com/girirajhira/Giraphics/refs/heads/master/examples/scatter_plot_example.svg" width="405" title="Giraphics">
+</p>
+ </td>
+  <td>
+   <p align="center">
+  <img src="https://raw.githubusercontent.com/girirajhira/Giraphics/refs/heads/master/examples/vectorfield_example.svg" width="405" title="Giraphics">
+</p>
+  </td>
+ </tr>
+  <tr> 
+ <td>
+     <p align="center">
+  <img src="https://raw.githubusercontent.com/girirajhira/Giraphics/refs/heads/master/examples_uses/feynman_diagram.svg" width="405" title="Giraphics">
+</p>
+ </td>
+  <td>
+  <p align="center">
+  <img src="https://raw.githubusercontent.com/girirajhira/Giraphics/refs/heads/master/examples_uses/feynman_diagram_direct.svg" width="405" title="Giraphics">
+</p>
+  </td>
+ </tr>
+ </table>
+
 
 ### Animations
-
-
 
 
 <table padding="0" border="0">
