@@ -391,7 +391,7 @@ class Graph:
         scale = scale * self.nscale
         self.svg.draw_arrow(x1, y1, x2, y2, scale, stroke=colour, strokewidth=strokewidth)
 
-    def plot(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
+    def plot_func(self, func, colour="red", strokewidth=1.5, opac=1, n=500):
         """
         Graphs the given function
         :param func: function
@@ -477,7 +477,7 @@ class Graph:
         Y = [self.trany(func(i * eps - self.origin[0])) for i in range(-n, n + 1)]
         self.svg.draw_polyline(X, Y, colour=colour, strokewidth=strokewidth, opac=opac)
 
-    def plot_points(self, X, Y, colour="red", strokewidth=1, opac=1, style='none', fill='none', fill_opacity=1):
+    def plot(self, X, Y, colour="red", strokewidth=1, opac=1, style='none', fill='none', fill_opacity=1):
         """
         Graphs the inputted points
         :param X:
@@ -1024,7 +1024,7 @@ class Graph:
             name, extension = os.path.splitext(self.name)
             convert_image(self.name, f'{name}.{export}', modifier='-d 300')
         if trim:
-            os.system(f'inkscape {self.name} --export-area-drawing --export-filename={self.name}')
+            os.system(f'inkscape {self.name} --export-plain-svg --export-filename={self.name}')
 
     # def save(self, clear=False):
     #     if len(self.TexLoader) != 0:

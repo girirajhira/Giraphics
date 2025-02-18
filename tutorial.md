@@ -64,7 +64,7 @@ g.display()
 
 The `FancyGraphs` class is an extension of the `Graph` class that adds automated special plots
 like vectorfields, linear transformations, complex plots, density plots and histograms.
-### VectorField
+### VectorFieldFunction
 
 ### ComplexPlotScatter
 ### ComplexPlot

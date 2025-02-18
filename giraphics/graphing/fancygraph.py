@@ -81,10 +81,10 @@ class FancyGraph(Graph):
                         self.svg.draw_arrow(self.tranx(x), self.trany(y), x2, y2, stroke=cl((norm(f)) / M),
                                             strokewidth=strokewidth, scale=arrow_scale)
 
-    def VectorField(self, func, gridint=None, scale=0.08, strokewidth=1.25, stroke="white", arrow=True,
-                    constColour=False,
-                    initColour=[0, 130, 50], endColour=[2, 66, 130],
-                    constLength=False, tail_length=1, arrow_scale=1, grid_multiplier=1):
+    def VectorFieldFunction(self, func, gridint=None, scale=0.08, strokewidth=1.25, stroke="white", arrow=True,
+                            constColour=False,
+                            initColour=[0, 130, 50], endColour=[2, 66, 130],
+                            constLength=False, tail_length=1, arrow_scale=1, grid_multiplier=1):
         """
         :type gridint: int
         """
@@ -145,7 +145,73 @@ class FancyGraph(Graph):
                         self.svg.draw_arrow(self.tranx(x), self.trany(y), x2, y2, stroke=cl((norm(f)) / M),
                                             strokewidth=strokewidth, scale=arrow_scale)
 
-    def vectorfield(self, X, Y, VX, VY, fixed_colour=False, fixed_length=True, scale=.1, colour='red'):
+    def VectorField(self, X,Y, U,V, gridint=None, scale=0.08, strokewidth=1.25, stroke="white", arrow=True,
+                            constColour=False,
+                            initColour=[0, 130, 50], endColour=[2, 66, 130],
+                            constLength=False, tail_length=1, arrow_scale=1, grid_multiplier=1):
+        """
+        :type gridint: int
+        """
+
+        # if gridint is None:
+        #     gridint = []
+        #     if self.xlim < 5:
+        #         gridint.append(round(2 * self.xlim * grid_multiplier))
+        #     else:
+        #         gridint.append(2 * self.xlim)
+        #     if self.ylim < 5:
+        #         gridint.append(round(2 * self.ylim * grid_multiplier))
+        #     else:
+        #         gridint.append(2 * self.ylim)
+
+        nx, ny = X.shape
+        epsx = self.xlim / nx
+        epsy = self.ylim / ny
+
+        fl = 1
+        if not constLength:
+            fl = 0
+        if constColour:
+            if not arrow:
+                arrow_scale = 0
+
+            for i in range(0, nx):
+                for j in range(0,ny):
+                    x, y = X[i,j], Y[i,j]
+                    fx, fy = U[i,j], V[i,j]
+                    x2 = self.tranx(x + (fx) * tail_length)
+                    y2 = self.trany(y + (fy) * tail_length)
+                    if abs(fx) <= 0.05 and abs(fy) <= 0.05:
+                        self.svg.draw_arrow(self.tranx(x), self.trany(y), x2, y2, stroke=stroke,
+                                            strokewidth=strokewidth, scale=arrow_scale)
+
+        else:
+            cl = linear(initColour, endColour)
+            if not arrow:
+                arrow_scale = 0
+            L = []
+            for i in range(0, nx):
+                for j in range(0, ny):
+                    x, y = X[i,j], Y[i,j]
+                    fx, fy = U[i,j], V[i,j]
+                    L.append(norm([fx, fy]))
+            M = max(L)
+            for i in range(0, nx):
+                for j in range(0,ny):
+                    x, y = X[i,j], Y[i,j]
+                    fx, fy = U[i,j], V[i,j]
+                    fn = norm([fx,fy]) * fl * nx / (2 * self.xlim) if norm([fx,fy]) * fl != 0 else 1
+                    x2 = self.tranx(x + (fx) * tail_length / fn)
+                    y2 = self.trany(y + (fy) * tail_length / fn)
+                    if fx == 0 and fy == 0:
+                        pass
+                        # self.svg.draw_circ(self.tranx(x), self.trany(y), scale * 70, fill=vec_to_hex(endColour),
+                        #                    strokewidth=0)
+                    else:
+                        self.svg.draw_arrow(self.tranx(x), self.trany(y), x2, y2, stroke=cl((norm([fx,fy])) / M),
+                                            strokewidth=strokewidth, scale=arrow_scale)
+
+    def vectorfield(self, X, Y, VX, VY, fixed_colour=False, fixed_length=True, scale=.1, colour='red', strokewidth=1,):
         X = np.array(X).flatten()
         Y = np.array(Y).flatten()
         VX = np.array(VX).flatten()
@@ -164,18 +230,18 @@ class FancyGraph(Graph):
                 y = Y[j]
                 vx, vy = VX[i], VY[j]
                 if fixed_length:
-                    theta = np.atan(vy, vx)
+                    theta = np.arctan2(vy, vx)
                     xf = x + np.cos(theta) * scale
                     yf = y + np.sin(theta) * scale
                     if fixed_colour:
                         self.svg.draw_arrow(self.tranx(x), self.trany(y),
                                             self.tranx(xf), self.trany(yf),
-                                            strokewidth=2, stroke=c[i])
+                                            strokewidth=strokewidth, stroke=cr[i])
 
                     else:
                         self.svg.draw_arrow(self.tranx(x), self.trany(y),
                                             self.tranx(xf), self.trany(yf),
-                                            strokewidth=2, stroke=c[i])
+                                            strokewidth=strokewidth, stroke=cr[i])
                 else:
                     xf = x + vx * scale
                     yf = y + vy * scale
@@ -306,9 +372,9 @@ class FancyGraph(Graph):
         absx = round(self.tranx(position[0]) - width1 / 2, 2)
         absy = round(self.trany(position[1]) - height1 / 2, 2)
 
-        # if border:
-        #     self.draw_rect(position[0], position[1], width, height, fill='None', colour=bcol, strokewidth=bstroke * 2,
-        #                    stroke_opacity=bopacity)
+        if border:
+            self.draw_rect(position[0], position[1], width, height, fill='None', colour=bcol, strokewidth=bstroke * 2,
+                           opac=bopacity)
 
         if magnifier:
             self.draw_rect(magnifier_pos[0], magnifier_pos[1], magnifier_dims[0], magnifier_dims[1],
@@ -424,8 +490,8 @@ class FancyGraph(Graph):
 #
 
 # A = FancyGraph(1400,1400,5,5,"Dipole.svg")
-# #A.VectorField(func, gridint=5,  arrow_scale=2, stroke_width=2, stroke="white", arrow = True, constcolour=False,constLength=True)
-# A.VectorField(func, gridint=25,  arrow_scale=1.5, tail_length=0.5, arrow = True, constLength=True, initColour=hex_to_vec('#000099'), endColour=hex_to_vec('#ff99cc'))
+# #A.VectorFieldFunction(func, gridint=5,  arrow_scale=2, stroke_width=2, stroke="white", arrow = True, constcolour=False,constLength=True)
+# A.VectorFieldFunction(func, gridint=25,  arrow_scale=1.5, tail_length=0.5, arrow = True, constLength=True, initColour=hex_to_vec('#000099'), endColour=hex_to_vec('#ff99cc'))
 # A.save()
 
 # y = np.array([-2,3,2,3,1,10,-4, 3,-3,1,2, 1, 13, 14])
@@ -468,7 +534,7 @@ class FancyGraph(Graph):
 # A.insets[0].plot(math.sin)
 # A.add_inset(3,3,5,5, position=[3,3], magnifier=False)
 # A.insets[1].bg()
-# A.insets[1].VectorField(vecfield, scale=.5)
+# A.insets[1].VectorFieldFunction(vecfield, scale=.5)
 # A.save()
 # A.display()
 

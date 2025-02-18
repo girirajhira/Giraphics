@@ -101,7 +101,7 @@ class Animator:
             if grid:
                 G.grid(colour=grid_colour)
             for i in range(len(func)):
-                G.VectorField(func[i], strokewidth=strokewidths[i], stroke=colours[i], gridint=grindint, scale=scale,constcolour=False)
+                G.VectorFieldFunction(func[i], strokewidth=strokewidths[i], stroke=colours[i], gridint=grindint, scale=scale, constcolour=False)
             G.save()
             if display:
                 G.display()
