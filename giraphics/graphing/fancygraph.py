@@ -329,7 +329,9 @@ class FancyGraph(Graph):
                                cl((field[k][j] - min) / (max - min)), strokewidth=0)
                 # self.text(j*self.xlim/xres, k*self.ylim/yres, str(round(j*self.xlim/xres,1)) +"," +str(round(k*self.ylim/yres,1)) , colour="red",fontsize=1)
 
-    def DenistyPlot(self, field, initColour=[10, 40, 30], endColour=[100, 240, 20], strokewidth=0):
+    def DenistyPlot(self, field, initColour=[230, 20, 60], endColour=[100, 240, 230], strokewidth=0, interp = False):
+        if interp:
+            field = np.inter
         # Do simultaneous
         # Edge Issue
         p1, p2 = field.shape
@@ -450,6 +452,90 @@ class FancyGraph(Graph):
         self.svg.draw_arrow(self.tranx(V2[2][0]), self.trany(V2[2][1]), self.tranx(V1[2][0]), self.trany(V1[2][1]),
                             stroke=colour)
         self.text((V1[2][0]), (V1[2][1]), 'z', colour='black')
+
+    def plot_surface(self, X, Y, Z,R = np.eye(3), color = 'Blue', cmap= None, cmesh=None, strokewidth =.05,
+                     strokecolor="white", strokeopacity=1, axes=False, box = False):
+        nx, ny = Z.shape
+        nf = (nx - 1) * (ny - 1)  # number of faces
+        # faces_array = np.zeros((nx - 1, ny - 1, 4, 3))
+
+
+        points = np.stack((X, Y, Z), axis=-1)
+
+        # Get each of the 4 corners of the quads using slicing
+        p0 = points[:-1, :-1]  # top-left
+        p1 = points[1:, :-1]  # bottom-left
+        p2 = points[1:, 1:]  # bottom-right
+        p3 = points[:-1, 1:]  # top-right
+
+        # Stack them into the faces_array: shape (nx-1, ny-1, 4, 3)
+        faces_array = np.stack((p0, p1, p2, p3), axis=2)
+        # Convert faces to list for easier use
+        faces = np.reshape(faces_array, (nf, 4, 3))
+
+        # Centre of the face
+        face_centres = np.mean(faces, axis=1)
+
+        maxz, minz = np.max(face_centres[:, -1]), np.min(face_centres[:, -1])
+        zinterp = (face_centres[:, -1] - minz) / (maxz - minz)
+
+        # Rotate Faces
+        faces = faces @ R.T
+
+        # get draw order, after rotation
+        face_centres = np.mean(faces, axis=1)
+        view_pos = [0, 0, 1]
+        light_pos = np.array([0, 2, 10])
+
+        view_pos = np.sqrt(2 ** 2 + 2 ** 2 + 1 ** 2) * ([0, 0, 1] @ np.eye(3))
+        dist_cam = np.sum((view_pos - face_centres) ** 2, axis=1)
+
+        # Reorder according to distance from the camera
+        order = np.argsort(dist_cam)[::-1]
+        faces = faces[order]
+        zinterp = zinterp[order]
+        color_range = np.zeros_like(zinterp)
+
+
+        # Compute edge vectors
+        v1 = faces[:, 0, :] - faces[:, 1, :]
+        v2 = faces[:, 0, :] - faces[:, 2, :]
+
+        # Compute cross product using np.cross (broadcasted)
+        face_normal = np.cross(v1, v2)
+
+        face_reflectance = (face_normal @ light_pos.T)
+
+        maxr, minr = np.max(face_reflectance), np.min(face_reflectance)
+        normalised_reflectance = (face_reflectance - minr) / (maxr - minr)
+        if cmap is None:
+            cmap = generate_cmap([ColourObj('#0000FF'), ColourObj('#0000FF')])
+
+        if cmesh is None:
+            cscale, opacscale = cmap(zinterp)
+        else:
+            cscale, opacscale= cmap(cmesh)
+
+        # Plot the faces
+        for i in range(nf):
+            self.area(faces[i, :, 0], faces[i, :, 1],
+                      fill_colour=cscale[i], opac=opacscale[i], strokewidth=strokewidth, colour=strokecolor)
+
+        if axes:
+            centre = [X[0,0], Y[0,0],  Z[0,0]]@R.T
+            xaxis =  [X[0,-1], Y[0,0], Z[0,0]]@R.T
+            yaxis =  [X[0,0], Y[-1,0], Z[0,0]]@R.T
+            zaxis =  [X[0,0], Y[0,0],  maxz]@R.T
+            self.draw_arrow(centre[0], centre[1], xaxis[0],xaxis[1], colour='black', strokewidth=0.5, scale=.2)
+            self.draw_arrow(centre[0], centre[1], yaxis[0],yaxis[1], colour='black', strokewidth=0.5, scale=.2)
+            self.draw_arrow(centre[0], centre[1], zaxis[0],zaxis[1], colour='black', strokewidth=0.5, scale=.2)
+        if box:
+            b1 = [X[0,0], Y[0,0],  Z[0,0]]@R.T
+            b2 = [X[0,-1], Y[0,0], Z[0,0]]@R.T
+            b3 = [X[0,0], Y[-1,0],  Z[0,0]]@R.T
+            b4 = [X[0,-1], Y[0,0], Z[0,0]]@R.T
+            b5 = [X[0,0], Y[0,0],  Z[0,0]]@R.T
+            b6 = [X[0,-1], Y[0,0], Z[0,0]]@R.T
 
     def save(self, clear=False):
         if len(self.insets) != 0:
