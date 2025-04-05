@@ -3,6 +3,7 @@ import numpy as np
 
 def vec_to_hex(x):
     h = "#"
+    x = np.round(x,2)
     for i in x:
         if i > 255 or i < 0:
             print("Invalid: values must be positive and less than 256", i)
@@ -62,26 +63,67 @@ class Colours:
         pass
 
 
-class colorObj:
+class ColourObj:
+    '''
+    Colour object useful for a bunch of things
+    '''
     def __init__(self, colour):
-        self.opacity = 1
-        if isinstance(colour, str):  # if hexadecimal code
-            if colour[0] == '#':
+        self.opacity = 1.0  # default opacity
+
+        if isinstance(colour, str):  # Hexadecimal color code
+            if colour.startswith('#') and len(colour) == 7:
                 self.colour = hex_to_vec(colour)
+                self.hex = colour
             else:
-                pass
-        elif isinstance(colour, list) or isinstance(colour, np.ndarray):
-            if len(colour) == 3:
-                self.colour = np.array(colour)
+                raise ValueError("Invalid hex color format.")
+
+        elif isinstance(colour, (list, np.ndarray)):
+            colour = np.array(colour)
+            if colour.size == 3:
+                self.colour = colour
+                self.hex = vec_to_hex(colour)
+            elif colour.size == 4:
+                self.colour = colour[:3]
+                self.opacity = colour[3]
+                self.hex = vec_to_hex(self.colour)
+
             else:
-                self.colour = np.array(colour[0:4])
-                self.opacity = colour[-1]
+                raise ValueError("List or array must have 3 (RGB) or 4 (RGBA) elements.")
+
+        else:
+            raise TypeError("Invalid input type for colour.")
+
+
+
+def generate_cmap(color_list, ratios=None):
+    colors = np.array([c.colour for c in color_list])
+    opacities = np.array([c.opacity for c in color_list])
+
+    if ratios is None:
+        ratios = np.linspace(0, 1, len(colors))
+    else:
+        ratios = np.array(ratios)
+        ratios = (ratios - ratios[0]) / (ratios[-1] - ratios[0])  # normalize ratios
+    def cmap(t):
+        t = np.clip(t, 0, 1)
+        interpolated_colors = []
+        interpolated_opacities = []
+        for val in t:
+            idx = np.searchsorted(ratios, val, side='right') - 1
+            idx = np.clip(idx, 0, len(colors) - 2)
+            frac = (val - ratios[idx]) / (ratios[idx + 1] - ratios[idx])
+            interp_color = (1 - frac) * colors[idx] + frac * colors[idx + 1]
+            interp_opacity = (1 - frac) * opacities[idx] + frac * opacities[idx + 1]
+            interpolated_colors.append(vec_to_hex(interp_color))
+            interpolated_opacities.append(interp_opacity)
+        return interpolated_colors, interpolated_opacities
+    return cmap
 
     def __add__(self, other):
-        if isinstance(other, colorObj):
-            return colorObj(self.colour + other.colour)
+        if isinstance(other, ColourObj):
+            return ColourObj(self.colour + other.colour)
         else:
-            return colorObj(self.colour + other)
+            return ColourObj(self.colour + other)
 
     def __rmul__(self, other):
         self.colour *= other
@@ -108,13 +150,16 @@ Monotones = Colours()
 Reds.salmon = '#FA8072'
 Blues.teal = '#008080'
 Blues.aquamarine = '#7FFFD4'
-Greens.pine = '#01796f'
+Blues.royal = '#4169E1'
+Blues.stone = '#336B87'
+
 Reds.maroon = '#c32148'
 Reds.coral = '#FF7F50'
-Blues.royal = '#4169E1'
-Monotones.silver = '#C0C0C0'
-Greens.spring = '#89DA59'
-Blues.stone = '#336B87'
-Greens.seafoam = '#C4DFE6'
 Reds.crimson = '#8D230F'
+
+Greens.spring = '#89DA59'
+Greens.pine = '#01796f'
+Greens.seafoam = '#C4DFE6'
 Greens.olive = '#8EBA43'
+
+Monotones.silver = '#C0C0C0'
