@@ -29,7 +29,7 @@ Basic graphing and plotting can be done without any other software, however, the
 * [tex2svg]: Used to render LaTex
 
 Individual packages can be installed for specific functionality, but installation of all packages is recommended.
-## Examples
+## Examples of 2D graphics
 Here are some examples of `Giraphics` in action
 
 <table padding="0" border="0">
@@ -59,6 +59,16 @@ Here are some examples of `Giraphics` in action
  </tr>
  </table>
 
+# Examples of 3D graphics
+<table padding="0" border="0">
+ <tr> 
+ <td>
+  <p align="center">
+  <img src="examples/surface3d_example.svg" width="405" title="Giraphics">
+</p>
+ </td>
+ </tr>
+ </table>
 
 ### Animations
 
