@@ -8,7 +8,7 @@ from giraphics.utilities.convert import *
 from giraphics.utilities.latex_svg_decoder import *
 from IPython.display import SVG as IPSVG
 from IPython.display import Image
-from latex2mathml.converter import convert
+# from latex2mathml.converter import convert
 import numpy as np
 from math import sqrt
 import webbrowser
@@ -859,30 +859,9 @@ class Graph:
         self.svg.canvas += expr_code
         self.svg.canvas += '</g>\n'
 
-    def add_mathml(self, expr, x, y, fontsize=10, colour='blue', rotate=0, borderwidth=0):
-        mathml = convert(expr)
-        '''
-        Need to recentre etc,
-        '''
-        style_dict = {
-            'color': colour,
-            'font-size': f'{fontsize}px',
-            # 'background-color': 'brown',
-            'border': f'solid black {borderwidth}px',
-            'transform-origin': 'center',
-            # 'transform': f'rotate({rotate}rad)',
 
-        }
-
-        self.svg.canvas += css_style(f'mathml{self.num_style_tags}', style_dict)
-
-        self.svg.canvas += f'\n<foreignObject  width="100%" height="100%" transform="translate({self.tranx(x)} {self.trany(y)})" class="mathml{self.num_style_tags}">\n'
-        self.svg.canvas += mathml + '\n'
-        self.svg.canvas += '</foreignObject> \n'
-        self.num_style_tags += 1
 
     # Constructions
-
     def draw_arrow(self, x1, y1, x2, y2, scale=1, colour="black", strokewidth=1):
         strokewidth = strokewidth * self.nscale
         scale = scale * self.nscale

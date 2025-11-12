@@ -1,0 +1,9 @@
+giraphics.egg-info
+*.False
+build
+*.xml
+*.tex
+*.aux
+*.log
+*.pdf
+*.patch

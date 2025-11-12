@@ -24,7 +24,7 @@ G.grid2()
 G.plot_coil2(t, t, period=40,amplitude=.1,colour='green', strokewidth=.8)
 
 # G.plot_coil(t, .1*t*t, period=30,amplitude=.1,colour='purple', strokewidth=.8)
-# G.add_latex('1', 0,0)
+G.add_latex('1', 0,0)
 # G.area(t, 2*np.sin(t)/(1 + t*t), fill_opacity=.2, fill_colour='red')
 G.save()
 # G.display()

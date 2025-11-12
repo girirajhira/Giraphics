@@ -8,9 +8,9 @@ brew install imagemagick
 
 echo "Installing virtualenv"
 pip install virtualenv
-virtualenv myenv
-source myenv/bin/activate
+virtualenv girenv
+source girenv/bin/activate
 
 echo "Installing giraphics locally"
-pip install -e .
+pip install .
 echo "Installation complete"

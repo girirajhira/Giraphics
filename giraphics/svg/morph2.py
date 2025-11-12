@@ -6,7 +6,7 @@ from math import floor
 import re
 # from svgpath2mpl import parse_path
 from svg.path import parse_path, Line, Arc, CubicBezier, QuadraticBezier, Move, Path
-from giraphics.utilities.colour import colorObj
+# from giraphics.utilities.colour import
 
 test_code = ''' <path d="M 10 315
            L 110 215

@@ -537,6 +537,54 @@ class FancyGraph(Graph):
             b5 = [X[0,0], Y[0,0],  Z[0,0]]@R.T
             b6 = [X[0,-1], Y[0,0], Z[0,0]]@R.T
 
+    def axes3d(self, rotator = np.eye(3), colour='white', strokewidth=1):
+        vecspos = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]) * self.xlim
+        vecsneg = -np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]) * self.xlim
+        V1 = np.matmul(rotator, vecspos)
+        V2 = np.matmul(rotator, vecsneg)
+        self.svg.draw_arrow(self.tranx(V2[0][0]), self.trany(V2[0][1]), self.tranx(V1[0][0]), self.trany(V1[0][1]),
+                            stroke=colour, strokewidth=strokewidth)
+        self.svg.draw_arrow(self.tranx(V2[1][0]), self.trany(V2[1][1]), self.tranx(V1[1][0]), self.trany(V1[1][1]),
+                            stroke=colour, strokewidth=strokewidth)
+        self.svg.draw_arrow(self.tranx(V2[2][0]), self.trany(V2[2][1]), self.tranx(V1[2][0]), self.trany(V1[2][1]),
+                            stroke=colour, strokewidth=strokewidth)
+
+    def background3d(self, xax, yax, zax,R = np.eye(3), colour = 'Blue', opacity =1,  cmap= None, cmesh=None, strokewidth =.05,
+                    strokecolor="white", strokeopacity=1,):
+
+        ####
+        # Create Panes
+        paneXY = [[xax[0], yax[0], zax[0]],
+                  [xax[-1], yax[0], zax[0]],
+                  [xax[-1], yax[-1], zax[0]],
+                  [xax[0], yax[-1], zax[0]]
+                  ]
+        paneYZ = [[xax[0], yax[0], zax[0]],
+                  [xax[0], yax[-1], zax[0]],
+                  [xax[0], yax[-1], zax[-1]],
+                  [xax[0], yax[0], zax[-1]]
+                  ]
+
+        paneZX = [[xax[0], yax[0], zax[0]],
+                  [xax[0], yax[0], zax[-1]],
+                  [xax[-1], yax[0], zax[-1]],
+                  [xax[-1], yax[0], zax[0]]
+                  ]
+
+        paneXY = np.array(paneXY)@R.T
+        paneYZ = np.array(paneYZ)@R.T
+        paneZX = np.array(paneZX)@R.T
+
+        self.area(paneXY[:, 0], paneXY[:, 1],
+                  fill_colour=colour, opac=opacity, strokewidth=strokewidth,)
+
+
+        self.area(paneYZ[:, 0], paneYZ[:, 1],
+                  fill_colour=colour, opac=opacity, strokewidth=strokewidth,)
+
+        self.area(paneZX[:, 0], paneZX[:, 1],
+              fill_colour=colour, opac=opacity, strokewidth=strokewidth, )
+
     def save(self, clear=False):
         if len(self.insets) != 0:
             for widg in self.insets:
