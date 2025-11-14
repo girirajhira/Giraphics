@@ -27,7 +27,7 @@ import numpy as np
 # class subobjects():
 #     def __init__(self, *arg, **kwargs):
 #         for k in kwargs
-from sample_projects.Pendulum.pendulum import x1
+# from sample_projects.Pendulum.pendulum import x1
 
 
 def translate(array, change, degrees=[]):
@@ -84,12 +84,12 @@ class DObject:
                 pass
 
 
-
-
-Pendulum = DObject('')
-Pendulum.line(0,0, 2, 2, 0)
-Pendulum.
-
+#
+#
+# Pendulum = DObject('')
+# Pendulum.line(0,0, 2, 2, 0)
+# Pendulum.
+#
 
 class Studio:
     def __init__(self):

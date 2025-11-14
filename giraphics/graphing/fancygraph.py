@@ -436,25 +436,38 @@ class FancyGraph(Graph):
                 P = np.matmul(rotator, np.column_stack((X, Y, Z)).T)
                 self.plot(P[0], P[1], colour=colour)
 
-    def axes3d(self, rotator, colour='white'):
-        # (3 x 3) @ (3, n)
-        vecspos = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]) * self.xlim
-        vecsneg = -np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]) * self.xlim
+    def axes3d(self, R, colour='white', zlim = None):
+        if zlim is None:
+            zlim = (self.xlim**2 + self.ylim**2)**.5
+        xpos = np.array([[0,0,0], [self.xlim, 0, 0]])
+        xneg = -xpos
+        ypos = np.array([[0, 0, 0], [0, self.ylim, 0, 0]])
+        yneg = -ypos
+        zpos = np.array([[0, 0, 0], [0, 0, zlim]])
+        zneg = -zpos
 
-        V1 = np.matmul(rotator, vecspos.T)
-        V2 = np.matmul(rotator, vecsneg.T)
-        self.svg.draw_arrow(self.tranx(V2[0][0]), self.trany(V2[0][1]), self.tranx(V1[0][0]), self.trany(V1[0][1]),
+        zpos = zpos@R.T
+        xpos = xpos@R.T
+        ypos = ypos@R.T
+        zneg = zneg@R.T
+        xneg = xneg@R.T
+        yneg = yneg@R.T
+        self.svg.draw_arrow(self.tranx(xpos[0][0]), self.trany(xpos[0][1]), self.tranx(xpos[1][0]), self.trany(xpos[1][1]),
                             stroke=colour)
-        self.text((V1[0][0]), (V1[0][1]), 'x', colour='black')
-        self.svg.draw_arrow(self.tranx(V2[1][0]), self.trany(V2[1][1]), self.tranx(V1[1][0]), self.trany(V1[1][1]),
+        self.svg.draw_arrow(self.tranx(ypos[0][0]), self.trany(ypos[0][1]), self.tranx(ypos[1][0]), self.trany(ypos[1][1]),
                             stroke=colour)
-        self.text((V1[1][0]), (V1[1][1]), 'y', colour='black')
-        self.svg.draw_arrow(self.tranx(V2[2][0]), self.trany(V2[2][1]), self.tranx(V1[2][0]), self.trany(V1[2][1]),
+        self.svg.draw_arrow(self.tranx(zpos[0][0]), self.trany(zpos[0][1]), self.tranx(zpos[1][0]), self.trany(pos[1][1]),
                             stroke=colour)
-        self.text((V1[2][0]), (V1[2][1]), 'z', colour='black')
+        # self.text((V1[0][0]), (V1[0][1]), 'x', colour='black')
+        # self.svg.draw_arrow(self.tranx(0), self.trany(0), self.tranx(V1[1][0]), self.trany(V1[1][1]),
+        #                     stroke=colour)
+        # self.text((V1[1][0]), (V1[1][1]), 'y', colour='black')
+        # self.svg.draw_arrow(self.tranx(0), self.trany(0), self.tranx(V1[2][0]), self.trany(V1[2][1]),
+        #                     stroke=colour)
+        # self.text((V1[2][0]), (V1[2][1]), 'z', colour='black')
 
     def plot_surface(self, X, Y, Z,R = np.eye(3), color = 'Blue', cmap= None, cmesh=None, strokewidth =.05,
-                     strokecolor="white", strokeopacity=1, axes=False, box = False):
+                     strokecolor="white", strokeopacity=1, axes=False, box = False, pane_colour='#555555'):
         nx, ny = Z.shape
         nf = (nx - 1) * (ny - 1)  # number of faces
         # faces_array = np.zeros((nx - 1, ny - 1, 4, 3))
@@ -516,39 +529,96 @@ class FancyGraph(Graph):
         else:
             cscale, opacscale= cmap(cmesh)
 
-        # Plot the faces
-        for i in range(nf):
-            self.area(faces[i, :, 0], faces[i, :, 1],
-                      fill_colour=cscale[i], opac=opacscale[i], strokewidth=strokewidth, colour=strokecolor)
 
         if axes:
             centre = [X[0,0], Y[0,0],  Z[0,0]]@R.T
             xaxis =  [X[0,-1], Y[0,0], Z[0,0]]@R.T
             yaxis =  [X[0,0], Y[-1,0], Z[0,0]]@R.T
             zaxis =  [X[0,0], Y[0,0],  maxz]@R.T
-            self.draw_arrow(centre[0], centre[1], xaxis[0],xaxis[1], colour='black', strokewidth=0.5, scale=.2)
-            self.draw_arrow(centre[0], centre[1], yaxis[0],yaxis[1], colour='black', strokewidth=0.5, scale=.2)
-            self.draw_arrow(centre[0], centre[1], zaxis[0],zaxis[1], colour='black', strokewidth=0.5, scale=.2)
+            self.draw_arrow(centre[0], centre[1], xaxis[0],xaxis[1], colour='white', strokewidth=0.5, scale=.2)
+            self.draw_arrow(centre[0], centre[1], yaxis[0],yaxis[1], colour='white', strokewidth=0.5, scale=.2)
+            self.draw_arrow(centre[0], centre[1], zaxis[0],zaxis[1], colour='white', strokewidth=0.5, scale=.2)
         if box:
-            b1 = [X[0,0], Y[0,0],  Z[0,0]]@R.T
-            b2 = [X[0,-1], Y[0,0], Z[0,0]]@R.T
-            b3 = [X[0,0], Y[-1,0],  Z[0,0]]@R.T
-            b4 = [X[0,-1], Y[0,0], Z[0,0]]@R.T
-            b5 = [X[0,0], Y[0,0],  Z[0,0]]@R.T
-            b6 = [X[0,-1], Y[0,0], Z[0,0]]@R.T
+            # Create Panes
+            xax = [X[0,0], X[0,-1]]
+            yax = [Y[0,0], Y[-1,0]]
+            zax = [np.min(Z[:]), np.max(Z[:])]
 
-    def axes3d(self, rotator = np.eye(3), colour='white', strokewidth=1):
-        vecspos = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]) * self.xlim
-        vecsneg = -np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]) * self.xlim
-        V1 = np.matmul(rotator, vecspos)
-        V2 = np.matmul(rotator, vecsneg)
-        self.svg.draw_arrow(self.tranx(V2[0][0]), self.trany(V2[0][1]), self.tranx(V1[0][0]), self.trany(V1[0][1]),
-                            stroke=colour, strokewidth=strokewidth)
-        self.svg.draw_arrow(self.tranx(V2[1][0]), self.trany(V2[1][1]), self.tranx(V1[1][0]), self.trany(V1[1][1]),
-                            stroke=colour, strokewidth=strokewidth)
-        self.svg.draw_arrow(self.tranx(V2[2][0]), self.trany(V2[2][1]), self.tranx(V1[2][0]), self.trany(V1[2][1]),
-                            stroke=colour, strokewidth=strokewidth)
+            paneXY = [[xax[0], yax[0], zax[0]],
+                      [xax[-1], yax[0], zax[0]],
+                      [xax[-1], yax[-1], zax[0]],
+                      [xax[0], yax[-1], zax[0]]
+                      ]
+            paneYZ = [[xax[0], yax[0], zax[0]],
+                      [xax[0], yax[-1], zax[0]],
+                      [xax[0], yax[-1], zax[-1]],
+                      [xax[0], yax[0], zax[-1]]
+                      ]
 
+            paneZX = [[xax[0], yax[0], zax[0]],
+                      [xax[0], yax[0], zax[-1]],
+                      [xax[-1], yax[0], zax[-1]],
+                      [xax[-1], yax[0], zax[0]]
+                      ]
+
+            paneXY = np.array(paneXY) @ R.T
+            paneYZ = np.array(paneYZ) @ R.T
+            paneZX = np.array(paneZX) @ R.T
+
+            self.area(paneXY[:, 0], paneXY[:, 1],
+                      fill_colour=pane_colour, opac=.8, strokewidth=strokewidth, )
+
+            self.area(paneYZ[:, 0], paneYZ[:, 1],
+                      fill_colour=pane_colour, opac=.8, strokewidth=strokewidth, )
+
+            self.area(paneZX[:, 0], paneZX[:, 1],
+                      fill_colour=pane_colour, opac=.8, strokewidth=strokewidth, )
+
+        # Plot the faces
+        for i in range(nf):
+            self.area(faces[i, :, 0], faces[i, :, 1],
+                      fill_colour=cscale[i], opac=opacscale[i], strokewidth=strokewidth, colour=strokecolor)
+
+    # def axes3d(self, rotator = np.eye(3), colour='white', strokewidth=1):
+    #     vecspos = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]) * self.xlim
+    #     vecsneg = -np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]) * self.xlim
+    #     V1 = np.matmul(rotator, vecspos)
+    #     V2 = np.matmul(rotator, vecsneg)
+    #     self.svg.draw_arrow(self.tranx(V2[0][0]), self.trany(V2[0][1]), self.tranx(V1[0][0]), self.trany(V1[0][1]),
+    #                         stroke=colour, strokewidth=strokewidth)
+    #     self.svg.draw_arrow(self.tranx(V2[1][0]), self.trany(V2[1][1]), self.tranx(V1[1][0]), self.trany(V1[1][1]),
+    #                         stroke=colour, strokewidth=strokewidth)
+    #     self.svg.draw_arrow(self.tranx(V2[2][0]), self.trany(V2[2][1]), self.tranx(V1[2][0]), self.trany(V1[2][1]),
+    #                         stroke=colour, strokewidth=strokewidth)
+    def axes3d(self, R, colour='white', zlim = None):
+        if zlim is None:
+            zlim = (self.xlim**2 + self.ylim**2)**.5
+        xpos = np.array([[0,0,0], [self.xlim, 0, 0]])
+        xneg = -xpos
+        ypos = np.array([[0, 0, 0], [0, self.ylim, 0]])
+        yneg = -ypos
+        zpos = np.array([[0, 0, 0], [0, 0, zlim]])
+        zneg = -zpos
+
+        zpos = zpos@R.T
+        xpos = xpos@R.T
+        ypos = ypos@R.T
+        zneg = zneg@R.T
+        xneg = xneg@R.T
+        yneg = yneg@R.T
+        self.svg.draw_arrow(self.tranx(xpos[0][0]), self.trany(xpos[0][1]), self.tranx(xpos[1][0]), self.trany(xpos[1][1]),
+                            stroke=colour)
+        self.svg.draw_arrow(self.tranx(ypos[0][0]), self.trany(ypos[0][1]), self.tranx(ypos[1][0]), self.trany(ypos[1][1]),
+                            stroke=colour)
+        self.svg.draw_arrow(self.tranx(zpos[0][0]), self.trany(zpos[0][1]), self.tranx(zpos[1][0]), self.trany(zpos[1][1]),
+                            stroke=colour)
+        # self.text((V1[0][0]), (V1[0][1]), 'x', colour='black')
+        # self.svg.draw_arrow(self.tranx(0), self.trany(0), self.tranx(V1[1][0]), self.trany(V1[1][1]),
+        #                     stroke=colour)
+        # self.text((V1[1][0]), (V1[1][1]), 'y', colour='black')
+        # self.svg.draw_arrow(self.tranx(0), self.trany(0), self.tranx(V1[2][0]), self.trany(V1[2][1]),
+        #                     stroke=colour)
+        # self.text((V1[2][0]), (V1[2][1]), 'z', colour='black')
     def background3d(self, xax, yax, zax,R = np.eye(3), colour = 'Blue', opacity =1,  cmap= None, cmesh=None, strokewidth =.05,
                     strokecolor="white", strokeopacity=1,):
 

@@ -41,12 +41,14 @@ C1 = ColourObj('#0000FF')
 C2 = ColourObj('#FF0000')
 cmap = generate_cmap([C1,C2])
 
-theta = .3 # Rotation around Z-axis
-phi = -1.3  # Rotation around X-axis
+theta = .1
+# Rotation around Z-axis
+phi = -1.1 # Rotation around X-axis
 R = rotation_matrix(theta, phi)
-
+# Create plot
 G.bg(colour='#555555')
-G.plot_surface(xm, ym, z, R = R, cmap = cmap, axes=False, box=False,
-               strokewidth=.08, colorbar=True)
+G.background3d([-2,2], [-2,2], [0, 1], colour='green', R = R)
+# G.plot_surface(xm, ym, z, R = R, cmap = cmap, axes=False, box=False,
+#                strokewidth=.08)
 
 G.save()

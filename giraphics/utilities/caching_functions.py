@@ -1,5 +1,5 @@
 import json
-from giraphics.utilities.latex2 import latex_expression
+from giraphics.utilities.latex import latex_expression
 from giraphics.utilities.latex_svg_decoder import *
 import numpy as np
 

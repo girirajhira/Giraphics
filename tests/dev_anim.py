@@ -16,6 +16,10 @@ t = np.linspace(0, 1, frames)
 
 x = np.linspace(-5,5,100)
 
+theta = .1
+# Rotation around Z-axis
+phi = -1.1 # Rotation around X-axis
+
 
 T = Timer()
 T.start()

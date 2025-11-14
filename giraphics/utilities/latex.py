@@ -3,7 +3,9 @@ import shutil
 import re
 import subprocess
 import numpy as np
+import pathlib as pl
 from functools import lru_cache, cache
+from giraphics.utilities.colour import ColourObj
 
 default_latex_template = r"""
 \documentclass[preview,border=10pt]{standalone}
@@ -34,20 +36,21 @@ def generate_pdf_from_tex(expression, outfile, tempfolder = False, usepackages=N
             file.write(preamble + " \n")
         if colour is not None:
             if isinstance(colour, list) or isinstance(colour, (np.ndarray, np.generic)):
-                file.write(r"\usepackage{xcolor}")
-                file.write(r"\definecolor{custcolour}{RGB}{" + f'{colour[0]}, {colour[1]}, {colour[2]}' + r"}" )
-                expression = (r"\textcolor{custcolour}{" + expression + r"}")
+                file.write(r"\usepackage{xcolor}" + '\n')
+                file.write(r"\definecolor{custcolour}{RGB}{" + f'{colour[0]}, {colour[1]}, {colour[2]}' + r"}" + '\n' )
+                expression = (r"\textcolor{custcolour}{" + expression + r"}" + '\n')
             else:
                 file.write(r"\usepackage{xcolor}")
-                expression = (r"\textcolor{" + colour + "}{" + expression + r"}")
+                expression = (r"\textcolor{" + colour + "}{" + expression + r"}" + '\n' )
 
-        file.write(r"\begin{document}")
+        file.write(r"\begin{document}" + '\n')
         file.write(expression)
-        file.write(r"\end{document}")
+        file.write( '\n'+ r"\end{document}")
 
     # Compiling
+    folder = pl.Path.cwd()/'tempfolder'
     if tempfolder:
-        command = f"pdflatex -output-format=pdf -interaction=batchmode -output-directory=tempfolder {outfile}"
+        command = f"pdflatex -output-format=pdf -interaction=batchmode -output-directory={str(folder)} {outfile}"
     else:
         command = f"latex {outfile}"
     result = subprocess.run(command.split(), capture_output=True, text=True)
@@ -62,11 +65,15 @@ def dvi_to_svg(infile, outfile):
 
 def latex_expression(expression, usepackages=None, preamble=None, cleanup = True, colour=None, current_dir= None):
     '''returns an svg string of the LaTeX expression'''
-    if os.path.exists('tempfolder'):
-        shutil.rmtree('tempfolder')
-        os.system('mkdir tempfolder')
+    folder_name = 'tempfolder'
+    folder = pl.Path.cwd()/folder_name
+
+    if os.path.exists(folder):
+        shutil.rmtree(str(folder))
+        folder.mkdir()
     else:
-        os.system('mkdir tempfolder')
+        folder.mkdir()
+
     # if current_dir is None:
     #     current_dir = os.path.dirname(os.path.abspath(__file__))
     # folder_name = "tempfolder"
@@ -82,11 +89,11 @@ def latex_expression(expression, usepackages=None, preamble=None, cleanup = True
     #     os.makedirs(folder_path)  # Create the folder if it doesn't exist
 
     generate_pdf_from_tex(expression, r'tempfolder/outfile.tex', tempfolder=True, usepackages=usepackages, preamble=preamble, colour=colour)
-    dvi_to_svg(r'tempfolder/outfile.pdf', r'tempfolder/outfile.svg')
-    with open(r'tempfolder/outfile.svg', 'r') as svgfile:
+    dvi_to_svg(rf'{str(folder)}/outfile.pdf', fr'{str(folder)}/outfile.svg')
+    with open(rf'{str(folder)}/outfile.svg', 'r') as svgfile:
         list_of_lines = svgfile.readlines()[1:]
     if cleanup:
-        shutil.rmtree('tempfolder')
+        shutil.rmtree(str(folder))
     # os.remove('outfile.svg')
     ## Get width and height
     first_line = list_of_lines[0]

@@ -2,6 +2,11 @@ import numpy as np
 
 
 def vec_to_hex(x):
+    '''
+    Vector with three values between 0, 255
+    :param x:
+    :return: hexadecimal
+    '''
     h = "#"
     x = np.round(x,2)
     for i in x:
@@ -16,6 +21,11 @@ def vec_to_hex(x):
 
 
 def hex_to_vec(h):
+    '''
+    Converts hexadecimal to vector with three values between 0, 255
+    :param h:
+    :return:
+    '''
     h1, h2, h3, = int(h[1:3], 16), int(h[3:5], 16), int(h[5:], 16)
     return [h1, h2, h3]
 

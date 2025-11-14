@@ -45,6 +45,7 @@ class Animation:
         if timeit:
             T = Timer()
             T.start()
+        # Convert SVG->PNG
         create_raster_batch('vectors', 'g', 'p', 'rasters', self.plate.frame_index)
         filename = os.path.splitext(self.name)[0]
         if self.name.lower().endswith(('.gif')):

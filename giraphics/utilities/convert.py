@@ -1,8 +1,8 @@
 import multiprocessing
 import os
 import shutil
-from multiprocessing import Process
-
+from multiprocessing import Pool
+import subprocess
 dirName = "Plotspng2"
 
 
@@ -99,12 +99,28 @@ def create_raster_batch(dir, filename, savename, savedir, num, parallel=False):
     if not parallel:
         for i in range(num):
             command = ("rsvg-convert {}/{}/{}{}.svg -o {}/{}/{}{}.png").format(os.getcwd(), dir, filename, namer(i), os.getcwd(), savedir, savename, namer(i))
+            # command = f"rsvg-convert {os.getcwd()}/{dir}/{filename}{namer(i)}.svg -o {os.getcwd()}/{savedir}/{savename}{namer(i)}.png")
+
             os.system(command)
     else:
         svgloc = os.getcwd()+dir
         command = """
         find . -name '*.svg' -print0 | parallel -0 -j 50% -I{} sh -c 'mkdir -p $(dirname {.}); rsvg-convert "{}" -o "{.}.png"'
         """
+
+def convert_svg2png(inps):
+    dir, filename, savename, savedir, n = inps
+    command = ("rsvg-convert {}/{}/{}{}.svg -o {}/{}/{}{}.png").format(os.getcwd(), dir, filename, namer(n),
+                                                                       os.getcwd(), savedir, savename, namer(n))
+    subprocess.run(command)
+
+def convert_png_batch(dir, filename, savename, savedir, num, parallel=False):
+    cmd = (
+        f"seq 0 {num - 1} | xargs -I {{}} -P 8 sh -c "
+        f"'rsvg-convert \"{os.getcwd()}/{dir}/*.svg\" "
+        f"-o \"{os.getcwd()}/{savedir}/${{0%.svg}}.png\"'"
+    )
+    os.system(cmd)
 
 
 

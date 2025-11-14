@@ -3,7 +3,7 @@ from giraphics.svg.css_util import *
 # from giraphics.utilities.latext import *
 # from giraphics.utilities.mathtext import *
 from giraphics.svg.morph2 import *
-from giraphics.utilities.latex2 import latex_expression
+from giraphics.utilities.latex import latex_expression
 from giraphics.utilities.convert import *
 from giraphics.utilities.latex_svg_decoder import *
 from IPython.display import SVG as IPSVG
@@ -802,7 +802,7 @@ class Graph:
         self.svg.canvas += expr_code
         self.svg.canvas += '</g>\n'
 
-    def add_latex(self, expr, x0, y0, scale=1, rotation=0, centre_align=True, colour=None, preamble=None,
+    def add_latex(self, expr: str, x0: float, y0:float, scale=1, rotation=0, centre_align=True, colour=None, preamble=None,
                   usepackages=None, cleanup=True, opacity=1, background=False, bg_colour='black', bg_opacity=.4,
                   box=False, boxcolour='white', boxwidth=2, boxmult=1.6):
         scale = scale * self.nscale
